@@ -24,6 +24,8 @@ namespace ChatRoomWithBot.Data
             {
                 ExecuteSafe(() =>
                 {
+
+                    _context.Database.EnsureCreated();
                     var user = new UserIdentity()
                     {
 

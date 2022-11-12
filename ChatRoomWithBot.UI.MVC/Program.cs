@@ -47,7 +47,7 @@ app.MapControllers();
 
 //Configure RabbitMQ
 
-app.UseRabbitListener();
+//app.UseRabbitListener();
 
 app.SeedData();
 
