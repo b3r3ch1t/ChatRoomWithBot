@@ -1,6 +1,9 @@
 ﻿using ChatRoomWithBot.Service.Identity.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 using ChatRoomWithBot.Service.Identity.Services;
+using Microsoft.AspNetCore.Identity;
+using ChatRoomWithBot.Data.Context;
+using ChatRoomWithBot.Data.IdentityModel;
 
 namespace ChatRoomWithBot.Service.Identity.IoC
 {
@@ -11,6 +14,25 @@ namespace ChatRoomWithBot.Service.Identity.IoC
         {
 
             services.AddScoped<IUserIdentityManager, UserIdentityManager>();
+
+            services.Configure<IdentityOptions>(options =>
+            {
+                options.Password.RequireDigit = false;
+                options.Password.RequiredLength = 8; //Valor default: 6
+                options.Password.RequiredUniqueChars = 1; //Valor default = 1
+                options.Password.RequireLowercase = false;
+                options.Password.RequireNonAlphanumeric = false;
+                options.Password.RequireUppercase = false;
+                // Lockout settings.
+                options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromHours(6);
+                options.Lockout.MaxFailedAccessAttempts = 5;
+                options.Lockout.AllowedForNewUsers = true;
+            });
+
+            
+            services.AddIdentity<UserIdentity, IdentityRole<Guid>>()
+                .AddEntityFrameworkStores<ChatRoomWithBotContext>();
+
 
 
             return services; 
