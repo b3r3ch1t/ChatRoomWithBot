@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
@@ -6,6 +6,13 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Controllers\**" />
+    <Content Remove="Controllers\**" />
+    <EmbeddedResource Remove="Controllers\**" />
+    <None Remove="Controllers\**" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.11">
@@ -16,13 +23,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\src\Data\ChatRoomWithBot.Data\ChatRoomWithBot.Data.csproj" />
-    <ProjectReference Include="..\src\Services\ChatRoomWithBot.Services.Log\ChatRoomWithBot.Services.Log.csproj" />
-    <ProjectReference Include="..\src\Services\ChatRoomWithBot.Services.RabbitMq\ChatRoomWithBot.Services.RabbitMq.csproj" />
+    <ProjectReference Include="..\..\Data\ChatRoomWithBot.Data\ChatRoomWithBot.Data.csproj" />
+    <ProjectReference Include="..\..\Services\ChatRoomWithBot.Services.Log\ChatRoomWithBot.Services.Log.csproj" />
+    <ProjectReference Include="..\..\Services\ChatRoomWithBot.Services.RabbitMq\ChatRoomWithBot.Services.RabbitMq.csproj" />
   </ItemGroup>
 
 </Project>
