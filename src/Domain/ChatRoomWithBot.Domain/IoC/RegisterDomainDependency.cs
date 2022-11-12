@@ -1,5 +1,6 @@
 ﻿ 
 
+using ChatRoomWithBot.Domain.Bus;
 using ChatRoomWithBot.Domain.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -12,6 +13,7 @@ namespace ChatRoomWithBot.Domain.IoC
         {
 
             services.AddScoped<IDependencyResolver, DependencyResolver>();
+            services.AddScoped<IMediatorHandler, MediatorHandler>();
 
 
             return services;
