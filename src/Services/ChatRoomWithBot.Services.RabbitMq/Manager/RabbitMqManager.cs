@@ -14,10 +14,11 @@ namespace ChatRoomWithBot.Services.RabbitMq.Manager
         private readonly IError _error;
 
 
-        public RabbitMqManager(IDependencyResolver dependencyResolver)
+        public RabbitMqManager(IOptions<RabbitMqSettings> rabbitMqSettings, IError error)
         {
-            _error = dependencyResolver.Resolve<IError>();
-            _rabbitMqSettings = dependencyResolver.Resolve<IOptions<RabbitMqSettings>>().Value;
+             
+            _rabbitMqSettings = rabbitMqSettings.Value ;
+            _error = error;
 
             try
             {
@@ -32,10 +33,9 @@ namespace ChatRoomWithBot.Services.RabbitMq.Manager
             }
             catch (Exception e)
             {
-                _error.Error(e); 
+                _error.Error(e);
                 throw;
             }
-          
         }
 
         public void Register()

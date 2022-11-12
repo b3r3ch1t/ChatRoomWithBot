@@ -1,14 +1,13 @@
-﻿using ChatRoomWithBot.Domain.Entities;
+﻿using ChatRoomWithBot.Data.Context;
+using ChatRoomWithBot.Domain.Entities;
 using ChatRoomWithBot.Domain.Interfaces;
 
 namespace ChatRoomWithBot.Data.Repository;
 
 public class ChatMessageRepository :Repository<ChatMessage>, IChatMessageRepository
 {
-     
-    protected ChatMessageRepository(IDependencyResolver dependencyResolver) : base(dependencyResolver)
+    public ChatMessageRepository(ChatRoomWithBotContext context, IError error) : base(context, error)
     {
-         
     }
 
     public async Task<IQueryable<ChatMessage>> GetAllMessagesAsync(int qte)
@@ -21,4 +20,6 @@ public class ChatMessageRepository :Repository<ChatMessage>, IChatMessageReposit
             return result; 
         
     }
+
+     
 }

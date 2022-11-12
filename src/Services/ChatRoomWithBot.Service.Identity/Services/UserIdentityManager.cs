@@ -15,13 +15,14 @@ namespace ChatRoomWithBot.Service.Identity.Services
         private readonly SignInManager<UserIdentity> _signInManager;
         private readonly IError _error;
 
-        public UserIdentityManager(IDependencyResolver dependencyResolver)
-        {
-            _userManager = dependencyResolver.Resolve<UserManager<UserIdentity>>();
-            _signInManager = dependencyResolver.Resolve<SignInManager<UserIdentity>>();
-            _error = dependencyResolver.Resolve<IError>();
 
+        public UserIdentityManager(UserManager<UserIdentity> userManager, SignInManager<UserIdentity> signInManager, IError error)
+        {
+            _userManager = userManager;
+            _signInManager = signInManager;
+            _error = error;
         }
+
         public async Task<OperationResult<LoginViewModel>> Login(LoginViewModel model)
         {
             var user = await _userManager.FindByNameAsync(model.Email);

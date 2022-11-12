@@ -6,6 +6,8 @@ using ChatRoomWithBot.Services.RabbitMq.Extensions;
 using ChatRoomWithBot.Services.RabbitMq.IoC;
 using ChatRoomWithBot.Services.RabbitMq.Settings;
 using ChatRoomWithBot.UI.MVC.Extensions;
+using System.Reflection;
+using MediatR;
 
 const string AspNetCoreEnvironment = "ASPNETCORE_ENVIRONMENT";
 
@@ -23,6 +25,13 @@ builder.Services
     .RegisterDataDependencies(builder.Configuration)
     .RegisterServicesRabbitMqDependencies()
     .RegisterIdentityDependencies();
+
+
+#region Mediator
+
+builder.Services.AddMediatR(Assembly.GetExecutingAssembly());
+
+#endregion
 
 
 builder.Services.Configure<RabbitMqSettings>(

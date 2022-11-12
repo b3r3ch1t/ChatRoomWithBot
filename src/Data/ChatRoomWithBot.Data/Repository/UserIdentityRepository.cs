@@ -12,14 +12,15 @@ namespace ChatRoomWithBot.Data.Repository
 
         private readonly UserManager<UserIdentity> _userManager; 
         private readonly IError _error;
-        private readonly ChatRoomWithBotContext _context; 
-        public UserIdentityRepository(IDependencyResolver dependencyResolver)
-        {
-            _userManager = dependencyResolver.Resolve<UserManager<UserIdentity>>(); 
-            _error = dependencyResolver.Resolve<IError>();
-            _context = dependencyResolver.Resolve<ChatRoomWithBotContext>(); 
+        private readonly ChatRoomWithBotContext _context;
 
+        public UserIdentityRepository(UserManager<UserIdentity> userManager, IError error, ChatRoomWithBotContext context)
+        {
+            _userManager = userManager;
+            _error = error;
+            _context = context;
         }
+
         public async Task AddAsync(UserIdentity user, string password)
         {
             try

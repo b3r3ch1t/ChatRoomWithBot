@@ -6,10 +6,12 @@ namespace ChatRoomWithBot.Domain
 {
     public  class ClassBase
     {
-        private readonly IError _error; 
-        public ClassBase(IDependencyResolver dependencyResolver)
+        private readonly IError _error;
+
+
+        public ClassBase(IError error)
         {
-            _error = dependencyResolver.Resolve<IError>(); 
+            _error = error;
         }
 
         public  void ExecuteSafe(Action action)

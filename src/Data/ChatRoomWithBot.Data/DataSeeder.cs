@@ -11,11 +11,11 @@ namespace ChatRoomWithBot.Data
         private readonly ChatRoomWithBotContext _context;
         private readonly UserManager<UserIdentity> _userManager;
 
-        public DataSeeder(IDependencyResolver dependencyResolver) : base(dependencyResolver)
-        {
-            _context = dependencyResolver.Resolve<ChatRoomWithBotContext>();
-            _userManager = dependencyResolver.Resolve<UserManager<UserIdentity>>();
 
+        public DataSeeder(IError error, ChatRoomWithBotContext context, UserManager<UserIdentity> userManager) : base(error)
+        {
+            _context = context;
+            _userManager = userManager;
         }
 
         public void Seed()

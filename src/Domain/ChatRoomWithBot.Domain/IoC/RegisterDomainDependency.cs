@@ -12,7 +12,7 @@ namespace ChatRoomWithBot.Domain.IoC
             this IServiceCollection services )
         {
 
-            services.AddScoped<IDependencyResolver, DependencyResolver>();
+      
             services.AddScoped<IMediatorHandler, MediatorHandler>();
 
 

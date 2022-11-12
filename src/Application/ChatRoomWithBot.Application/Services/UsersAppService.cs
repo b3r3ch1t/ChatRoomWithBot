@@ -12,13 +12,14 @@ namespace ChatRoomWithBot.Application.Services
         private readonly IError _error;
         private readonly IMapper _mapper;
 
-        public UsersAppService(IDependencyResolver dependencyResolver)
-        {
-            _userIdentityRepository = dependencyResolver.Resolve<IUserIdentityRepository>();
-            _error = dependencyResolver.Resolve<IError>();
-            _mapper = dependencyResolver.Resolve<IMapper>();
 
+        public UsersAppService(IUserIdentityRepository userIdentityRepository, IError error, IMapper mapper)
+        {
+            _userIdentityRepository = userIdentityRepository;
+            _error = error;
+            _mapper = mapper;
         }
+
         public void Dispose()
         {
             _userIdentityRepository.Dispose(); 

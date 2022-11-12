@@ -8,12 +8,13 @@ namespace ChatRoomWithBot.Domain.Bus
         private readonly IMediator _mediator;
         private readonly IError _error;
 
-        public MediatorHandler(IDependencyResolver dependencyResolver)
-        {
-            _mediator = dependencyResolver.Resolve<IMediator>();
-            _error = dependencyResolver.Resolve<IError>();
 
+        public MediatorHandler(IMediator mediator, IError error)
+        {
+            _mediator = mediator;
+            _error = error;
         }
+
         public async  Task<CommandResponse> SendMessage<T>(T chatMessage) where T : Event
         {
             try

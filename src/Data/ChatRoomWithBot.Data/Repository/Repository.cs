@@ -11,13 +11,17 @@ namespace ChatRoomWithBot.Data.Repository
         protected readonly DbSet<TEntity> DbSet;
         private readonly IError _error;
 
-        protected Repository(IDependencyResolver dependencyResolver)
+
+        public Repository(ChatRoomWithBotContext context, IError error)
         {
-            Context = dependencyResolver.Resolve<ChatRoomWithBotContext>();
+            Context = context;
+            _error = error;
             DbSet = Context.Set<TEntity>();
-            _error = dependencyResolver.Resolve<IError>();
 
         }
+
+         
+
 
         public async Task AddAsync(TEntity obj, string password)
         {
