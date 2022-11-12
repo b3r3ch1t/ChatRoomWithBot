@@ -1,5 +1,4 @@
 ﻿using ChatRoomWithBot.Domain.Interfaces;
-using ChatRoomWithBot.Services.RabbitMq.Manager;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;

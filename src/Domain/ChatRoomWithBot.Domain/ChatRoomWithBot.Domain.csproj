@@ -7,7 +7,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="IdentityModel\User.cs" />
+    <Compile Remove="IdentityModel\**" />
+    <EmbeddedResource Remove="IdentityModel\**" />
+    <None Remove="IdentityModel\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -15,10 +17,6 @@
     <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="7.0.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="7.0.0" />
    
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="IdentityModel\" />
   </ItemGroup>
 
 </Project>

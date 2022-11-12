@@ -1,8 +1,7 @@
 using ChatRoomWithBot.Data.IoC;
 using ChatRoomWithBot.Domain.IoC;
+using ChatRoomWithBot.Service.Identity.IoC;
 using ChatRoomWithBot.Services.Log.IoC;
-using ChatRoomWithBot.Services.RabbitMq;
-using ChatRoomWithBot.Services.RabbitMq.Extensions;
 using ChatRoomWithBot.Services.RabbitMq.IoC;
 using ChatRoomWithBot.Services.RabbitMq.Settings;
 using ChatRoomWithBot.UI.MVC.Extensions;
@@ -21,7 +20,8 @@ builder.Services
     .RegisterDomainDependencies()
     .RegisterLogDependencies(builder.Configuration, builder.Environment)
     .RegisterDataDependencies(builder.Configuration)
-    .RegisterServicesRabbitMqDependencies();
+    .RegisterServicesRabbitMqDependencies()
+    .RegisterIdentityDependencies();
 
 
 builder.Services.Configure<RabbitMqSettings>(

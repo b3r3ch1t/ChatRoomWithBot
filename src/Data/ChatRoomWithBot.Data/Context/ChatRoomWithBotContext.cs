@@ -1,9 +1,9 @@
-﻿using ChatRoomWithBot.Domain.Entities;
+﻿using ChatRoomWithBot.Data.IdentityModel;
+using ChatRoomWithBot.Domain.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using ChatRoomWithBot.Domain.Interfaces;
-using ChatRoomWithBot.Data.IdentiModel;
 
 namespace ChatRoomWithBot.Data.Context
 {
@@ -66,7 +66,6 @@ namespace ChatRoomWithBot.Data.Context
                     case EntityState.Added:
 
                         trackable.ChangeDateCreated(DateTime.Now); 
-                        trackable.Activate();
 
                         if (trackable.Id == Guid.Empty)
                         {

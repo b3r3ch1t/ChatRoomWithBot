@@ -19,18 +19,15 @@ namespace ChatRoomWithBot.Data.Repository
 
         }
 
-        public async  Task<TEntity> AddAsync(TEntity obj)
+        public async Task AddAsync(TEntity obj, string password)
         {
             try
             {
-                await DbSet.AddAsync(obj);
-
-                return obj;
+                await DbSet.AddAsync(obj); 
             }
             catch (Exception e)
             {
-                _error.Error(e);
-                return null;
+                _error.Error(e); 
             }
         }
 

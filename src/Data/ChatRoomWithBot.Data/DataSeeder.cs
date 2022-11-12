@@ -1,8 +1,8 @@
 ﻿using ChatRoomWithBot.Data.Context;
+using ChatRoomWithBot.Data.IdentityModel;
 using ChatRoomWithBot.Domain.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using ChatRoomWithBot.Domain;
-using ChatRoomWithBot.Data.IdentiModel;
 
 namespace ChatRoomWithBot.Data
 {

@@ -1,4 +1,4 @@
-﻿using ChatRoomWithBot.Data.IdentiModel;
+﻿using ChatRoomWithBot.Data.IdentityModel;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
