@@ -2,12 +2,12 @@
 using ChatRoomWithBot.Domain.Interfaces;
 using MediatR;
 
-namespace ChatRoomWithBot.Services.RabbitMq
+namespace ChatRoomWithBot.Services.RabbitMq.Handler
 {
     internal class BotMessageNotificationHandler : INotificationHandler<BotMessageEvent>
     {
 
-        protected BotMessageNotificationHandler(IDependencyResolver dependencyResolver) 
+        public  BotMessageNotificationHandler(IDependencyResolver dependencyResolver)
         {
 
         }

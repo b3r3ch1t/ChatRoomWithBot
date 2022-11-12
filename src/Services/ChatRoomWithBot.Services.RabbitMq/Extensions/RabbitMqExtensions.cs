@@ -1,18 +1,26 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using ChatRoomWithBot.Domain.Interfaces;
+using ChatRoomWithBot.Services.RabbitMq.Manager;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
 namespace ChatRoomWithBot.Services.RabbitMq.Extensions
 {
-    public  static  class RabbitMqExtensions
+    public static class RabbitMqExtensions
     {
-        private static RabbitMqManager RabbitMqReceiver { get; set; }
-
+        private static IRabbitMqManager _rabbitMqReceiver;
+        private static  IError _error;
 
 
         public static IApplicationBuilder UseRabbitListener(this IApplicationBuilder app)
         {
-            RabbitMqReceiver = app.ApplicationServices.GetService<RabbitMqManager>();
+
+            using var scopedServices = app.ApplicationServices.CreateScope();
+
+            var serviceProvider = scopedServices.ServiceProvider;
+
+            _rabbitMqReceiver = serviceProvider.GetRequiredService<IRabbitMqManager>();
+            _error = serviceProvider.GetRequiredService<IError>();
 
             var lifetime = app.ApplicationServices.GetService<IApplicationLifetime>();
 
@@ -25,12 +33,21 @@ namespace ChatRoomWithBot.Services.RabbitMq.Extensions
 
         private static void OnStarted()
         {
-            RabbitMqReceiver.Register();
+            try
+            {
+                _rabbitMqReceiver.Register();
+            }
+            catch (Exception e)
+            {
+                _error.Error(e);
+                throw;
+            }
+
         }
 
         private static void OnStopping()
         {
-            RabbitMqReceiver.DeRegister();
+            _rabbitMqReceiver.DeRegister();
         }
     }
 }

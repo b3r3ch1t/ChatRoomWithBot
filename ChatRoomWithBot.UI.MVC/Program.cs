@@ -4,6 +4,7 @@ using ChatRoomWithBot.Services.Log.IoC;
 using ChatRoomWithBot.Services.RabbitMq;
 using ChatRoomWithBot.Services.RabbitMq.Extensions;
 using ChatRoomWithBot.Services.RabbitMq.IoC;
+using ChatRoomWithBot.Services.RabbitMq.Settings;
 using ChatRoomWithBot.UI.MVC.Extensions;
 
 const string AspNetCoreEnvironment = "ASPNETCORE_ENVIRONMENT";

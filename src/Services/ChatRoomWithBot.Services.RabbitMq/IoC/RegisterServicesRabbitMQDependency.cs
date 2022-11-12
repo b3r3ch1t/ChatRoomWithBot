@@ -1,5 +1,7 @@
 ﻿using ChatRoomWithBot.Domain.Commands;
 using ChatRoomWithBot.Domain.Interfaces;
+using ChatRoomWithBot.Services.RabbitMq.Handler;
+using ChatRoomWithBot.Services.RabbitMq.Manager;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 
