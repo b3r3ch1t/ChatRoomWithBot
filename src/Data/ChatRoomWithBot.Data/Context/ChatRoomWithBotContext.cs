@@ -1,14 +1,13 @@
-﻿
-
-using ChatRoomWithBot.Data.IdentityModel;
+﻿using ChatRoomWithBot.Domain.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using ChatRoomWithBot.Domain.Interfaces;
+using ChatRoomWithBot.Data.IdentiModel;
 
 namespace ChatRoomWithBot.Data.Context
 {
-    internal class ChatRoomWithBotContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
+    public class ChatRoomWithBotContext : IdentityDbContext<UserIdentity, IdentityRole<Guid>, Guid>
     {
 
         public ChatRoomWithBotContext(
@@ -19,7 +18,9 @@ namespace ChatRoomWithBot.Data.Context
 
         #region DbSet
 
-        public DbSet<User> Users { get; set; }
+        public DbSet<UserIdentity> Users { get; set; }
+        public DbSet<ChatMessage> ChatMessages { get; set; }
+
 
         #endregion
 
@@ -52,26 +53,22 @@ namespace ChatRoomWithBot.Data.Context
 
         private void UpdateData()
         {
-            var entries = ChangeTracker.Entries().Where(x => x.State == EntityState.Added || x.State == EntityState.Modified);
+            var entries = ChangeTracker.Entries()
+                .Where(x => x.State == EntityState.Added || x.State == EntityState.Modified);
 
             foreach (var entry in entries)
             {
                 if (!(entry.Entity is IEntity trackable)) continue;
                 switch (entry.State)
                 {
-                    case EntityState.Modified:
-
-                        trackable.ChangeDateModification(DateTime.Now);
-
-                        break;
+                     
 
                     case EntityState.Added:
 
-                        trackable.ChangeDateAdded(DateTime.Now);
-                        trackable.ChangeDateModification(DateTime.Now);
+                        trackable.ChangeDateCreated(DateTime.Now); 
                         trackable.Activate();
 
-                        if (trackable.Id == Guid.Empty )
+                        if (trackable.Id == Guid.Empty)
                         {
                             trackable.ChangeId();
                         }
@@ -85,7 +82,18 @@ namespace ChatRoomWithBot.Data.Context
             }
 
         }
+
         #endregion
+        
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+            var assemblyWithConfigurations = GetType().Assembly; //get whatever assembly you want
+            modelBuilder.ApplyConfigurationsFromAssembly(assemblyWithConfigurations);
+
+        }
+
 
     }
 }

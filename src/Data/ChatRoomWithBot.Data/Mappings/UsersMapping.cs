@@ -1,12 +1,12 @@
-﻿using Microsoft.EntityFrameworkCore;
-using ChatRoomWithBot.Data.IdentityModel;
+﻿using ChatRoomWithBot.Data.IdentiModel;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace ChatRoomWithBot.Data.Mappings
 {
-    internal class UsersMapping : IEntityTypeConfiguration<User>
+    internal class UsersMapping : IEntityTypeConfiguration<UserIdentity>
     {
-        public void Configure(EntityTypeBuilder<User> builder)
+        public void Configure(EntityTypeBuilder<UserIdentity> builder)
         {
            builder.HasKey(u => u.Id);
 

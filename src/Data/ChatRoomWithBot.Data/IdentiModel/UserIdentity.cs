@@ -1,25 +1,28 @@
-﻿using ChatRoomWithBot.Domain.Interfaces;
+﻿
+using ChatRoomWithBot.Domain.Entities;
+using ChatRoomWithBot.Domain.Interfaces;
 using Microsoft.AspNetCore.Identity;
 
-namespace ChatRoomWithBot.Data.IdentityModel
+namespace ChatRoomWithBot.Data.IdentiModel
 {
-    public class User : IdentityUser<Guid>, IEntity
+    public class UserIdentity:IdentityUser<Guid>, IEntity
     {
-
         public string Name { get; set; }
 
-        public override string UserName => Email;
+        public Guid Id { get; protected set; }
         public bool Valid { get; set; }
         public DateTime DateModification { get; set; }
-        public DateTime DateAdded { get; set; }
+        public DateTime DateCreated { get; set; }
+        public IEnumerable<ChatMessage> ChatMessages { get; set; }
+
         public void ChangeDateModification(DateTime date)
         {
             DateModification = date;
         }
 
-        public void ChangeDateAdded(DateTime date)
+        public void ChangeDateCreated(DateTime date)
         {
-            DateAdded = date;
+            DateCreated = date;
         }
 
         public void Activate()

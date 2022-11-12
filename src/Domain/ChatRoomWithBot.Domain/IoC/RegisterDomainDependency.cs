@@ -1,7 +1,6 @@
 ﻿ 
 
 using ChatRoomWithBot.Domain.Interfaces;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace ChatRoomWithBot.Domain.IoC

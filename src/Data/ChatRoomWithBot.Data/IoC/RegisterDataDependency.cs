@@ -1,9 +1,9 @@
 ﻿using ChatRoomWithBot.Data.Context;
-using ChatRoomWithBot.Data.IdentityModel;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
+using ChatRoomWithBot.Data.IdentiModel;
 
 namespace ChatRoomWithBot.Data.IoC
 {
@@ -34,7 +34,7 @@ namespace ChatRoomWithBot.Data.IoC
            });
              
 
-           services.AddIdentity<User, IdentityRole<Guid>>()
+           services.AddIdentity<UserIdentity, IdentityRole<Guid>>()
                .AddEntityFrameworkStores<ChatRoomWithBotContext>();
 
             return services;

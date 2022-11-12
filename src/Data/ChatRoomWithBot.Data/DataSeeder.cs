@@ -1,20 +1,20 @@
 ﻿using ChatRoomWithBot.Data.Context;
 using ChatRoomWithBot.Domain.Interfaces;
 using Microsoft.AspNetCore.Identity;
-using ChatRoomWithBot.Data.IdentityModel;
 using ChatRoomWithBot.Domain;
+using ChatRoomWithBot.Data.IdentiModel;
 
 namespace ChatRoomWithBot.Data
 {
     public class DataSeeder : ClassBase
     {
         private readonly ChatRoomWithBotContext _context;
-        private readonly UserManager<User> _userManager;
+        private readonly UserManager<UserIdentity> _userManager;
 
         public DataSeeder(IDependencyResolver dependencyResolver) : base(dependencyResolver)
         {
             _context = dependencyResolver.Resolve<ChatRoomWithBotContext>();
-            _userManager = dependencyResolver.Resolve<UserManager<User>>();
+            _userManager = dependencyResolver.Resolve<UserManager<UserIdentity>>();
 
         }
 
@@ -24,7 +24,7 @@ namespace ChatRoomWithBot.Data
             {
                 ExecuteSafe(() =>
                 {
-                    var user = new User()
+                    var user = new UserIdentity()
                     {
 
                         Email = "user1@teste.com",
@@ -34,10 +34,10 @@ namespace ChatRoomWithBot.Data
 
                     };
 
-                     _userManager.CreateAsync(user).GetAwaiter().GetResult();
+                    _userManager.CreateAsync(user).GetAwaiter().GetResult();
 
 
-                    user = new User()
+                    user = new UserIdentity()
                     {
 
                         Email = "user2@teste.com",

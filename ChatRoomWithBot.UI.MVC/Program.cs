@@ -1,6 +1,4 @@
-using ChatRoomWithBot.Data;
 using ChatRoomWithBot.Data.IoC;
-using ChatRoomWithBot.Domain.Interfaces;
 using ChatRoomWithBot.Domain.IoC;
 using ChatRoomWithBot.Log.IoC;
 using ChatRoomWithBot.UI.MVC.Extensions;

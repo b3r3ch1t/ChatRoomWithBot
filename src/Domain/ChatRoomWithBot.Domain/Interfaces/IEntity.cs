@@ -2,16 +2,11 @@
 
 public interface IEntity
 {
-    Guid Id { get; set; }
+    Guid Id { get;  }
     bool Valid { get; }
-    DateTime DateModification { get; }
-    DateTime DateAdded { get; }
-
-
-    void ChangeDateModification(DateTime date);
-    void ChangeDateAdded(DateTime date);
+    DateTime DateCreated { get; }
+    void ChangeDateCreated(DateTime date);
     void Activate();
-
     void Deactivate();
     void ChangeId();
 }
