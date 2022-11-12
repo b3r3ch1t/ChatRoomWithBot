@@ -1,8 +1,8 @@
 ﻿using System;
+using ChatRoomWithBot.Domain.Interfaces;
 using Microsoft.Extensions.Logging;
-using SisViagem.Domain.Interfaces.Erro;
 
-namespace SisViagem.Services.Log;
+namespace ChatRoomWithBot.Log;
 
 public class ErroSentry : IError
 {
