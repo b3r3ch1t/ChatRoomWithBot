@@ -1,9 +1,7 @@
-﻿using Microsoft.Extensions.Configuration;
-using Serilog.Events;
+﻿using Serilog.Events;
 using Serilog.Filters;
 using Serilog;
 using System;
-using Serilog.Core;
 using Serilog.Exceptions;
 using Microsoft.Extensions.DependencyInjection;
 

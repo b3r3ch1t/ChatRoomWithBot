@@ -12,7 +12,7 @@ namespace ChatRoomWithBot.Domain
             _error = dependencyResolver.Resolve<IError>(); 
         }
 
-        private void ExecuteSafe(Action action)
+        public  void ExecuteSafe(Action action)
         {
             try
             {

@@ -1,7 +1,6 @@
-﻿
-
-using ChatRoomWithBot.Domain;
+﻿using ChatRoomWithBot.Domain.Interfaces;
 using ChatRoomWithBot.Log.Extensions;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -14,8 +13,11 @@ namespace ChatRoomWithBot.Log.IoC
         public static IServiceCollection RegisterLogDependencies(
             this IServiceCollection services,
             IConfiguration configuration,
-            IHostEnvironment env)
+            IWebHostEnvironment env)
         {
+
+            services.AddScoped<IError,ErroSentry>(); 
+
 
             var sentryDsn = configuration["SentryDsn"];
 
