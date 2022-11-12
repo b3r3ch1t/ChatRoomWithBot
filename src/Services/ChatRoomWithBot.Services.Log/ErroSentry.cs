@@ -2,7 +2,7 @@
 using ChatRoomWithBot.Domain.Interfaces;
 using Microsoft.Extensions.Logging;
 
-namespace ChatRoomWithBot.Log;
+namespace ChatRoomWithBot.Services.Log;
 
 public class ErroSentry : IError
 {

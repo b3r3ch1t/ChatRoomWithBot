@@ -21,7 +21,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\src\Data\ChatRoomWithBot.Data\ChatRoomWithBot.Data.csproj" />
-    <ProjectReference Include="..\src\Services\ChatRoomWithBot.Log\ChatRoomWithBot.Log.csproj" />
+    <ProjectReference Include="..\src\Services\ChatRoomWithBot.Services.Log\ChatRoomWithBot.Services.Log.csproj" />
+    <ProjectReference Include="..\src\Services\ChatRoomWithBot.Services.RabbitMq\ChatRoomWithBot.Services.RabbitMq.csproj" />
   </ItemGroup>
 
 </Project>

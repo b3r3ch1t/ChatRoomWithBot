@@ -1,11 +1,11 @@
-﻿using Serilog.Events;
-using Serilog.Filters;
-using Serilog;
-using System;
-using Serilog.Exceptions;
+﻿using System;
 using Microsoft.Extensions.DependencyInjection;
+using Serilog;
+using Serilog.Events;
+using Serilog.Exceptions;
+using Serilog.Filters;
 
-namespace ChatRoomWithBot.Log.Extensions
+namespace ChatRoomWithBot.Services.Log.Extensions
 {
     internal static class SerilogExtension
     {
