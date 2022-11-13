@@ -2,6 +2,7 @@
 using ChatRoomWithBot.Application.ViewModel;
 using ChatRoomWithBot.Domain.Interfaces;
 using AutoMapper;
+using ChatRoomWithBot.Domain.Bus;
 using ChatRoomWithBot.Domain.Interfaces.Repositories;
 
 namespace ChatRoomWithBot.Application.Services
@@ -19,9 +20,11 @@ namespace ChatRoomWithBot.Application.Services
             _chatManagerDomain = chatManagerDomain;
         }
 
-        public Task<ChatMessageViewModel> SendMessageAsync(ChatMessageViewModel message)
+        public async Task<CommandResponse> SendMessageAsync(SendMessageViewModel model)
         {
-            throw new NotImplementedException();
+           // var result = await _chatManagerDomain.SendMessageAsync( userId: userId);
+
+            return CommandResponse.Ok();
         }
 
         public async  Task<IEnumerable<ChatRoomViewModel>> GetChatRoomsAsync()

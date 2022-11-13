@@ -1,5 +1,7 @@
 ﻿using ChatRoomWithBot.Application.Interfaces;
 using ChatRoomWithBot.Application.ViewModel;
+using ChatRoomWithBot.Domain;
+using ChatRoomWithBot.Domain.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -15,44 +17,63 @@ namespace ChatRoomWithBot.UI.MVC.Controllers
 
         private readonly IChatManagerApplication _managerChatMessage;
         private readonly IUsersAppService _usersAppService;
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly IError _error;
+
 
         private const string key = "roomId";
-        public ChatRoomController(IChatManagerApplication managerChatMessage, IUsersAppService usersAppService)
+        public ChatRoomController(IChatManagerApplication managerChatMessage, IUsersAppService usersAppService, IHttpContextAccessor httpContextAccessor, IError error)
         {
             _managerChatMessage = managerChatMessage;
             _usersAppService = usersAppService;
-        }
-
-        protected IActionResult ResponsePost<T>(T result)
-        {
-            if (result == null)
-                return NoContent();
-
-            return Ok(result);
-
+            _httpContextAccessor = httpContextAccessor;
+            _error = error;
         }
 
 
-        /// <summary>
-        /// Action for sending and store messages
-        /// </summary>
-        /// <param name="message">Model with message composition</param>
-        /// <returns>Returns the posted message</returns>
         [HttpPost]
-        [Route("postmessage")]
-        public async Task<IActionResult> PostMessage([FromBody] ChatMessageViewModel message)
+        [Route("SendMessage")]
+        public async Task<IActionResult> SendMessage([FromBody] SendMessageViewModel model)
         {
 
-            var result = await _managerChatMessage.SendMessageAsync(message);
+            var user = await _usersAppService.GetCurrentUserAsync();
+            if (user == null)
+            {
+                return BadRequest("user or room invalid ! ");
+            }
 
-            return ResponsePost(result);
+            var validateRoomId = await ValidateRoomIdAsync(model.RoomId);
+
+            if (!validateRoomId )
+            {
+                return BadRequest("user or room invalid !");
+            }
+
+            var result = await _managerChatMessage.SendMessageAsync(model);
+
+            if (result.Failure)
+
+                return BadRequest();
+
+            return Accepted(result);
+
         }
 
-
-        [HttpGet]
-        public IActionResult GetRoom()
+        private async Task<bool> ValidateRoomIdAsync (string roomIdString)
         {
-            return View();
+            try
+            {
+                var roomId = new Guid(Criptografia.Decrypt(roomIdString));
+
+                var result = await _managerChatMessage.GetChatRoomByIdAsync(roomId);
+
+                return result != null;
+            }
+            catch (Exception e)
+            {
+                _error.Error(e);
+                return false;
+            }
         }
 
 
@@ -61,11 +82,11 @@ namespace ChatRoomWithBot.UI.MVC.Controllers
         {
 
             var room = await _managerChatMessage.GetChatRoomByIdAsync(roomId: id);
-            if (room == null )
+            if (room == null)
             {
                 TempData["Message"] = "This room is invalid !";
 
-                return RedirectToAction("ChatRooms", "Home"); 
+                return RedirectToAction("ChatRooms", "Home");
             }
 
             var user = await _usersAppService.GetCurrentUserAsync();
@@ -84,22 +105,15 @@ namespace ChatRoomWithBot.UI.MVC.Controllers
                     TempData["Message"] = "Fail to Join in the room ";
                     break;
                 case true:
-                    CreateCookie(userId: user.Id);
+
+                    ViewData["roomId"] = Criptografia.Encrypt(room.ChatRoomId.ToString());
+
                     break;
             }
 
-            ViewData["ChatName"] = room.Name; 
+            ViewData["ChatName"] = room.Name;
 
             return View("Index");
-        }
-
-        private void CreateCookie(Guid userId)
-        {
-            var option = new CookieOptions
-            {
-                Expires = DateTime.Now.AddMinutes(30)
-            };
-            Response.Cookies.Append(key, userId.ToString(), option);
         }
 
 

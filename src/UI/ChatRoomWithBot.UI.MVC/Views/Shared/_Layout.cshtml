@@ -26,7 +26,7 @@
                     <partial name="_LoginPartial" />
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link text-dark"  asp-controller="Home" asp-action="Index">Home</a>
+                            <a class="nav-link text-dark" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
                         @if (_usersAppService.IsAuthenticated())
                         {
@@ -36,7 +36,7 @@
                             </li>
 
                             <li class="nav-item">
-                                <a class="nav-link text-dark"  asp-controller="Account" asp-action="Users">List of Users</a>
+                                <a class="nav-link text-dark" asp-controller="Account" asp-action="Users">List of Users</a>
                             </li>
 
                         }
@@ -68,6 +68,8 @@
     <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
 
+    <script src="~/js/signalr/dist/browser/signalr.js"></script>
+    <script src="~/js/chat.js"></script>
 
     @await RenderSectionAsync("Scripts", required: false)
 </body>

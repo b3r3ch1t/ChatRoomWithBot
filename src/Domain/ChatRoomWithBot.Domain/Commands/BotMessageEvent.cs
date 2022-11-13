@@ -1,5 +1,4 @@
 ﻿using ChatRoomWithBot.Domain.Bus;
-using MediatR;
 
 namespace ChatRoomWithBot.Domain.Commands
 {

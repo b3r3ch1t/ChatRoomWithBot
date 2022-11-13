@@ -7,5 +7,6 @@ namespace ChatRoomWithBot.UI.MVC.Services
     [Authorize]
     public class ChatRoomHub:Hub
     {
+         
     }
 }
