@@ -38,7 +38,7 @@ namespace ChatRoomWithBot.UI.MVC.Controllers
         {
             if (!ModelState.IsValid) return View();
             var result = await _userIdentityManager.Login(model);
-            if (!result.Error)
+            if (!result.Error && result.Result.Succeeded )
             {
                 var claims = new List<Claim>() {
                     new Claim(ClaimTypes.NameIdentifier, Convert.ToString(model.Email)),
@@ -54,12 +54,12 @@ namespace ChatRoomWithBot.UI.MVC.Controllers
                     new ClaimsPrincipal(identity));
             }
 
-            if (model.ReturnUrl != null)
-            {
-                return Redirect(model.ReturnUrl);
-            }
+            if (result.Result.Succeeded) return RedirectToAction("Index", "Rooms");
 
-            return RedirectToAction("Index", "Rooms");
+
+            TempData["Login"] = "User or password is invalid.";
+            return RedirectToAction("Login", "Account");
+
         }
 
 

@@ -1,35 +1,39 @@
 ﻿using AutoMapper;
 using ChatRoomWithBot.Application.Interfaces;
 using ChatRoomWithBot.Application.ViewModel;
+using ChatRoomWithBot.Data.IdentityModel;
 using ChatRoomWithBot.Data.Interfaces;
 using ChatRoomWithBot.Domain.Interfaces;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 
 namespace ChatRoomWithBot.Application.Services
 {
-    internal  class UsersAppService: IUsersAppService
+    internal class UsersAppService : IUsersAppService
     {
         private readonly IUserIdentityRepository _userIdentityRepository;
         private readonly IError _error;
         private readonly IMapper _mapper;
         private readonly IHttpContextAccessor _accessor;
 
+        private readonly UserManager<UserIdentity> _userManager;
 
-        public UsersAppService(IUserIdentityRepository userIdentityRepository, IError error, IMapper mapper, IHttpContextAccessor accessor)
+        public UsersAppService(IUserIdentityRepository userIdentityRepository, IError error, IMapper mapper, IHttpContextAccessor accessor, UserManager<UserIdentity> userManager)
         {
             _userIdentityRepository = userIdentityRepository;
             _error = error;
             _mapper = mapper;
             _accessor = accessor;
+            _userManager = userManager;
         }
 
         public void Dispose()
         {
-            _userIdentityRepository.Dispose(); 
+            _userIdentityRepository.Dispose();
             GC.SuppressFinalize(this);
         }
 
-        public  bool IsAuthenticated()
+        public bool IsAuthenticated()
         {
             return _accessor.HttpContext.User.Identity.IsAuthenticated;
         }
@@ -43,18 +47,26 @@ namespace ChatRoomWithBot.Application.Services
             return map;
         }
 
-        public async   Task<IEnumerable<UserViewModel>> GetAllUsersAsync()
+        public async Task<IEnumerable<UserViewModel>> GetAllUsersAsync()
         {
-            var result =await  _userIdentityRepository.GetAllUsersAsync( );
+            var result = await _userIdentityRepository.GetAllUsersAsync();
 
-            var map = _mapper.Map<IEnumerable<UserViewModel>> (result);
+            var map = _mapper.Map<IEnumerable<UserViewModel>>(result);
 
             return map;
         }
 
-        public Task<UserViewModel> GetCurrentUserAsync()
+        public async Task<UserViewModel> GetCurrentUserAsync()
         {
-            throw new NotImplementedException();
+            var userId = _accessor.HttpContext.User
+                .Identities.FirstOrDefault()
+                ?.Claims.FirstOrDefault(x => x.Type == "userId")
+                ?.Value;
+
+            var user = await _userManager.FindByIdAsync(userId);
+
+            var map = _mapper.Map<UserViewModel>(user);
+            return map;
         }
     }
 }

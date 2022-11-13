@@ -1,19 +1,27 @@
 ﻿@using Microsoft.AspNetCore.Mvc.TagHelpers
+
 @model ChatRoomWithBot.Service.Identity.ViewModels.LoginViewModel
 @{
     ViewData["Title"] = "Log in";
 }
 
 <h1>@ViewData["Title"]</h1>
+
+
 <div class="row">
     <div class="col-md-4">
         <section>
-            <form id="account" method="post" action="Login"  >
-                
+            <form id="account" method="post" action="Login">
+
                 @Html.AntiForgeryToken()
                 <h4>Use a local account to log in.</h4>
                 <hr />
-                <div asp-validation-summary="All" class="text-danger"></div>
+                
+                <div class="text-danger">
+                    @TempData["Login"]
+
+                </div>
+                
                 <div class="form-group">
                     <label asp-for="Email"></label>
                     <input asp-for="Email" class="form-control" />
@@ -21,7 +29,7 @@
                 </div>
                 <div class="form-group">
                     <label asp-for="Password"></label>
-                    <input asp-for="Password" class="form-control" />
+                    <input asp-for="Password" type="password" class="form-control" />
                     <span asp-validation-for="Password" class="text-danger"></span>
                 </div>
                 <div class="form-group">
@@ -38,8 +46,8 @@
                 <div class="form-group">
                     <p>
                         <a class="nav-link text-dark" asp-controller="Account" asp-action="ForgotPassword">Forgot your password?</a>
-                        
-                    </p> 
+
+                    </p>
                 </div>
             </form>
         </section>
