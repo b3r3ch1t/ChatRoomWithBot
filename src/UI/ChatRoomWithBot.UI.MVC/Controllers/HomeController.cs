@@ -3,7 +3,6 @@ using ChatRoomWithBot.Application.Interfaces;
 using ChatRoomWithBot.UI.MVC.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using RabbitMQ.Client;
 
 namespace ChatRoomWithBot.UI.MVC.Controllers
 {

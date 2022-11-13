@@ -1,11 +1,7 @@
 ﻿using ChatRoomWithBot.Application.Interfaces;
 using ChatRoomWithBot.Application.ViewModel;
-using ChatRoomWithBot.Data.IdentityModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using Newtonsoft.Json.Linq;
-using Sentry;
 
 namespace ChatRoomWithBot.UI.MVC.Controllers
 {

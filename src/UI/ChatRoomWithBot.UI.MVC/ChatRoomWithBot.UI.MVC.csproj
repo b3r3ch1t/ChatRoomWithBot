@@ -63,7 +63,7 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.10" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.10">
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.11">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
@@ -77,6 +77,7 @@
     <ProjectReference Include="..\..\Application\ChatRoomWithBot.Application\ChatRoomWithBot.Application.csproj" />
     <ProjectReference Include="..\..\Data\ChatRoomWithBot.Data\ChatRoomWithBot.Data.csproj" />
     <ProjectReference Include="..\..\Services\ChatRoomWithBot.Service.Identity\ChatRoomWithBot.Service.Identity.csproj" />
+    <ProjectReference Include="..\..\Services\ChatRoomWithBot.Service.SignalR\ChatRoomWithBot.Service.SignalR.csproj" />
     <ProjectReference Include="..\..\Services\ChatRoomWithBot.Services.Log\ChatRoomWithBot.Services.Log.csproj" />
     <ProjectReference Include="..\..\Services\ChatRoomWithBot.Services.RabbitMq\ChatRoomWithBot.Services.RabbitMq.csproj" />
   </ItemGroup>

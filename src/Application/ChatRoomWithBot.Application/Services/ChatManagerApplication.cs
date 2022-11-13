@@ -1,9 +1,4 @@
 ﻿using ChatRoomWithBot.Application.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using ChatRoomWithBot.Application.ViewModel;
 using ChatRoomWithBot.Domain.Interfaces;
 using AutoMapper;
@@ -16,13 +11,11 @@ namespace ChatRoomWithBot.Application.Services
 
         private readonly IChatRoomRepository _chatRoomRepository;
         private readonly IMapper _mapper;
-        private readonly IUsersAppService _usersAppService; 
         private readonly IChatManagerDomain _chatManagerDomain;
         public ChatManagerApplication(IChatRoomRepository chatRoomRepository, IMapper mapper, IUsersAppService usersAppService, IChatManagerDomain chatManagerDomain)
         {
             _chatRoomRepository = chatRoomRepository;
             _mapper = mapper;
-            _usersAppService = usersAppService;
             _chatManagerDomain = chatManagerDomain;
         }
 

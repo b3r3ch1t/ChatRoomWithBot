@@ -4,7 +4,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
 using ChatRoomWithBot.Data.Interfaces;
 using ChatRoomWithBot.Data.Repository;
-using ChatRoomWithBot.Domain.Interfaces;
 using ChatRoomWithBot.Domain.Interfaces.Repositories;
 
 namespace ChatRoomWithBot.Data.IoC

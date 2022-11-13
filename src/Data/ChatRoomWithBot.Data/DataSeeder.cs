@@ -1,5 +1,4 @@
-﻿using System.Runtime.CompilerServices;
-using ChatRoomWithBot.Data.Context;
+﻿using ChatRoomWithBot.Data.Context;
 using ChatRoomWithBot.Data.IdentityModel;
 using ChatRoomWithBot.Domain.Interfaces;
 using Microsoft.AspNetCore.Identity;

@@ -2,7 +2,6 @@
 using ChatRoomWithBot.Domain.Entities;
 using ChatRoomWithBot.Domain.Interfaces;
 using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
 using ChatRoomWithBot.Domain.Interfaces.Repositories;
 
 namespace ChatRoomWithBot.Data.Repository

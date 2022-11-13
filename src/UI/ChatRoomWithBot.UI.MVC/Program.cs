@@ -10,6 +10,8 @@ using System.Reflection;
 using ChatRoomWithBot.Application.IoC;
 using MediatR;
 using ChatRoomWithBot.Application.AutoMapper;
+using ChatRoomWithBot.Service.SignalR.IoC;
+using ChatRoomWithBot.Service.SignalR;
 
 const string AspNetCoreEnvironment = "ASPNETCORE_ENVIRONMENT";
 
@@ -24,7 +26,8 @@ builder.Services
     .RegisterApplicationDependencies(builder.Configuration)
     .RegisterDataDependencies(builder.Configuration)
     .RegisterServicesRabbitMqDependencies()
-    .RegisterIdentityDependencies();
+    .RegisterIdentityDependencies()
+    .RegisterSignalRDependencies();
 
 
 #region Mediator
