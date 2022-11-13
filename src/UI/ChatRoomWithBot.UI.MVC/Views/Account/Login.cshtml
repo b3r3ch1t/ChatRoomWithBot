@@ -1,4 +1,6 @@
 ﻿@using Microsoft.AspNetCore.Mvc.TagHelpers
+@using ChatRoomWithBot.Application.Interfaces
+@inject IUsersAppService _usersAppService
 
 @model ChatRoomWithBot.Service.Identity.ViewModels.LoginViewModel
 @{
@@ -52,4 +54,11 @@
             </form>
         </section>
     </div>
+</div>
+
+<div class="row">
+    @{
+        var model = await  _usersAppService.GetAllUsersAsync();
+    }
+    <partial name="_Users" model="model" />
 </div>
