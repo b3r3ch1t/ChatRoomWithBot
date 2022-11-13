@@ -4,6 +4,8 @@ using ChatRoomWithBot.Service.Identity.Services;
 using Microsoft.AspNetCore.Identity;
 using ChatRoomWithBot.Data.Context;
 using ChatRoomWithBot.Data.IdentityModel;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc.Authorization;
 
 namespace ChatRoomWithBot.Service.Identity.IoC
 {
@@ -30,9 +32,25 @@ namespace ChatRoomWithBot.Service.Identity.IoC
             });
 
             
-            services.AddIdentity<UserIdentity, IdentityRole<Guid>>()
+            
+
+            services.AddDefaultIdentity<UserIdentity>(
+                    options => options.SignIn.RequireConfirmedAccount = true)
+                .AddRoles<IdentityRole<Guid>>()
                 .AddEntityFrameworkStores<ChatRoomWithBotContext>();
 
+
+            // Add services to the container.
+            //services.AddControllersWithViews();
+
+
+            services.AddControllersWithViews(config =>
+            {
+                var policy = new AuthorizationPolicyBuilder()
+                    .RequireAuthenticatedUser()
+                    .Build();
+                config.Filters.Add(new AuthorizeFilter(policy));
+            });
 
 
             return services; 

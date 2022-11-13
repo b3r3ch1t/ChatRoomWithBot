@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
 using ChatRoomWithBot.UI.MVC.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ChatRoomWithBot.UI.MVC.Controllers
@@ -8,16 +9,21 @@ namespace ChatRoomWithBot.UI.MVC.Controllers
     {
         private readonly ILogger<HomeController> _logger;
 
+
         public HomeController(ILogger<HomeController> logger)
         {
             _logger = logger;
         }
+
+        [AllowAnonymous]
 
         public IActionResult Index()
         {
             return View();
         }
 
+
+        [Authorize]
         public IActionResult Privacy()
         {
             return View();
