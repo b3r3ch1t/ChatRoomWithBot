@@ -20,7 +20,7 @@
                 <hr />
                 
                 <div class="text-danger">
-                    @TempData["Login"]
+                    @TempData["Message"]
 
                 </div>
                 
@@ -60,5 +60,7 @@
     @{
         var model = await  _usersAppService.GetAllUsersAsync();
     }
+    
+    <div class="text-danger">The password to default users is Test12345678 </div>
     <partial name="_Users" model="model" />
 </div>

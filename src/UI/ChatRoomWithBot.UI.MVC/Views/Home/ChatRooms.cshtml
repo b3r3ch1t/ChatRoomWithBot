@@ -1,0 +1,23 @@
+﻿@model IEnumerable< ChatRoomWithBot.Application.ViewModel.ChatRoomViewModel>
+
+
+<div class="text-danger">
+    @TempData["Message"]
+
+</div>
+
+
+@foreach (var m in Model)
+{
+
+
+    <a class="nav-link text-dark" asp-controller="ChatRoom" asp-route-id="@m.ChatRoomId" asp-action="JoinChatRoom">
+
+        <div class="d-inline p-2 bg-primary text-white">
+            @m.Name
+        </div>
+    </a>
+
+
+
+}

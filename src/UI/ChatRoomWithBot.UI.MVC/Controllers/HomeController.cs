@@ -1,18 +1,19 @@
 ﻿using System.Diagnostics;
+using ChatRoomWithBot.Application.Interfaces;
 using ChatRoomWithBot.UI.MVC.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using RabbitMQ.Client;
 
 namespace ChatRoomWithBot.UI.MVC.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        private readonly IChatManagerApplication _managerChat;
 
-
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(IChatManagerApplication managerChat)
         {
-            _logger = logger;
+            _managerChat = managerChat;
         }
 
         [AllowAnonymous]
@@ -27,6 +28,19 @@ namespace ChatRoomWithBot.UI.MVC.Controllers
         public IActionResult Privacy()
         {
             return View();
+        }
+
+
+
+        [Authorize]
+        [HttpGet]
+        public async Task<IActionResult> ChatRooms()
+        {
+
+            var model = await _managerChat.GetChatRoomsAsync();
+
+
+            return View(model);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

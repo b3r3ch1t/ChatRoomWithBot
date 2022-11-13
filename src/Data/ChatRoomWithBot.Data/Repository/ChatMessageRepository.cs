@@ -1,6 +1,7 @@
 ﻿using ChatRoomWithBot.Data.Context;
 using ChatRoomWithBot.Domain.Entities;
 using ChatRoomWithBot.Domain.Interfaces;
+using ChatRoomWithBot.Domain.Interfaces.Repositories;
 
 namespace ChatRoomWithBot.Data.Repository;
 

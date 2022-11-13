@@ -5,6 +5,7 @@ using ChatRoomWithBot.Data.IdentityModel;
 using ChatRoomWithBot.Data.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace ChatRoomWithBot.Application.Services
 {
@@ -35,6 +36,8 @@ namespace ChatRoomWithBot.Application.Services
             return _accessor.HttpContext.User.Identity.IsAuthenticated;
         }
 
+       
+
         public async Task<UserViewModel> GetUserByIdAsync(Guid userId)
         {
             var result = _userIdentityRepository.GetUserByIdAsync(userId);
@@ -55,12 +58,12 @@ namespace ChatRoomWithBot.Application.Services
 
         public async Task<UserViewModel> GetCurrentUserAsync()
         {
-            var userId = _accessor.HttpContext.User
+            var userEmail = _accessor.HttpContext.User
                 .Identities.FirstOrDefault()
-                ?.Claims.FirstOrDefault(x => x.Type == "userId")
+                ?.Claims.FirstOrDefault(x => x.Type == "userEmail")
                 ?.Value;
 
-            var user = await _userManager.FindByIdAsync(userId);
+            var user = await _userManager.FindByEmailAsync(userEmail);
 
             var map = _mapper.Map<UserViewModel>(user);
             return map;

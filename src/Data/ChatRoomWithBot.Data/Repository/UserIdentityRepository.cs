@@ -1,4 +1,5 @@
-﻿using ChatRoomWithBot.Data.Context;
+﻿using System.Runtime.CompilerServices;
+using ChatRoomWithBot.Data.Context;
 using ChatRoomWithBot.Data.IdentityModel;
 using ChatRoomWithBot.Data.Interfaces;
 using ChatRoomWithBot.Domain.Interfaces;
@@ -7,10 +8,10 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ChatRoomWithBot.Data.Repository
 {
-    internal class UserIdentityRepository:IUserIdentityRepository 
+    internal class UserIdentityRepository : IUserIdentityRepository
     {
 
-        private readonly UserManager<UserIdentity> _userManager; 
+        private readonly UserManager<UserIdentity> _userManager;
         private readonly IError _error;
         private readonly ChatRoomWithBotContext _context;
 
@@ -35,16 +36,24 @@ namespace ChatRoomWithBot.Data.Repository
             }
             catch (Exception e)
             {
-               _error.Error(e);
+                _error.Error(e);
             }
-           
-            
+
+
         }
 
-        public async  Task<List<UserIdentity>> GetAllAsync()
+        public async Task<IEnumerable<UserIdentity>> GetAllAsync()
         {
-            var result =await  _context.Users.ToListAsync();
-            return result; 
+            var result = await _context.Users.ToListAsync();
+            return result;
+        }
+
+        public async Task<UserIdentity> GetByIdAsync(Guid id)
+        {
+            var result = await _context.Users
+                .FirstOrDefaultAsync(x => x.Id == id);
+
+            return result;
         }
 
         public void Dispose()
@@ -55,16 +64,16 @@ namespace ChatRoomWithBot.Data.Repository
         }
 
 
-        public async  Task<UserIdentity> GetUserByIdAsync(Guid userId)
+        public async Task<UserIdentity> GetUserByIdAsync(Guid userId)
         {
-            return await  _context.Users.FirstOrDefaultAsync(x => x.Id == userId); 
+            return await _context.Users.FirstOrDefaultAsync(x => x.Id == userId);
         }
 
-        public async  Task<IEnumerable<UserIdentity>> GetAllUsersAsync()
+        public async Task<IEnumerable<UserIdentity>> GetAllUsersAsync()
         {
-            var result =   _context.Users.AsEnumerable();
+            var result = _context.Users.AsEnumerable();
 
-            return   result ;
+            return result;
         }
     }
 }

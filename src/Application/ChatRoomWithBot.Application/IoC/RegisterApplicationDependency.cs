@@ -16,6 +16,8 @@ namespace ChatRoomWithBot.Application.IoC
 
             services.AddScoped<IUsersAppService, UsersAppService>();
 
+            services.AddScoped<IChatManagerApplication, ChatManagerApplication>(); 
+
             return services;
 
         }

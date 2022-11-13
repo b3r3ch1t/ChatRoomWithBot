@@ -8,5 +8,5 @@ public interface IUsersAppService:IDisposable
     Task<IEnumerable<UserViewModel>> GetAllUsersAsync();
     Task<UserViewModel> GetCurrentUserAsync();
 
-    bool IsAuthenticated(); 
+    bool IsAuthenticated();
 }

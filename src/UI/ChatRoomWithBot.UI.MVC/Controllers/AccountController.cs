@@ -42,6 +42,7 @@ namespace ChatRoomWithBot.UI.MVC.Controllers
                 var claims = new List<Claim>() {
                     new Claim(ClaimTypes.NameIdentifier, Convert.ToString(model.Email)),
                     new Claim(ClaimTypes.Name, model.Email),
+                    new Claim("userEmail", model.Email),
                 };
 
                 var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
@@ -53,10 +54,10 @@ namespace ChatRoomWithBot.UI.MVC.Controllers
                     new ClaimsPrincipal(identity));
             }
 
-            if (result.Result.Succeeded) return RedirectToAction("Index", "Rooms");
+            if (result.Result.Succeeded) return RedirectToAction("ChatRooms", "Home");
 
 
-            TempData["Login"] = "User or password is invalid.";
+            TempData["Message"] = "User or password is invalid.";
             return RedirectToAction("Login", "Account");
 
         }
@@ -87,7 +88,7 @@ namespace ChatRoomWithBot.UI.MVC.Controllers
         {
             if (!ModelState.IsValid)
             {
-                TempData["Register"] = "Error in data";
+                TempData["Message"] = "Error in data";
 
                 return View(model);
             }
@@ -97,7 +98,7 @@ namespace ChatRoomWithBot.UI.MVC.Controllers
 
             if (!result.Error && result.Result.Succeeded)
             {
-                TempData["Register"] = "User created with success !";
+                TempData["Message"] = "User created with success !";
 
             }
             return View();
