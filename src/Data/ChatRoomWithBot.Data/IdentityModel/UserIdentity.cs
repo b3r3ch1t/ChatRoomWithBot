@@ -9,15 +9,9 @@ namespace ChatRoomWithBot.Data.IdentityModel
         public Guid Id { get; protected set; }
 
         public string Name { get; set; }
-         
-        public DateTime DateModification { get; set; }
+      
         public DateTime DateCreated { get; set; }
         public IEnumerable<ChatMessage> ChatMessages { get; set; }
-
-        public void ChangeDateModification(DateTime date)
-        {
-            DateModification = date;
-        }
 
         public void ChangeDateCreated(DateTime date)
         {

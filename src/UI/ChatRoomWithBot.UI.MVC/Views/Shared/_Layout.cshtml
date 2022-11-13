@@ -1,4 +1,7 @@
-﻿<!DOCTYPE html>
+﻿@using ChatRoomWithBot.Application.Interfaces
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@inject IUsersAppService _usersAppService
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -23,17 +26,27 @@
                     <partial name="_LoginPartial" />
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                            <a class="nav-link text-dark"  asp-controller="Home" asp-action="Index">Home</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                            <a class="nav-link text-dark"  asp-controller="Home" asp-action="Privacy">Privacy</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-controller="Sala1" asp-action="Index">Sala1</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Sala2" asp-action="Index">Sala2</a>
-                        </li>
+                        @if (_usersAppService.IsAuthenticated())
+                        {
+
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-controller="Sala1" asp-action="Index">Sala1</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Sala2" asp-action="Index">Sala2</a>
+                            </li>
+
+
+                            <li class="nav-item">
+                                <a class="nav-link text-dark"  asp-controller="Account" asp-action="Users">List of Users</a>
+                            </li>
+
+                        }
                     </ul>
                 </div>
             </div>
@@ -53,14 +66,14 @@
 
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
-<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 
 
 
-<script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
 
     <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
-<script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
 
 
     @await RenderSectionAsync("Scripts", required: false)

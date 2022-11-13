@@ -1,4 +1,5 @@
 ﻿using System.Security.Claims;
+using ChatRoomWithBot.Application.Interfaces;
 using ChatRoomWithBot.Data.IdentityModel;
 using ChatRoomWithBot.Service.Identity.Interfaces;
 using ChatRoomWithBot.Service.Identity.ViewModels;
@@ -13,16 +14,15 @@ namespace ChatRoomWithBot.UI.MVC.Controllers
 
     [Authorize]
     public class AccountController : Controller
-    { 
-        private readonly UserManager<UserIdentity> _userManager;
+    {
 
         private readonly IUserIdentityManager _userIdentityManager;
+        private readonly IUsersAppService _usersAppService;
 
-        public AccountController(  UserManager<UserIdentity> userManager, IUserIdentityManager userIdentityManager)
+        public AccountController(IUserIdentityManager userIdentityManager, IUsersAppService usersAppService)
         {
-             
-            _userManager = userManager;
             _userIdentityManager = userIdentityManager;
+            _usersAppService = usersAppService;
         }
 
         [AllowAnonymous]
@@ -39,11 +39,11 @@ namespace ChatRoomWithBot.UI.MVC.Controllers
         {
             if (!ModelState.IsValid) return View();
             var result = await _userIdentityManager.Login(model);
-            if (!result.Error && result.Result.Succeeded )
+            if (!result.Error && result.Result.Succeeded)
             {
                 var claims = new List<Claim>() {
                     new Claim(ClaimTypes.NameIdentifier, Convert.ToString(model.Email)),
-                    new Claim(ClaimTypes.Name, model.Email), 
+                    new Claim(ClaimTypes.Name, model.Email),
                 };
 
                 var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
@@ -76,16 +76,16 @@ namespace ChatRoomWithBot.UI.MVC.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        public    IActionResult  Register()
+        public IActionResult Register()
         {
-          return View();
+            return View();
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         [AllowAnonymous]
 
-        public async Task<IActionResult> Register(RegisterViewModel model )
+        public async Task<IActionResult> Register(RegisterViewModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -95,15 +95,21 @@ namespace ChatRoomWithBot.UI.MVC.Controllers
             }
 
 
-            var result = await _userIdentityManager.Register(model );
+            var result = await _userIdentityManager.Register(model);
 
             if (!result.Error && result.Result.Succeeded)
             {
                 TempData["Register"] = "User created with success !";
 
             }
-            return View(); 
+            return View();
         }
 
+        public async Task<IActionResult> Users()
+        {
+            var users = await  _usersAppService.GetAllUsersAsync();
+
+            return View(users); 
+        }
     }
 }
