@@ -10,12 +10,6 @@ public interface IUserIdentityManager
     
     Task<OperationResult<IdentityResult>> Register(RegisterViewModel model );
 
-    Task<OperationResult<bool>> ConfirmEmail(Guid userId, string code);
-
-    Task<OperationResult<ForgotPasswordViewModel>> ForgotPassword(ForgotPasswordViewModel model);
-
-    Task<OperationResult<ResetPasswordViewModel>> ResetPassword(ResetPasswordViewModel model);
-
-
+   
 
 }

@@ -96,61 +96,7 @@ namespace ChatRoomWithBot.Service.Identity.Services
 
         }
 
-        public async Task<OperationResult<bool>> ConfirmEmail(Guid userId, string code)
-        {
-            if (string.IsNullOrWhiteSpace(code))
-            {
-                return new OperationResult<bool>("The code is invalid !");
-            }
-            var user = await _userManager.FindByIdAsync(userId.ToString());
-            if (user == null)
-            {
-                return new OperationResult<bool>("The userId is invalid !");
-            }
-            code = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(code));
-            var result = await _userManager.ConfirmEmailAsync(user, code);
-
-            return result.Succeeded ? new OperationResult<bool>(true) : new OperationResult<bool>("Error in confirm email");
-        }
-
-        public async Task<OperationResult<ForgotPasswordViewModel>> ForgotPassword(ForgotPasswordViewModel model)
-        {
-            var user = await _userManager.FindByNameAsync(model.Email);
-            if (user == null)
-            {
-                // Don't reveal that the user does not exist or is not confirmed
-                model.Code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(Guid.NewGuid().ToString()));
-                return new OperationResult<ForgotPasswordViewModel>(model);
-
-            }
-
-            var code = await _userManager.GeneratePasswordResetTokenAsync(user);
-            code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
-
-
-
-            model.Code = code;
-            return new OperationResult<ForgotPasswordViewModel>(model);
-
-
-
-        }
-
-        public async Task<OperationResult<ResetPasswordViewModel>> ResetPassword(ResetPasswordViewModel model)
-        {
-            var user = await _userManager.FindByNameAsync(model.Email);
-            if (user == null)
-            {
-                // Don't reveal that the user does not exist or is not confirmed
-
-                return new OperationResult<ResetPasswordViewModel>(model);
-            }
-
-            var code = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(model.Code));
-            var result = await _userManager.ResetPasswordAsync(user, code, model.Password);
-            return result.Succeeded ? new OperationResult<ResetPasswordViewModel>(model) : new OperationResult<ResetPasswordViewModel>("Error in Reset password !");
-        }
-
+        
         public void Dispose()
         {
             GC.SuppressFinalize(this);
