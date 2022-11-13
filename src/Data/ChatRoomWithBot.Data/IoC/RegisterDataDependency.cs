@@ -1,6 +1,4 @@
 ﻿using ChatRoomWithBot.Data.Context;
-using ChatRoomWithBot.Data.IdentityModel;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;

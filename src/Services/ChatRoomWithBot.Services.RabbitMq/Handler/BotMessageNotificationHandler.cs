@@ -1,5 +1,4 @@
 ﻿using ChatRoomWithBot.Domain.Commands;
-using ChatRoomWithBot.Domain.Interfaces;
 using MediatR;
 
 namespace ChatRoomWithBot.Services.RabbitMq.Handler

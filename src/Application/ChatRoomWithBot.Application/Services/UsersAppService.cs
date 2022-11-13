@@ -3,25 +3,22 @@ using ChatRoomWithBot.Application.Interfaces;
 using ChatRoomWithBot.Application.ViewModel;
 using ChatRoomWithBot.Data.IdentityModel;
 using ChatRoomWithBot.Data.Interfaces;
-using ChatRoomWithBot.Domain.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 
 namespace ChatRoomWithBot.Application.Services
 {
-    internal class UsersAppService : IUsersAppService
+    public  class UsersAppService : IUsersAppService
     {
         private readonly IUserIdentityRepository _userIdentityRepository;
-        private readonly IError _error;
         private readonly IMapper _mapper;
         private readonly IHttpContextAccessor _accessor;
 
         private readonly UserManager<UserIdentity> _userManager;
 
-        public UsersAppService(IUserIdentityRepository userIdentityRepository, IError error, IMapper mapper, IHttpContextAccessor accessor, UserManager<UserIdentity> userManager)
+        public UsersAppService(IUserIdentityRepository userIdentityRepository, IMapper mapper, IHttpContextAccessor accessor, UserManager<UserIdentity> userManager)
         {
             _userIdentityRepository = userIdentityRepository;
-            _error = error;
             _mapper = mapper;
             _accessor = accessor;
             _userManager = userManager;

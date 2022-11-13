@@ -3,8 +3,6 @@ using ChatRoomWithBot.Domain.Interfaces;
 using ChatRoomWithBot.Service.Identity.Interfaces;
 using ChatRoomWithBot.Service.Identity.ViewModels;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.WebUtilities;
-using System.Text;
 using ChatRoomWithBot.Data.IdentityModel;
 
 namespace ChatRoomWithBot.Service.Identity.Services

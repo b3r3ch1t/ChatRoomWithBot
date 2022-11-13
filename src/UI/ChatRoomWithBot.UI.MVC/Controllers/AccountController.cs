@@ -1,12 +1,10 @@
 ﻿using System.Security.Claims;
 using ChatRoomWithBot.Application.Interfaces;
-using ChatRoomWithBot.Data.IdentityModel;
 using ChatRoomWithBot.Service.Identity.Interfaces;
 using ChatRoomWithBot.Service.Identity.ViewModels;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ChatRoomWithBot.UI.MVC.Controllers

@@ -9,16 +9,30 @@ using ChatRoomWithBot.UI.MVC.Extensions;
 using System.Reflection;
 using ChatRoomWithBot.Application.IoC;
 using MediatR;
-using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Identity;
 using ChatRoomWithBot.Application.AutoMapper;
+using ChatRoomWithBot.UI.MVC.Interfaces;
 
 const string AspNetCoreEnvironment = "ASPNETCORE_ENVIRONMENT";
 
 
-var builder = WebApplication.CreateBuilder(args); 
+var builder = WebApplication.CreateBuilder(args);
 
 
+var type = typeof(IRoomController);
+var types = AppDomain.CurrentDomain.GetAssemblies()
+    .SelectMany(s => s.GetTypes())
+    .Where(p => type.IsAssignableFrom(p) && p.FullName != "ChatRoomWithBot.UI.MVC.Interfaces.IRoomController")
+    .ToDictionary(x=>   x.GUID , x=> x.FullName);
+
+var lisRooms = new List<Guid>();
+
+foreach (var t in types)
+{
+     
+    
+}
+    
+ 
 
 
 builder.Services
