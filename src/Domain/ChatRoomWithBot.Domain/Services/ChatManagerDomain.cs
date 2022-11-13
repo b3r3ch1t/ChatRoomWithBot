@@ -1,26 +1,31 @@
-﻿using ChatRoomWithBot.Domain.Interfaces;
+﻿using ChatRoomWithBot.Domain.Commands;
+using ChatRoomWithBot.Domain.Interfaces;
 
 
 namespace ChatRoomWithBot.Domain.Services
 {
     public  class ChatManagerDomain: IChatManagerDomain
-    {
-        private readonly IChatManagerSignalR _chatManagerSignalR;
-
-        public ChatManagerDomain(IChatManagerSignalR chatManagerSignalR)
+    { 
+        private readonly IMediatorHandler _mediatorHandler; 
+        public ChatManagerDomain(IMediatorHandler mediatorHandler)
         {
-            _chatManagerSignalR = chatManagerSignalR;
+            _mediatorHandler = mediatorHandler;
         }
 
         public void Dispose()
         {
-            _chatManagerSignalR.Dispose();
+            
             GC.SuppressFinalize(this);
         }
 
-        public Task<bool> JoinChatRoomAsync(Guid roomId, Guid userId)
+        public async  Task<bool> JoinChatRoomAsync(Guid roomId, Guid userId)
         {
-            return _chatManagerSignalR.JoinChatRoomAsync(roomId: roomId, userId: userId); 
+
+            var joinChatRoomCommand = new JoinChatRoomCommand(roomId: roomId, userId: userId);
+
+            var result =await  _mediatorHandler.SendMessage(joinChatRoomCommand); 
+            
+            return result.Success; 
         }
     }
 }

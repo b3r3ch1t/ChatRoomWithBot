@@ -10,8 +10,10 @@ using System.Reflection;
 using ChatRoomWithBot.Application.IoC;
 using MediatR;
 using ChatRoomWithBot.Application.AutoMapper;
-using ChatRoomWithBot.Service.SignalR.IoC;
-using ChatRoomWithBot.Service.SignalR;
+using ChatRoomWithBot.UI.MVC.Services;
+using ChatRoomWithBot.Domain.Bus;
+using ChatRoomWithBot.Domain.Commands;
+using ChatRoomWithBot.UI.MVC.Handles;
 
 const string AspNetCoreEnvironment = "ASPNETCORE_ENVIRONMENT";
 
@@ -26,8 +28,7 @@ builder.Services
     .RegisterApplicationDependencies(builder.Configuration)
     .RegisterDataDependencies(builder.Configuration)
     .RegisterServicesRabbitMqDependencies()
-    .RegisterIdentityDependencies()
-    .RegisterSignalRDependencies();
+    .RegisterIdentityDependencies();
 
 
 #region Mediator
@@ -35,7 +36,6 @@ builder.Services
 builder.Services.AddMediatR(Assembly.GetExecutingAssembly());
 
 #endregion
-
 
 
 #region AutoMapper
@@ -47,6 +47,9 @@ builder.Services.AddAutoMapperSetup();
 builder.Services.Configure<RabbitMqSettings>(
     builder.Configuration.GetSection("RabbitMQ"));
 
+builder.Services.AddSignalR();
+
+builder.Services.AddScoped<IRequestHandler<JoinChatRoomCommand, CommandResponse>, ChatRoomHandler>();
 
 
 var configuration = new ConfigurationBuilder()
@@ -78,9 +81,15 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
+
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapHub<ChatRoomHub>("/chatroom");
+});
+
 //Configure RabbitMQ
 
-app.UseRabbitListener();
+app.UseRabbitListener(); 
 
 app.SeedData();
 

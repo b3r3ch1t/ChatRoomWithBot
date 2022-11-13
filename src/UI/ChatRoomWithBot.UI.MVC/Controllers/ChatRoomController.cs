@@ -78,15 +78,19 @@ namespace ChatRoomWithBot.UI.MVC.Controllers
 
             var result = await _managerChatMessage.JoinChatRoomAsync(roomId: id, userId: user.Id);
 
-            if (!result)
+            switch (result)
             {
-                TempData["Message"] = "Fail to Join in the room ";
+                case false:
+                    TempData["Message"] = "Fail to Join in the room ";
+                    break;
+                case true:
+                    CreateCookie(userId: user.Id);
+                    break;
             }
 
-            if (result) CreateCookie(userId: user.Id);
+            ViewData["ChatName"] = room.Name; 
 
-
-            return View();
+            return View("Index");
         }
 
         private void CreateCookie(Guid userId)

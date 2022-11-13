@@ -19,7 +19,7 @@ namespace ChatRoomWithBot.Domain.Bus
         {
             try
             {
-                await _mediator.Publish(chatMessage);
+                await _mediator.Send(chatMessage);
                 return CommandResponse.Ok();
             }
             catch (Exception e)

@@ -3,7 +3,7 @@ using MediatR;
 
 namespace ChatRoomWithBot.Domain.Commands
 {
-    public  class BotMessageEvent: Event, INotification
+    public  class BotMessageEvent: Event
     {
         public string StockCode { get; protected  set; }
 
