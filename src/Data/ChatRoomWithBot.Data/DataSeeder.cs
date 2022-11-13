@@ -36,7 +36,7 @@ namespace ChatRoomWithBot.Data
 
                     };
 
-                    _userManager.CreateAsync(user).GetAwaiter().GetResult();
+                  var x=  _userManager.CreateAsync(user, user.Email).GetAwaiter().GetResult();
 
 
                     user = new UserIdentity()
@@ -49,7 +49,7 @@ namespace ChatRoomWithBot.Data
 
                     };
 
-                    _userManager.CreateAsync(user).GetAwaiter().GetResult();
+                    _userManager.CreateAsync(user, user.Email).GetAwaiter().GetResult();
 
                 });
             }

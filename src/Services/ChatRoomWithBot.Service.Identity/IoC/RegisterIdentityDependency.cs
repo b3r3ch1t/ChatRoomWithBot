@@ -4,6 +4,7 @@ using ChatRoomWithBot.Service.Identity.Services;
 using Microsoft.AspNetCore.Identity;
 using ChatRoomWithBot.Data.Context;
 using ChatRoomWithBot.Data.IdentityModel;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Authorization;
 
@@ -39,6 +40,24 @@ namespace ChatRoomWithBot.Service.Identity.IoC
                 .AddRoles<IdentityRole<Guid>>()
                 .AddEntityFrameworkStores<ChatRoomWithBotContext>();
 
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                .AddCookie(options =>
+                {
+                    options.ExpireTimeSpan = TimeSpan.FromMinutes(20);
+                    options.SlidingExpiration = true;
+                    options.AccessDeniedPath = "/Forbidden/";
+                    options.LoginPath = "/Account/Login"; 
+                });
+
+            services.ConfigureApplicationCookie(options =>
+            {
+                // Cookie settings
+                options.Cookie.HttpOnly = true;
+                options.ExpireTimeSpan = TimeSpan.FromMinutes(5);
+
+                options.LoginPath = "/Account/Login"; 
+                options.SlidingExpiration = true;
+            });
 
             // Add services to the container.
             //services.AddControllersWithViews();

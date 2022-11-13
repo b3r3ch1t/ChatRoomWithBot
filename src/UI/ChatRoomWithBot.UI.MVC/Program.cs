@@ -7,7 +7,11 @@ using ChatRoomWithBot.Services.RabbitMq.IoC;
 using ChatRoomWithBot.Services.RabbitMq.Settings;
 using ChatRoomWithBot.UI.MVC.Extensions;
 using System.Reflection;
+using ChatRoomWithBot.Application.IoC;
 using MediatR;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Identity;
+using ChatRoomWithBot.Application.AutoMapper;
 
 const string AspNetCoreEnvironment = "ASPNETCORE_ENVIRONMENT";
 
@@ -20,6 +24,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services
     .RegisterDomainDependencies()
     .RegisterLogDependencies(builder.Configuration, builder.Environment)
+    .RegisterApplicationDependencies(builder.Configuration)
     .RegisterDataDependencies(builder.Configuration)
     .RegisterServicesRabbitMqDependencies()
     .RegisterIdentityDependencies();
@@ -31,6 +36,13 @@ builder.Services.AddMediatR(Assembly.GetExecutingAssembly());
 
 #endregion
 
+
+
+#region AutoMapper
+
+builder.Services.AddAutoMapperSetup();
+
+#endregion
 
 builder.Services.Configure<RabbitMqSettings>(
     builder.Configuration.GetSection("RabbitMQ"));
@@ -57,6 +69,8 @@ if (!app.Environment.IsDevelopment())
 app.UseStaticFiles();
 
 app.UseRouting();
+ 
+
 app.UseAuthentication();
 app.UseAuthorization();
 

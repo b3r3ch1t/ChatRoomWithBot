@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using ChatRoomWithBot.Application.Interfaces;
+using ChatRoomWithBot.Application.Services;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -11,6 +13,9 @@ namespace ChatRoomWithBot.Application.IoC
             IConfiguration configuration)
         {
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+
+            services.AddScoped<IUsersAppService, UsersAppService>();
+
             return services;
 
         }

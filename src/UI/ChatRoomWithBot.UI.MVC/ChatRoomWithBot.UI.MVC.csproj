@@ -74,6 +74,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Application\ChatRoomWithBot.Application\ChatRoomWithBot.Application.csproj" />
     <ProjectReference Include="..\..\Data\ChatRoomWithBot.Data\ChatRoomWithBot.Data.csproj" />
     <ProjectReference Include="..\..\Services\ChatRoomWithBot.Service.Identity\ChatRoomWithBot.Service.Identity.csproj" />
     <ProjectReference Include="..\..\Services\ChatRoomWithBot.Services.Log\ChatRoomWithBot.Services.Log.csproj" />

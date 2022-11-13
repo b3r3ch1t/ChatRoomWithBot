@@ -1,0 +1,25 @@
+﻿@using Microsoft.AspNetCore.Identity 
+@using ChatRoomWithBot.Application.Interfaces
+@inject IUsersAppService _usersAppService  
+
+<ul class="navbar-nav">
+    @if (_usersAppService.IsAuthenticated())
+    {
+        <li class="nav-item">
+            <a class="nav-link text-dark" asp-controller="Home" asp-action="Index">Hello @User.Identity.Name!</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link text-dark" asp-controller="Account" asp-action="Logoff">Logout</a>
+             
+        </li>
+    }
+    else
+    {
+        <li class="nav-item">
+            <a class="nav-link text-dark" asp-controller="Account" asp-action="Register">Register</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link text-dark" asp-controller="Account" asp-action="Login">Login</a>
+        </li>
+    }
+</ul>

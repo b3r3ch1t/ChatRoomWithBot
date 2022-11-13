@@ -3,6 +3,7 @@ using ChatRoomWithBot.Application.Interfaces;
 using ChatRoomWithBot.Application.ViewModel;
 using ChatRoomWithBot.Data.Interfaces;
 using ChatRoomWithBot.Domain.Interfaces;
+using Microsoft.AspNetCore.Http;
 
 namespace ChatRoomWithBot.Application.Services
 {
@@ -11,19 +12,26 @@ namespace ChatRoomWithBot.Application.Services
         private readonly IUserIdentityRepository _userIdentityRepository;
         private readonly IError _error;
         private readonly IMapper _mapper;
+        private readonly IHttpContextAccessor _accessor;
 
 
-        public UsersAppService(IUserIdentityRepository userIdentityRepository, IError error, IMapper mapper)
+        public UsersAppService(IUserIdentityRepository userIdentityRepository, IError error, IMapper mapper, IHttpContextAccessor accessor)
         {
             _userIdentityRepository = userIdentityRepository;
             _error = error;
             _mapper = mapper;
+            _accessor = accessor;
         }
 
         public void Dispose()
         {
             _userIdentityRepository.Dispose(); 
             GC.SuppressFinalize(this);
+        }
+
+        public  bool IsAuthenticated()
+        {
+            return _accessor.HttpContext.User.Identity.IsAuthenticated;
         }
 
         public async Task<UserViewModel> GetUserByIdAsync(Guid userId)

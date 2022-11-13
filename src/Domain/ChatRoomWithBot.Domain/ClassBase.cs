@@ -14,6 +14,8 @@ namespace ChatRoomWithBot.Domain
             _error = error;
         }
 
+         
+
         public  void ExecuteSafe(Action action)
         {
             try

@@ -9,14 +9,14 @@ using ChatRoomWithBot.Data.IdentityModel;
 
 namespace ChatRoomWithBot.Service.Identity.Services
 {
-    public class  UserIdentityManager : IUserIdentityManager, IDisposable
+    public class  UserIdentityManager :ClassBase, IUserIdentityManager, IDisposable
     {
         private readonly UserManager<UserIdentity> _userManager;
         private readonly SignInManager<UserIdentity> _signInManager;
         private readonly IError _error;
 
 
-        public UserIdentityManager(UserManager<UserIdentity> userManager, SignInManager<UserIdentity> signInManager, IError error)
+        public UserIdentityManager(UserManager<UserIdentity> userManager, SignInManager<UserIdentity> signInManager, IError error) : base(error )
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -25,19 +25,35 @@ namespace ChatRoomWithBot.Service.Identity.Services
 
         public async Task<OperationResult<LoginViewModel>> Login(LoginViewModel model)
         {
-            var user = await _userManager.FindByNameAsync(model.Email);
-            if (user == null)
+
+            try
             {
-                return new OperationResult<LoginViewModel>("User or password is not valid !");
+                var user = await _userManager.FindByNameAsync(model.Email);
+                if (user == null)
+                {
+                    return new OperationResult<LoginViewModel>("User or password is not valid !");
+                }
+
+                var result = await _signInManager.CheckPasswordSignInAsync(user, model.Password, false);
+
+               
+                if (!result.Succeeded) return new OperationResult<LoginViewModel>("User or password is not valid !");
+
+
+                _error.Information("User logged in.");
+                return new OperationResult<LoginViewModel>(model);
+
+
+            }
+            catch (Exception e)
+            {
+              _error.Error(e);
+
+              return new OperationResult<LoginViewModel>("User or password is not valid !");
+
             }
 
-            var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberLogin, lockoutOnFailure: false);
-            if (!result.Succeeded) return new OperationResult<LoginViewModel>("User or password is not valid !");
 
-
-            _error.Information("User logged in.");
-            return new OperationResult<LoginViewModel>(model); 
-            
 
         }
 
