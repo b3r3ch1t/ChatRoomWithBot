@@ -57,21 +57,7 @@ namespace ChatRoomWithBot.Service.Identity.Services
 
         }
 
-        public async Task<OperationResult<LogoutViewModel>> Logout(LogoutViewModel model)
-        {
-            try
-            {
-                await _signInManager.SignOutAsync();
-                return new OperationResult<LogoutViewModel>(model);
-            }
-            catch (Exception e)
-            {
-                _error.Error(e);
-                return new OperationResult<LogoutViewModel>(e.Message);
-            }
-        }
-
-        public async Task<OperationResult<RegisterViewModel>> Register(RegisterViewModel model, string returnUrl)
+        public async Task<OperationResult<IdentityResult>> Register(RegisterViewModel model)
         {
 
             try
@@ -90,18 +76,20 @@ namespace ChatRoomWithBot.Service.Identity.Services
                 var result = await _userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
-                    return new OperationResult<RegisterViewModel>(model);
+                    return new OperationResult<IdentityResult>(IdentityResult.Success);
                 }
 
                 var msg = result.Errors.Aggregate(string.Empty, (current, error) => current + (error.Description + @"\"));
+                _error.Error(msg); 
 
-                return new OperationResult<RegisterViewModel>(msg);
+
+                return new OperationResult<IdentityResult>(IdentityResult.Failed( ));
 
             }
             catch (Exception e)
             {
                 _error.Error(e);
-                return new OperationResult<RegisterViewModel>(e);
+                return new OperationResult<IdentityResult>(IdentityResult.Failed());
 
             }
 

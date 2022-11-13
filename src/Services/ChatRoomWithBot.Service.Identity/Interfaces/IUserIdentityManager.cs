@@ -7,10 +7,8 @@ namespace ChatRoomWithBot.Service.Identity.Interfaces;
 public interface IUserIdentityManager
 {
     Task<OperationResult<SignInResult>> Login(LoginViewModel model);
-
-    Task<OperationResult<LogoutViewModel>> Logout(LogoutViewModel model);
-
-    Task<OperationResult<RegisterViewModel>> Register(RegisterViewModel model, string returnUrl);
+    
+    Task<OperationResult<IdentityResult>> Register(RegisterViewModel model );
 
     Task<OperationResult<bool>> ConfirmEmail(Guid userId, string code);
 

@@ -10,16 +10,17 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ChatRoomWithBot.UI.MVC.Controllers
 {
+
+    [Authorize]
     public class AccountController : Controller
-    {
-        private readonly SignInManager<UserIdentity> _signInManager;
+    { 
         private readonly UserManager<UserIdentity> _userManager;
 
         private readonly IUserIdentityManager _userIdentityManager;
 
-        public AccountController(SignInManager<UserIdentity> signInManager, UserManager<UserIdentity> userManager, IUserIdentityManager userIdentityManager)
+        public AccountController(  UserManager<UserIdentity> userManager, IUserIdentityManager userIdentityManager)
         {
-            _signInManager = signInManager;
+             
             _userManager = userManager;
             _userIdentityManager = userIdentityManager;
         }
@@ -64,6 +65,7 @@ namespace ChatRoomWithBot.UI.MVC.Controllers
 
 
         [HttpGet]
+
         public async Task<IActionResult> Logoff()
         {
 
@@ -71,5 +73,37 @@ namespace ChatRoomWithBot.UI.MVC.Controllers
                 CookieAuthenticationDefaults.AuthenticationScheme);
             return RedirectToAction("Index", "Home");
         }
+
+        [HttpGet]
+        [AllowAnonymous]
+        public    IActionResult  Register()
+        {
+          return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [AllowAnonymous]
+
+        public async Task<IActionResult> Register(RegisterViewModel model )
+        {
+            if (!ModelState.IsValid)
+            {
+                TempData["Register"] = "Error in data";
+
+                return View(model);
+            }
+
+
+            var result = await _userIdentityManager.Register(model );
+
+            if (!result.Error && result.Result.Succeeded)
+            {
+                TempData["Register"] = "User created with success !";
+
+            }
+            return View(); 
+        }
+
     }
 }
