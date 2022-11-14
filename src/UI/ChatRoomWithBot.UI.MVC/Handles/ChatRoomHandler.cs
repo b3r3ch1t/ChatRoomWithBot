@@ -21,10 +21,9 @@ public class ChatRoomHandler : IRequestHandler<JoinChatRoomEvent, CommandRespons
         try
         {
 
-            //var x = _hubContext.Clients;
 
-            //await _hubContext.Groups.AddToGroupAsync(connectionId: notification.UserId.ToString(),
-            //    groupName: notification.RoomId.ToString(), cancellationToken: cancellationToken);
+            await _hubContext.Groups.AddToGroupAsync(connectionId: notification.UserId.ToString(),
+                groupName: notification.RoomId.ToString(), cancellationToken: cancellationToken);
 
 
             return (CommandResponse.Ok());
