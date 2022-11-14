@@ -2,7 +2,7 @@
 {
     public  class ChatMessageFromUserEvent : Event
     {
-
+        public Guid UserId { get; set; }
        
     }
 }

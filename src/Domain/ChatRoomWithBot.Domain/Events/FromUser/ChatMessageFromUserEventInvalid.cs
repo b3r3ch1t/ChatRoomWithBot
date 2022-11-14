@@ -1,6 +1,7 @@
 ﻿namespace ChatRoomWithBot.Domain.Events.FromUser
 {
-    internal class ChatMessageFromUserEventInvalid
+    public  class ChatMessageFromUserEventInvalid: ChatMessageFromUserEvent
     {
+        public Guid UserId { get; set; }
     }
 }

@@ -33,9 +33,20 @@ namespace ChatRoomWithBot.Application.Services
             {
                 var chatMessageEvent = _mapper.Map<Event>(model);
 
-                var result = await _chatManagerDomain.SendMessageAsync(chatMessageEvent);
+                var type = chatMessageEvent.GetType().Name;
 
-                return result;
+                CommandResponse result;
+
+                switch (type)
+                {
+                    case "ChatMessageFromBotEvent":
+                        result = await _chatManagerDomain.SendMessageFromBotAsync((ChatMessageFromBotEvent)chatMessageEvent);
+                        return result;
+
+                    case "ChatMessageFromUserEvent":
+                        result = await _chatManagerDomain.SendMessageFromUserAsync((ChatMessageFromUserEvent)chatMessageEvent);
+                        return result;
+                }
             }
             catch (Exception e)
             {
@@ -43,6 +54,7 @@ namespace ChatRoomWithBot.Application.Services
                 return CommandResponse.Fail(e);
             }
 
+            return CommandResponse.Fail("Problem to send message");
         }
 
         public async Task<IEnumerable<ChatRoomViewModel>> GetChatRoomsAsync()
