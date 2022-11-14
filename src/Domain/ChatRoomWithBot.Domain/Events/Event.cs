@@ -2,24 +2,13 @@
 
 namespace ChatRoomWithBot.Domain.Events
 {
-    public class Event :  INotification
+    public abstract  class Event :  INotification
     {
-        public Guid UserId { get; set; }
-        public string Message { get; set; }
-        protected Event()
-        {
+        
+        public string Message { get;  }
+        public Guid CodeRoom { get; }
 
-        }
+        public virtual bool IsBotCommand { get; } 
 
-        public Event(Guid userId, string message) 
-        {
-            UserId = userId;
-            Message = message;
-        }
-
-        public bool IsBotCommand()
-        {
-            return Message.StartsWith('/');
-        }
     }
 }

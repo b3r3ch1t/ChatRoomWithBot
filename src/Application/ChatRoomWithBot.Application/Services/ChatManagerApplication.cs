@@ -14,21 +14,33 @@ namespace ChatRoomWithBot.Application.Services
         private readonly IChatRoomRepository _chatRoomRepository;
         private readonly IMapper _mapper;
         private readonly IChatManagerDomain _chatManagerDomain;
-        public ChatManagerApplication(IChatRoomRepository chatRoomRepository, IMapper mapper, IChatManagerDomain chatManagerDomain)
+        private readonly IBerechitLogger _berechitLogger;
+
+        public ChatManagerApplication(IChatRoomRepository chatRoomRepository, IMapper mapper, IChatManagerDomain chatManagerDomain, IBerechitLogger berechitLogger)
         {
             _chatRoomRepository = chatRoomRepository;
             _mapper = mapper;
             _chatManagerDomain = chatManagerDomain;
+            _berechitLogger = berechitLogger;
         }
 
-        public async Task<CommandResponse> SendMessageAsync(Guid roomId, string message, Guid userId)
+        public async Task<CommandResponse> SendMessageAsync(ISendMessageViewModel model)
         {
+ 
+            try
+            {
+                var chatMessageEvent = _mapper.Map<Event>(model);
 
-            var chatMessageEvent = new ChatMessageEvent(userId: userId, message: message, codeRoom: roomId);
+                var result = await _chatManagerDomain.SendMessageAsync(chatMessageEvent);
 
-            var result = await _chatManagerDomain.SendMessageAsync(chatMessageEvent);
-
-            return result ;
+                return result;
+            }
+            catch (Exception e)
+            {
+                _berechitLogger.Error(e);
+                return CommandResponse.Fail(e);
+            }
+           
         }
 
         public async Task<IEnumerable<ChatRoomViewModel>> GetChatRoomsAsync()

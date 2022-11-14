@@ -1,5 +1,4 @@
 ﻿using ChatRoomWithBot.Domain.Bus;
-using ChatRoomWithBot.Domain.Entities;
 using ChatRoomWithBot.Domain.Events;
 using ChatRoomWithBot.Domain.Interfaces;
 using ChatRoomWithBot.Domain.Validators;
@@ -10,8 +9,8 @@ namespace ChatRoomWithBot.Domain.Services
     public class ChatManagerDomain : IChatManagerDomain
     {
         private readonly IMediatorHandler _mediatorHandler;
-        private readonly ChatMessageEventValidator _validator;
-        public ChatManagerDomain(IMediatorHandler mediatorHandler, ChatMessageEventValidator validator)
+        private readonly EventValidator _validator;
+        public ChatManagerDomain(IMediatorHandler mediatorHandler, EventValidator validator)
         {
             _mediatorHandler = mediatorHandler;
             _validator = validator;
@@ -33,14 +32,17 @@ namespace ChatRoomWithBot.Domain.Services
             return result.Success;
         }
 
-        public async Task<CommandResponse> SendMessageAsync(ChatMessageEvent message)
+        public async Task<CommandResponse> SendMessageAsync(Event message)
         {
             var validate = await _validator.ValidateAsync(message);
 
-            var command = EventCreator.CriarChatMessageEvent(message, validate.IsValid);
+            //var command = EventCreator.CriarChatMessageEvent(message, validate.IsValid);
 
-            return await _mediatorHandler.PublishCommand(command);
+            //return await _mediatorHandler.PublishCommand(command);
+
+            return CommandResponse.Ok();
             
+
         }
     }
 }

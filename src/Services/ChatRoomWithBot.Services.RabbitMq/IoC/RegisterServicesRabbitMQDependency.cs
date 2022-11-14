@@ -13,7 +13,7 @@ namespace ChatRoomWithBot.Services.RabbitMq.IoC
         public static IServiceCollection RegisterServicesRabbitMqDependencies(
             this IServiceCollection services)
         {
-            services.AddScoped<INotificationHandler<ChatMessageBotEvent>, BotMessageNotificationHandler>();
+            services.AddScoped<INotificationHandler<Event>, BotMessageNotificationHandler>();
             services.AddScoped<IRabbitMqManager, RabbitMqManager>();
 
 

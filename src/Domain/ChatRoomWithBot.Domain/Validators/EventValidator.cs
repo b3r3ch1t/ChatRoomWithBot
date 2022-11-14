@@ -4,10 +4,10 @@ using FluentValidation;
 
 namespace ChatRoomWithBot.Domain.Validators
 {
-    public class ChatMessageEventValidator : AbstractValidator<ChatMessageEvent>
+    public class EventValidator : AbstractValidator<Event>
     {
         private readonly IChatRoomRepository _chatRoomRepository;
-        public ChatMessageEventValidator(IChatRoomRepository chatRoomRepository)
+        public EventValidator(IChatRoomRepository chatRoomRepository)
         {
             _chatRoomRepository = chatRoomRepository;
 
@@ -19,7 +19,7 @@ namespace ChatRoomWithBot.Domain.Validators
 
         private void ValidateCommand()
         {
-            When(x => x.IsBotCommand(), () =>
+            When(x => x.IsBotCommand , () =>
             {
                 RuleFor(x => x.Message)
                     .MustAsync(CommandIsValid)

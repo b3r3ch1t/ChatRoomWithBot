@@ -1,18 +1,18 @@
-using ChatRoomWithBot.Data.IoC;
 using ChatRoomWithBot.Domain.IoC;
-using ChatRoomWithBot.Service.Identity.IoC;
 using ChatRoomWithBot.Services.RabbitMq.Extensions;
-using ChatRoomWithBot.Services.RabbitMq.IoC;
 using ChatRoomWithBot.Services.RabbitMq.Settings;
 using ChatRoomWithBot.UI.MVC.Extensions;
 using System.Reflection;
-using ChatRoomWithBot.Application.IoC;
 using MediatR;
 using ChatRoomWithBot.Application.AutoMapper;
+using ChatRoomWithBot.Application.IoC;
+using ChatRoomWithBot.Data.IoC;
 using ChatRoomWithBot.UI.MVC.Services;
 using ChatRoomWithBot.Domain.Bus;
 using ChatRoomWithBot.Domain.Events;
+using ChatRoomWithBot.Service.Identity.IoC;
 using ChatRoomWithBot.Services.BerechitLog.IoC;
+using ChatRoomWithBot.Services.RabbitMq.IoC;
 using ChatRoomWithBot.UI.MVC.Handles;
 
 const string AspNetCoreEnvironment = "ASPNETCORE_ENVIRONMENT";

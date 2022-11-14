@@ -17,10 +17,10 @@ namespace ChatRoomWithBot.UI.MVC.Controllers
 
         private readonly IChatManagerApplication _managerChatMessage;
         private readonly IUsersAppService _usersAppService;
-        private readonly IBerechitLogger _berechitLogger; 
+        private readonly IBerechitLogger _berechitLogger;
 
         private const string key = "roomId";
-        public ChatRoomController(IChatManagerApplication managerChatMessage, IUsersAppService usersAppService, IBerechitLogger berechitLogger )
+        public ChatRoomController(IChatManagerApplication managerChatMessage, IUsersAppService usersAppService, IBerechitLogger berechitLogger)
         {
             _managerChatMessage = managerChatMessage;
             _usersAppService = usersAppService;
@@ -30,14 +30,8 @@ namespace ChatRoomWithBot.UI.MVC.Controllers
 
         [HttpPost]
         [Route("SendMessage")]
-        public async Task<IActionResult> SendMessage([FromBody] SendMessageViewModel model)
+        public async Task<IActionResult> SendMessage([FromBody] SendMessageFromUserViewModel model)
         {
-            
-            var user = await _usersAppService.GetCurrentUserAsync();
-            if (user == null)
-            {
-                return BadRequest("user or room invalid ! ");
-            }
 
             var room = await ValidateRoomIdAsync(model.RoomId);
 
@@ -46,7 +40,16 @@ namespace ChatRoomWithBot.UI.MVC.Controllers
                 return BadRequest("user or room invalid !");
             }
 
-            var result = await _managerChatMessage.SendMessageAsync(roomId: room.ChatRoomId, message: model.Message, user.Id);
+
+            var user = await _usersAppService.GetCurrentUserAsync();
+            if (user == null)
+            {
+                return BadRequest("user or room invalid ! ");
+            }
+
+
+
+            var result = await _managerChatMessage.SendMessageAsync(model);
 
             if (result.Failure)
 
@@ -54,6 +57,47 @@ namespace ChatRoomWithBot.UI.MVC.Controllers
 
             return Accepted(result);
 
+        }
+
+
+        [HttpPost]
+        [Route("SendMessageFromBot")]
+        public async Task<IActionResult> SendMessage([FromBody] SendMessageFromBotViewModel model)
+        {
+
+            var room = await ValidateRoomIdAsync(model.RoomId);
+
+            if (room == null)
+            {
+                return BadRequest("user or room invalid !");
+            }
+
+            if (ValidateBot(model.HashBot))
+            {
+                return BadRequest("user or room invalid !");
+            }
+
+            var result = await _managerChatMessage.SendMessageAsync(model);
+
+            if (result.Failure)
+
+                return BadRequest();
+
+            return Accepted(result);
+
+        }
+
+
+        private bool ValidateBot(string hashBot)
+        {
+            const string HashId = "a206dff7-814a-40ea-b4b3-89ea2656f574";
+
+            //Bot need to send this string to authenticate as a valid bot
+            //HashBot= "ogYA5nFt7287Iu74oEkhK+PG2KDEYBOZEJ52Pkx6PkJCnRpIUN1KWMvEfNzL649J"
+
+            if (string.IsNullOrWhiteSpace(hashBot)) return false;
+
+            return Criptografia.Decrypt(hashBot) == HashId;
         }
 
         private async Task<ChatRoomViewModel?> ValidateRoomIdAsync(string roomIdString)

@@ -2,7 +2,6 @@
 using ChatRoomWithBot.Services.RabbitMq.Settings;
 using Microsoft.Extensions.Options;
 using RabbitMQ.Client;
-using RabbitMQ.Client.Events;
 
 namespace ChatRoomWithBot.Services.RabbitMq.Manager
 {

@@ -8,7 +8,7 @@ using RabbitMQ.Client;
 
 namespace ChatRoomWithBot.Services.RabbitMq.Handler
 {
-    internal class BotMessageNotificationHandler : INotificationHandler<ChatMessageBotEvent>
+    internal class BotMessageNotificationHandler : INotificationHandler<Event>
     {
 
         private readonly RabbitMqSettings _rabbitMqSettings;
@@ -20,7 +20,7 @@ namespace ChatRoomWithBot.Services.RabbitMq.Handler
             _rabbitMqSettings = rabbitMqSettings.Value;
         }
 
-        public Task Handle(ChatMessageBotEvent notification, CancellationToken cancellationToken)
+        public Task Handle(Event notification, CancellationToken cancellationToken)
         {
 
             try

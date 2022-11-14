@@ -7,10 +7,9 @@ namespace ChatRoomWithBot.Domain.Events
     {
         public readonly  Guid RoomId;
 
-        public JoinChatRoomEvent(Guid roomId, Guid userId)
+        public JoinChatRoomEvent(Guid roomId, Guid userId) 
         {
             RoomId = roomId;
-            UserId = userId;
         }
     }
 }
