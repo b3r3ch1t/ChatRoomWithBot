@@ -3,6 +3,7 @@
 using ChatRoomWithBot.Domain.Bus;
 using ChatRoomWithBot.Domain.Interfaces;
 using ChatRoomWithBot.Domain.Services;
+using ChatRoomWithBot.Domain.Validators;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace ChatRoomWithBot.Domain.IoC
@@ -16,6 +17,7 @@ namespace ChatRoomWithBot.Domain.IoC
       
             services.AddScoped<IMediatorHandler, MediatorHandler>();
             services.AddScoped<IChatManagerDomain, ChatManagerDomain>();
+            services.AddScoped<ChatMessageEventValidator>(); 
 
             return services;
         }

@@ -1,4 +1,4 @@
-﻿using ChatRoomWithBot.Domain.Commands;
+﻿using ChatRoomWithBot.Domain.Events;
 using ChatRoomWithBot.Domain.Interfaces;
 using ChatRoomWithBot.Services.RabbitMq.Handler;
 using ChatRoomWithBot.Services.RabbitMq.Manager;

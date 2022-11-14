@@ -15,5 +15,7 @@ namespace ChatRoomWithBot.Domain.Bus
             UserId = userId;
             Message = message;
         }
+
+        
     }
 }

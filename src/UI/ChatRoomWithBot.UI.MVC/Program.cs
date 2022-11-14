@@ -12,7 +12,7 @@ using MediatR;
 using ChatRoomWithBot.Application.AutoMapper;
 using ChatRoomWithBot.UI.MVC.Services;
 using ChatRoomWithBot.Domain.Bus;
-using ChatRoomWithBot.Domain.Commands;
+using ChatRoomWithBot.Domain.Events;
 using ChatRoomWithBot.UI.MVC.Handles;
 
 const string AspNetCoreEnvironment = "ASPNETCORE_ENVIRONMENT";
@@ -49,7 +49,7 @@ builder.Services.Configure<RabbitMqSettings>(
 
 builder.Services.AddSignalR();
 
-builder.Services.AddScoped<IRequestHandler<JoinChatRoomCommand, CommandResponse>, ChatRoomHandler>();
+builder.Services.AddScoped<IRequestHandler<JoinChatRoomEvent, CommandResponse>, ChatRoomHandler>();
 
 
 var configuration = new ConfigurationBuilder()

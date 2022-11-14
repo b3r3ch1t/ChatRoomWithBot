@@ -4,5 +4,5 @@ namespace ChatRoomWithBot.Domain.Interfaces.Repositories;
 
 public interface IChatRoomRepository : IRepository<ChatRoom>
 {
-    
+    Task<bool> ExistsRoomIdAsync(Guid roomId);
 }

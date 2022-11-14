@@ -42,14 +42,14 @@ namespace ChatRoomWithBot.UI.MVC.Controllers
                 return BadRequest("user or room invalid ! ");
             }
 
-            var validateRoomId = await ValidateRoomIdAsync(model.RoomId);
+            var room = await ValidateRoomIdAsync(model.RoomId);
 
-            if (!validateRoomId )
+            if (room == null)
             {
                 return BadRequest("user or room invalid !");
             }
 
-            var result = await _managerChatMessage.SendMessageAsync(model);
+            var result = await _managerChatMessage.SendMessageAsync(roomId: room.ChatRoomId, message: model.Message, user.Id);
 
             if (result.Failure)
 
@@ -59,7 +59,7 @@ namespace ChatRoomWithBot.UI.MVC.Controllers
 
         }
 
-        private async Task<bool> ValidateRoomIdAsync (string roomIdString)
+        private async Task<ChatRoomViewModel?> ValidateRoomIdAsync(string roomIdString)
         {
             try
             {
@@ -67,12 +67,12 @@ namespace ChatRoomWithBot.UI.MVC.Controllers
 
                 var result = await _managerChatMessage.GetChatRoomByIdAsync(roomId);
 
-                return result != null;
+                return result;
             }
             catch (Exception e)
             {
                 _error.Error(e);
-                return false;
+                return null;
             }
         }
 

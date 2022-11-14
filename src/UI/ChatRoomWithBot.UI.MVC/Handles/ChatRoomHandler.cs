@@ -1,12 +1,12 @@
 ﻿using ChatRoomWithBot.Domain.Bus;
-using ChatRoomWithBot.Domain.Commands;
+using ChatRoomWithBot.Domain.Events;
 using ChatRoomWithBot.UI.MVC.Services;
 using MediatR;
 using Microsoft.AspNetCore.SignalR;
 
 namespace ChatRoomWithBot.UI.MVC.Handles;
 
-public class ChatRoomHandler : IRequestHandler<JoinChatRoomCommand, CommandResponse>
+public class ChatRoomHandler : IRequestHandler<JoinChatRoomEvent, CommandResponse>
 {
     private readonly IHubContext<ChatRoomHub> _hubContext;
 
@@ -15,7 +15,7 @@ public class ChatRoomHandler : IRequestHandler<JoinChatRoomCommand, CommandRespo
         _hubContext = hubContext;
     }
 
-    public async Task<CommandResponse> Handle(JoinChatRoomCommand notification, CancellationToken cancellationToken)
+    public async Task<CommandResponse> Handle(JoinChatRoomEvent notification, CancellationToken cancellationToken)
     {
 
         try

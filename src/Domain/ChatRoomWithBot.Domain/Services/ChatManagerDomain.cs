@@ -1,31 +1,46 @@
-﻿using ChatRoomWithBot.Domain.Commands;
+﻿using ChatRoomWithBot.Domain.Bus;
+using ChatRoomWithBot.Domain.Entities;
+using ChatRoomWithBot.Domain.Events;
 using ChatRoomWithBot.Domain.Interfaces;
+using ChatRoomWithBot.Domain.Validators;
 
 
 namespace ChatRoomWithBot.Domain.Services
 {
-    public  class ChatManagerDomain: IChatManagerDomain
-    { 
-        private readonly IMediatorHandler _mediatorHandler; 
-        public ChatManagerDomain(IMediatorHandler mediatorHandler)
+    public class ChatManagerDomain : IChatManagerDomain
+    {
+        private readonly IMediatorHandler _mediatorHandler;
+        private readonly ChatMessageEventValidator _validator;
+        public ChatManagerDomain(IMediatorHandler mediatorHandler, ChatMessageEventValidator validator)
         {
             _mediatorHandler = mediatorHandler;
+            _validator = validator;
         }
 
         public void Dispose()
         {
-            
+
             GC.SuppressFinalize(this);
         }
 
-        public async  Task<bool> JoinChatRoomAsync(Guid roomId, Guid userId)
+        public async Task<bool> JoinChatRoomAsync(Guid roomId, Guid userId)
         {
 
-            var joinChatRoomCommand = new JoinChatRoomCommand(roomId: roomId, userId: userId);
+            var joinChatRoomCommand = new JoinChatRoomEvent(roomId: roomId, userId: userId);
 
-            var result =await  _mediatorHandler.SendMessage(joinChatRoomCommand); 
+            var result = await _mediatorHandler.SendMessage(joinChatRoomCommand);
+
+            return result.Success;
+        }
+
+        public async Task<CommandResponse> SendMessageAsync(ChatMessageEvent message)
+        {
+            var validate = await _validator.ValidateAsync(message);
+
+            var command = EventCreator.CriarChatMessageEvent(message, validate.IsValid);
+
+            return await _mediatorHandler.SendMessage(command);
             
-            return result.Success; 
         }
     }
 }
