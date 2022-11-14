@@ -10,22 +10,27 @@ var connection = new signalR.HubConnectionBuilder()
 
 connection.on("ReceiveMessage", function (user, message) {
 
-
-      
-    var li = document.createElement("li");
-    $('#messagesList').val('');
+    $('#messagesList').empty();
 
     var arr = $.parseJSON(message);
     console.log("ReceiveMessage arr ==>", arr);
 
     $.each(arr, function (index, value) {
+
+       // var dateLocal = new Date(value.Date);
+
+        var sDate = new Date(Date.parse(value.Date, "MM/dd/yyyy"));
+        var content = value.UserName + '(' + sDate.toLocaleString() + ') --> ' + value.Message;
+
         var li = document.createElement("li");
+        document.getElementById("messagesList").appendChild(li);
+
+        li.textContent = content;
 
 
-        $('#messagesList').appendChild(li);
+        // $('#messagesList').appendChild(li);
 
-        var content = value.UserName ;
-        console.log("ReceiveMessage content ==>", content); 
+        console.log("ReceiveMessage content ==>", content);
     });
 
     //var li = document.createElement("li");
@@ -71,7 +76,7 @@ $("#sendButton").click(function (e) {
         data: data,
         success: function (data) {
             $('#messageInput').val('');
-            console.log('data=>', data); 
+            console.log('data=>', data);
 
             $('#messageError').hide();
 
@@ -79,10 +84,10 @@ $("#sendButton").click(function (e) {
         },
         error: function (XMLHttpRequest, textStatus, errorThrown) {
 
-            $('#messageError').val('the message wasn`t send'); 
+            $('#messageError').val('the message wasn`t send');
             $('#messageError').show();
 
-            console.log('erro=>', textStatus); 
+            console.log('erro=>', textStatus);
         }
     });
 
