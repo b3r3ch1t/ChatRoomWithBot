@@ -2,8 +2,7 @@
 
 public  interface IRabbitMqManager
 {
-    void Register();
-    void SendMessage(string message);
+    void Register(); 
     void DeRegister();
 
 

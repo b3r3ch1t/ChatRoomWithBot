@@ -1,6 +1,4 @@
-﻿using ChatRoomWithBot.Domain.Bus;
-
-namespace ChatRoomWithBot.Domain.Events
+﻿namespace ChatRoomWithBot.Domain.Events
 {
     public  class ChatMessageEvent:Event
     {

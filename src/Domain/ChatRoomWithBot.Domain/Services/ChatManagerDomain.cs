@@ -39,7 +39,7 @@ namespace ChatRoomWithBot.Domain.Services
 
             var command = EventCreator.CriarChatMessageEvent(message, validate.IsValid);
 
-            return await _mediatorHandler.SendMessage(command);
+            return await _mediatorHandler.PublishCommand(command);
             
         }
     }

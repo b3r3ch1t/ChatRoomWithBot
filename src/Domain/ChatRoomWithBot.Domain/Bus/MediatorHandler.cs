@@ -1,4 +1,5 @@
-﻿using ChatRoomWithBot.Domain.Interfaces;
+﻿using ChatRoomWithBot.Domain.Events;
+using ChatRoomWithBot.Domain.Interfaces;
 using MediatR;
 
 namespace ChatRoomWithBot.Domain.Bus
@@ -28,6 +29,20 @@ namespace ChatRoomWithBot.Domain.Bus
                 return CommandResponse.Fail(e);
             }
              
+        }
+
+        public async Task<CommandResponse> PublishCommand<T>(T chatMessage) where T : Event
+        {
+            try
+            {
+                await _mediator.Publish( chatMessage);
+                return CommandResponse.Ok();
+            }
+            catch (Exception e)
+            {
+                _error.Error(e);
+                return CommandResponse.Fail(e);
+            }
         }
     }
 }

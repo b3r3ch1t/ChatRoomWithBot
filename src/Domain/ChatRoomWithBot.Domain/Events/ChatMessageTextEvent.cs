@@ -1,10 +1,9 @@
-﻿using ChatRoomWithBot.Domain.Bus;
-
-namespace ChatRoomWithBot.Domain.Events
+﻿namespace ChatRoomWithBot.Domain.Events
 {
     public  class ChatMessageTextEvent:Event 
     {
         public readonly Guid CodeRoom;
+        public readonly Guid Id; 
 
         public ChatMessageTextEvent(string message, Guid codeRoom, Guid userId) : base(userId, message)
         {

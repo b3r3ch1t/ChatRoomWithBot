@@ -49,19 +49,7 @@ namespace ChatRoomWithBot.Services.RabbitMq.Manager
 
 
         }
-
-        public void SendMessage(string message)
-        {
-            var consumer = new EventingBasicConsumer(_channel);
-            consumer.Received += (model, ea) =>
-            {
-                var body = ea.Body;
-
-                _error.Information(" [x] Received {0}", message);
-            };
-            _channel.BasicConsume(queue: _rabbitMqSettings.BotResponseQueue.Name, autoAck: true, consumer: consumer);
-        }
-
+ 
         public void DeRegister()
         {
             _connection.Close();

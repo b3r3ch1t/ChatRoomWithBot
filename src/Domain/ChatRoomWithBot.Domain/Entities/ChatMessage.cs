@@ -19,9 +19,6 @@ namespace ChatRoomWithBot.Domain.Entities
         }
 
 
-        public bool IsBotCommand()
-        {
-            return Message.StartsWith('/');
-        }
+        
     }
 }

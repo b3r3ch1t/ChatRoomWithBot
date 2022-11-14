@@ -27,6 +27,7 @@ connection.start().then(function () {
 
 document.getElementById("sendButton").addEventListener("click", function (event) {
 
+    event.preventDefault(); 
     var message = document.getElementById("messageInput").value;
     var roomId = document.getElementById("roomId").value
 
@@ -43,5 +44,5 @@ document.getElementById("sendButton").addEventListener("click", function (event)
         },
         data:  data 
     });
-
+     
 });

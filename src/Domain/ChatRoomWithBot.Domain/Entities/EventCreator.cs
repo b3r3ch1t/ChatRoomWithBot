@@ -1,6 +1,4 @@
-﻿using System.Reflection.Metadata.Ecma335;
-using ChatRoomWithBot.Domain.Bus;
-using ChatRoomWithBot.Domain.Events;
+﻿using ChatRoomWithBot.Domain.Events;
 
 namespace ChatRoomWithBot.Domain.Entities
 {
@@ -17,7 +15,7 @@ namespace ChatRoomWithBot.Domain.Entities
 
             if (message.IsBotCommand())
             {
-                return new ChatMessageBotCommandEvent(message: message.Message, codeRoom: message.CodeRoom,
+                return new ChatMessageBotEvent(message: message.Message, codeRoom: message.CodeRoom,
                     userId: message.UserId); 
             }
 

@@ -1,6 +1,4 @@
-﻿using ChatRoomWithBot.Domain.Bus;
-
-namespace ChatRoomWithBot.Domain.Events
+﻿namespace ChatRoomWithBot.Domain.Events
 {
     public  class ChatMessageInvalidEvent : Event
     {
@@ -8,7 +6,7 @@ namespace ChatRoomWithBot.Domain.Events
 
         public ChatMessageInvalidEvent( string message, Guid codeRoom) : base(Guid.Empty, message)
         {
-            Id = Guid.Empty;
+          
             CodeRoom = codeRoom;
         }
     }
