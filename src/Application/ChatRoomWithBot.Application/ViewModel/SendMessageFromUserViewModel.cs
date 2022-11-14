@@ -1,9 +1,10 @@
 ﻿namespace ChatRoomWithBot.Application.ViewModel;
 
-public class SendMessageFromUserViewModel : ISendMessageViewModel
+public class SendMessageFromUserViewModel : SendMessageViewModel
 {
     
     public string Message { get; set; }
     public string RoomId { get; set; }
-    public bool IsBot => false;
+    public override  bool IsBot => false;
+    public Guid  UserId { get; set; }
 }

@@ -8,5 +8,5 @@ public interface IChatManagerApplication : IDisposable
     Task<IEnumerable<ChatRoomViewModel>> GetChatRoomsAsync();
     Task<bool> JoinChatRoomAsync(Guid roomId, Guid userId);
     Task<ChatRoomViewModel> GetChatRoomByIdAsync(Guid roomId);
-    Task<CommandResponse> SendMessageAsync(ISendMessageViewModel model);
+    Task<CommandResponse> SendMessageAsync(SendMessageViewModel model);
 }

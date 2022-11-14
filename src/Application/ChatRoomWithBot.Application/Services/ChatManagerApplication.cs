@@ -5,6 +5,8 @@ using AutoMapper;
 using ChatRoomWithBot.Domain.Bus;
 using ChatRoomWithBot.Domain.Events;
 using ChatRoomWithBot.Domain.Interfaces.Repositories;
+using ChatRoomWithBot.Domain.Events.FromBot;
+using ChatRoomWithBot.Domain.Events.FromUser;
 
 namespace ChatRoomWithBot.Application.Services
 {
@@ -24,9 +26,9 @@ namespace ChatRoomWithBot.Application.Services
             _berechitLogger = berechitLogger;
         }
 
-        public async Task<CommandResponse> SendMessageAsync(ISendMessageViewModel model)
+        public async Task<CommandResponse> SendMessageAsync(SendMessageViewModel model)
         {
- 
+
             try
             {
                 var chatMessageEvent = _mapper.Map<Event>(model);
@@ -40,7 +42,7 @@ namespace ChatRoomWithBot.Application.Services
                 _berechitLogger.Error(e);
                 return CommandResponse.Fail(e);
             }
-           
+
         }
 
         public async Task<IEnumerable<ChatRoomViewModel>> GetChatRoomsAsync()

@@ -2,13 +2,15 @@
 
 namespace ChatRoomWithBot.Domain.Events
 {
-    public abstract  class Event :  INotification
+    public abstract class Event : INotification
     {
-        
-        public string Message { get;  }
-        public Guid CodeRoom { get; }
+        public Guid UserId { get; set; }
+        public string Message { get; set; }
+        public Guid CodeRoom { get; set; }
 
-        public virtual bool IsBotCommand { get; } 
+        public virtual bool IsBotCommand { get; set; }
+
+        public bool IsCommand => Message.StartsWith("/stock=");
 
     }
 }

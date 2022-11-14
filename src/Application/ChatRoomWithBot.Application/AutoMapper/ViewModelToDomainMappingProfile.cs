@@ -10,8 +10,8 @@ internal class ViewModelToDomainMappingProfile : Profile
 {
     public ViewModelToDomainMappingProfile()
     {
-        
-        CreateMap<ISendMessageViewModel, Event>() 
+
+        CreateMap<SendMessageViewModel, Event>()
             .ConstructUsing((messageViewModel, context) =>
             {
                 return messageViewModel.IsBot switch
@@ -22,8 +22,22 @@ internal class ViewModelToDomainMappingProfile : Profile
             });
 
 
-        CreateMap<ISendMessageViewModel, ChatMessageFromBotEvent>();
-        CreateMap<ISendMessageViewModel, ChatMessageFromUserEvent>();
+        CreateMap<SendMessageFromBotViewModel, ChatMessageFromBotEvent>()
+            .ForMember(dest => dest.Message,
+                o => o.MapFrom(map => map.Message ))
+            .ForMember(dest => dest.CodeRoom,
+                o => o.MapFrom(map => map.RoomId))
+            ;
+
+
+
+        CreateMap<SendMessageFromUserViewModel, ChatMessageFromUserEvent>().ForMember(dest => dest.UserId,
+                o => o.MapFrom(map => map.UserId))
+            .ForMember(dest => dest.Message ,
+                o => o.MapFrom(map => map.Message ))
+            .ForMember(dest => dest.CodeRoom ,
+                o => o.MapFrom(map => map.RoomId ))
+            ;
 
 
     }

@@ -47,6 +47,8 @@ namespace ChatRoomWithBot.UI.MVC.Controllers
                 return BadRequest("user or room invalid ! ");
             }
 
+            model.UserId = user.Id;
+            model.RoomId = room.ChatRoomId.ToString(); 
 
 
             var result = await _managerChatMessage.SendMessageAsync(model);
