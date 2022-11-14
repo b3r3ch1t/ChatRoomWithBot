@@ -14,9 +14,7 @@ namespace ChatRoomWithBot.Data.IoC
             this IServiceCollection services,
             IConfiguration configuration)
         {
-            services.AddDbContext<ChatRoomWithBotContext>(
-                opt => opt
-                    .UseInMemoryDatabase("ChatRoomWithBotContext"));
+
 
             services.AddTransient<DataSeeder>();
 
@@ -25,6 +23,15 @@ namespace ChatRoomWithBot.Data.IoC
             services.AddScoped<IUserIdentityRepository, UserIdentityRepository>();
             services.AddScoped<IChatRoomRepository, ChatRoomRepository>();
             services.AddScoped<IChatMessageRepository, ChatMessageRepository>();
+
+            //services.AddDbContext<ChatRoomWithBotContext>(
+            //    opt => opt
+            //        .UseInMemoryDatabase("ChatRoomWithBotContext"));
+
+            services.AddDbContext<ChatRoomWithBotContext>(options =>
+                options.UseSqlServer(configuration.GetConnectionString("Default")));
+
+
 
             return services;
         }

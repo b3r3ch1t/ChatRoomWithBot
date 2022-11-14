@@ -22,6 +22,8 @@ namespace ChatRoomWithBot.Data
         public void Seed()
         {
 
+            _context.Database.EnsureCreated();
+
             SeedUsers();
 
             SeedChatRooms();
