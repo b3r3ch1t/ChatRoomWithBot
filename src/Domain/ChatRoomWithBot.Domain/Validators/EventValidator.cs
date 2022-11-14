@@ -19,7 +19,7 @@ namespace ChatRoomWithBot.Domain.Validators
 
         private void ValidateCommand()
         {
-            When(x => x.IsBotCommand , () =>
+            When(x => x.IsCommand , () =>
             {
                 RuleFor(x => x.Message)
                     .MustAsync(CommandIsValid)

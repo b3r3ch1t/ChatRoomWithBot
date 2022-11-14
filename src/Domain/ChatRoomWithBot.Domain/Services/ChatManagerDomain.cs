@@ -40,7 +40,9 @@ namespace ChatRoomWithBot.Domain.Services
             var validate = await _validator.ValidateAsync(message);
 
             ChatMessageFromUserEvent publish;
-            
+            CommandResponse result;
+
+
             if (!validate.IsValid)
             {
                 publish = new ChatMessageFromUserEventInvalid()
@@ -50,6 +52,9 @@ namespace ChatRoomWithBot.Domain.Services
                     Message = message.Message,
                     UserId = message.UserId
                 };
+
+                result = await _mediatorHandler.SendMessage(publish);
+                return result;
             }
             else
             {
@@ -73,11 +78,13 @@ namespace ChatRoomWithBot.Domain.Services
                         UserId = message.UserId
                     };
                 }
+
+                result = await _mediatorHandler.SendMessage(publish);
+                return result;
             }
 
-            var result = await _mediatorHandler.SendMessage(publish); 
 
-            return result ;
+            return CommandResponse.Fail("Fail");
         }
 
 

@@ -10,7 +10,7 @@ namespace ChatRoomWithBot.Domain.Events
 
         public virtual bool IsBotCommand { get; set; }
 
-        public bool IsCommand => Message.StartsWith("/stock=");
+        public bool IsCommand => Message.StartsWith("/");
 
     }
 }
