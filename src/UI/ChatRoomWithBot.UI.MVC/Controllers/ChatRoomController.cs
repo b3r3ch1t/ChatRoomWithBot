@@ -34,7 +34,7 @@ namespace ChatRoomWithBot.UI.MVC.Controllers
         {
 
             var room = await ValidateRoomIdAsync(model.RoomId);
-
+             
             if (room == null)
             {
                 return BadRequest("user or room invalid !");

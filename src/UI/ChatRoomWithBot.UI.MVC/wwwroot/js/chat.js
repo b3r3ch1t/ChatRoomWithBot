@@ -19,7 +19,9 @@ connection.on("ReceiveMessage", function (user, message) {
 connection.start().then(function () {
     document.getElementById("sendButton").disabled = false;
     console.log("ok !");
+    $('#messageError').hide();
 
+    $('#messageError').val('');
 
 }).catch(function (err) {
     return console.error(err.toString());
@@ -32,17 +34,31 @@ $("#sendButton").click(function (e) {
     var roomId = $("#roomId").val()
 
     var data = `{"Message":"${message}", "RoomId":"${roomId}"}`;
+    $('#messageError').hide();
 
+    $('#messageError').val('');
 
     $.ajax({
         url: '/api/ChatRoom/SendMessage',
         type: 'post',
         dataType: 'json',
         contentType: 'application/json',
+        data: data,
         success: function (data) {
-            document.getElementById("messageInput").value = '';
+            $('#messageInput').val('');
+            console.log('data=>', data); 
+
+            $('#messageError').hide();
+
+            $('#messageError').val('');
         },
-        data: data
+        error: function (XMLHttpRequest, textStatus, errorThrown) {
+
+            $('#messageError').val('the message wasn`t send'); 
+            $('#messageError').show();
+
+            console.log('erro=>', textStatus); 
+        }
     });
 
 
