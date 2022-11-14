@@ -13,15 +13,14 @@ connection.on("ReceiveMessage", function (user, message) {
 
     console.log("ReceiveMessage", message); 
     console.log("ReceiveMessage", user);
-
-    var userName = $("#userName").val();
+     
 
     var li = document.createElement("li");
     document.getElementById("messagesList").appendChild(li);
     // We can assign user-supplied strings to an element's textContent because it
     // is not interpreted as markup. If you're assigning in any other way, you 
     // should be aware of possible script injection concerns.
-    li.textContent = `${userName} --> ${new Date().toLocaleString()} says ${message}`;
+    li.textContent = `${user}(${new Date().toLocaleString()})--> ${message}`;
 
 });
 

@@ -1,4 +1,5 @@
-﻿using ChatRoomWithBot.Domain.Events;
+﻿using ChatRoomWithBot.Domain.Bus;
+using ChatRoomWithBot.Domain.Events;
 using ChatRoomWithBot.Domain.Interfaces;
 using ChatRoomWithBot.Services.RabbitMq.Handler;
 using ChatRoomWithBot.Services.RabbitMq.Manager;
@@ -13,7 +14,7 @@ namespace ChatRoomWithBot.Services.RabbitMq.IoC
         public static IServiceCollection RegisterServicesRabbitMqDependencies(
             this IServiceCollection services)
         {
-            services.AddScoped<INotificationHandler<Event>, BotMessageNotificationHandler>();
+            services.AddScoped<IRequestHandler<ChatMessageCommandEvent, CommandResponse>, BotMessageNotificationHandler>();
             services.AddScoped<IRabbitMqManager, RabbitMqManager>();
 
 

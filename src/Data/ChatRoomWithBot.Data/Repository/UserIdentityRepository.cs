@@ -41,6 +41,11 @@ namespace ChatRoomWithBot.Data.Repository
 
         }
 
+        public Task AddAsync(UserIdentity obj)
+        {
+            throw new NotImplementedException();
+        }
+
         public async Task<IEnumerable<UserIdentity>> GetAllAsync()
         {
             var result = await _context.Users.ToListAsync();

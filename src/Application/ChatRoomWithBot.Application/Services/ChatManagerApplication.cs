@@ -5,8 +5,6 @@ using AutoMapper;
 using ChatRoomWithBot.Domain.Bus;
 using ChatRoomWithBot.Domain.Events;
 using ChatRoomWithBot.Domain.Interfaces.Repositories;
-using ChatRoomWithBot.Domain.Events.FromBot;
-using ChatRoomWithBot.Domain.Events.FromUser;
 
 namespace ChatRoomWithBot.Application.Services
 {
@@ -33,20 +31,11 @@ namespace ChatRoomWithBot.Application.Services
             {
                 var chatMessageEvent = _mapper.Map<Event>(model);
 
-                var type = chatMessageEvent.GetType().Name;
 
-                CommandResponse result;
+                var result = await _chatManagerDomain.SendMessageAsync(chatMessageEvent);
 
-                switch (type)
-                {
-                    case "ChatMessageFromBotEvent":
-                        result = await _chatManagerDomain.SendMessageFromBotAsync((ChatMessageFromBotEvent)chatMessageEvent);
-                        return result;
+                return result;
 
-                    case "ChatMessageFromUserEvent":
-                        result = await _chatManagerDomain.SendMessageFromUserAsync((ChatMessageFromUserEvent)chatMessageEvent);
-                        return result;
-                }
             }
             catch (Exception e)
             {
@@ -54,7 +43,6 @@ namespace ChatRoomWithBot.Application.Services
                 return CommandResponse.Fail(e);
             }
 
-            return CommandResponse.Fail("Problem to send message");
         }
 
         public async Task<IEnumerable<ChatRoomViewModel>> GetChatRoomsAsync()
@@ -66,7 +54,7 @@ namespace ChatRoomWithBot.Application.Services
             return map;
         }
 
-         
+
 
         public async Task<ChatRoomViewModel> GetChatRoomByIdAsync(Guid roomId)
         {

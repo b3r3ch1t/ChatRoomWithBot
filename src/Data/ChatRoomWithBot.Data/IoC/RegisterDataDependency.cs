@@ -24,7 +24,7 @@ namespace ChatRoomWithBot.Data.IoC
 
             services.AddScoped<IUserIdentityRepository, UserIdentityRepository>();
             services.AddScoped<IChatRoomRepository, ChatRoomRepository>();
-
+            services.AddScoped<IChatMessageRepository, ChatMessageRepository>();
 
             return services;
         }

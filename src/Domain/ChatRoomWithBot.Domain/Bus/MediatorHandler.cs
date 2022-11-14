@@ -16,11 +16,11 @@ namespace ChatRoomWithBot.Domain.Bus
             _berechitLogger = berechitLogger;
         }
 
-        public async  Task<CommandResponse> SendMessage<T>(T chatMessage) where T : Event
+        public async Task<CommandResponse> SendMessage<T>(T chatMessage) where T : Event
         {
             try
             {
-                await _mediator.Send(chatMessage);
+                await _mediator.Send(  chatMessage);
                 return CommandResponse.Ok();
             }
             catch (Exception e)
@@ -28,21 +28,9 @@ namespace ChatRoomWithBot.Domain.Bus
                 _berechitLogger.Error(e);
                 return CommandResponse.Fail(e);
             }
-             
+
         }
 
-        public async Task<CommandResponse> PublishCommand<T>(T chatMessage) where T : Event
-        {
-            try
-            {
-                await _mediator.Publish( chatMessage);
-                return CommandResponse.Ok();
-            }
-            catch (Exception e)
-            {
-                _berechitLogger.Error(e);
-                return CommandResponse.Fail(e);
-            }
-        }
+
     }
 }

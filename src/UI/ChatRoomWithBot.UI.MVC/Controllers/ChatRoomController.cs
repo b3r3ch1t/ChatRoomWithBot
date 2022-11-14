@@ -30,7 +30,7 @@ namespace ChatRoomWithBot.UI.MVC.Controllers
 
         [HttpPost]
         [Route("SendMessage")]
-        public async Task<IActionResult> SendMessage([FromBody] SendMessageFromUserViewModel model)
+        public async Task<IActionResult> SendMessage([FromBody] SendMessageViewModel model)
         {
 
             var room = await _managerChatMessage.GetChatRoomByIdAsync(model.RoomId);
@@ -63,7 +63,7 @@ namespace ChatRoomWithBot.UI.MVC.Controllers
 
         [HttpPost]
         [Route("SendMessageFromBot")]
-        public async Task<IActionResult> SendMessage([FromBody] SendMessageFromBotViewModel model)
+        public async Task<IActionResult> SendMessageFromBot([FromBody] SendMessageViewModel model)
         {
 
             var room = await _managerChatMessage.GetChatRoomByIdAsync(model.RoomId);

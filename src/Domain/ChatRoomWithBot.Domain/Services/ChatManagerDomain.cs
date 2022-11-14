@@ -1,6 +1,5 @@
 ﻿using ChatRoomWithBot.Domain.Bus;
-using ChatRoomWithBot.Domain.Events.FromBot;
-using ChatRoomWithBot.Domain.Events.FromUser;
+using ChatRoomWithBot.Domain.Events;
 using ChatRoomWithBot.Domain.Interfaces;
 using ChatRoomWithBot.Domain.Validators;
 
@@ -11,10 +10,14 @@ namespace ChatRoomWithBot.Domain.Services
     {
         private readonly IMediatorHandler _mediatorHandler;
         private readonly EventValidator _validator;
-        public ChatManagerDomain(IMediatorHandler mediatorHandler, EventValidator validator)
+        private readonly IBerechitLogger _berechitLogger;
+
+        public ChatManagerDomain(IMediatorHandler mediatorHandler, EventValidator validator, IBerechitLogger berechitLogger)
         {
             _mediatorHandler = mediatorHandler;
             _validator = validator;
+            _berechitLogger = berechitLogger;
+
         }
 
         public void Dispose()
@@ -23,102 +26,42 @@ namespace ChatRoomWithBot.Domain.Services
             GC.SuppressFinalize(this);
         }
 
-      
-
-        public async Task<CommandResponse> SendMessageFromUserAsync(ChatMessageFromUserEvent message)
+       
+        public async Task<CommandResponse> SendMessageAsync(Event message)
         {
             var validate = await _validator.ValidateAsync(message);
-
-            ChatMessageFromUserEvent publish;
+ 
             CommandResponse result;
 
-
-            if (!validate.IsValid)
+            try
             {
-                publish = new ChatMessageFromUserEventInvalid()
+                if (!validate.IsValid)
                 {
-                    CodeRoom = message.CodeRoom,
-                    IsBotCommand = message.IsBotCommand,
-                    Message = message.Message,
-                    UserId = message.UserId
-                };
-
-                result = await _mediatorHandler.SendMessage(publish);
-                return result;
-            }
-
-            if (message.IsBotCommand)
-            {
-                publish = new ChatMessageFromUserEventCommand()
-                {
-                    CodeRoom = message.CodeRoom,
-                    IsBotCommand = message.IsBotCommand,
-                    Message = message.Message,
-                    UserId = message.UserId
-                };
-            }
-            else
-            {
-                publish = new ChatMessageFromUserEventText()
-                {
-                    CodeRoom = message.CodeRoom,
-                    IsBotCommand = message.IsBotCommand,
-                    Message = message.Message,
-                    UserId = message.UserId
-                };
-            }
-
-            result = await _mediatorHandler.SendMessage(publish);
-            return result;
-
-
-            return CommandResponse.Fail("Fail");
-        }
-
-
-        public async Task<CommandResponse> SendMessageFromBotAsync(ChatMessageFromBotEvent message)
-        {
-            var validate = await _validator.ValidateAsync(message);
-
-            ChatMessageFromBotEvent publish;
-
-
-            if (!validate.IsValid)
-            {
-                publish = new ChatMessageFromBotEventInvalid()
-                {
-                    CodeRoom = message.CodeRoom,
-                    IsBotCommand = message.IsBotCommand,
-                    Message = message.Message
-                };
-            }
-            else
-            {
-                if (message.IsBotCommand)
-                {
-                    publish = new ChatMessageFromBotEventCommand()
-                    {
-                        CodeRoom = message.CodeRoom,
-                        IsBotCommand = message.IsBotCommand,
-                        Message = message.Message
-                    };
+                    message.Message = $"This message is not valid : {message.Message}";
+                    result = await _mediatorHandler.SendMessage(message);
+                    return result;
                 }
-                else
+
+                if (message.IsCommand)
                 {
-                    publish = new ChatMessageFromBotEventText()
-                    {
-                        CodeRoom = message.CodeRoom,
-                        IsBotCommand = message.IsBotCommand,
-                        Message = message.Message
-                    };
+                    message.UserName = "bot";
+
+                    result = await _mediatorHandler.SendMessage(message);
+                    return result;
                 }
+
+            }
+            catch (Exception e)
+            {
+              _berechitLogger.Error(e);
+              return CommandResponse.Fail(e);
             }
 
-            var result = await _mediatorHandler.SendMessage(publish);
+            result = await  _mediatorHandler.SendMessage(message);
 
             return result;
 
-
         }
+         
     }
 }

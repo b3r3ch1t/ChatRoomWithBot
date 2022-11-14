@@ -2,7 +2,7 @@
 
 public interface IRepository<TEntity> : IDisposable where TEntity : IEntity
 {
-    Task  AddAsync(TEntity obj, string password);
+    Task  AddAsync(TEntity obj );
 
     Task<IEnumerable<TEntity>> GetAllAsync();
 

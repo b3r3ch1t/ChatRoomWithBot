@@ -7,13 +7,13 @@ using MediatR;
 using ChatRoomWithBot.Application.AutoMapper;
 using ChatRoomWithBot.Application.IoC;
 using ChatRoomWithBot.Data.IoC;
-using ChatRoomWithBot.UI.MVC.Services;
 using ChatRoomWithBot.Domain.Bus;
+using ChatRoomWithBot.UI.MVC.Services;
 using ChatRoomWithBot.Service.Identity.IoC;
 using ChatRoomWithBot.Services.BerechitLog.IoC;
 using ChatRoomWithBot.Services.RabbitMq.IoC;
 using ChatRoomWithBot.UI.MVC.Handles;
-using ChatRoomWithBot.Domain.Events.FromUser;
+using ChatRoomWithBot.Domain.Events;
 
 const string AspNetCoreEnvironment = "ASPNETCORE_ENVIRONMENT";
 
@@ -49,8 +49,7 @@ builder.Services.Configure<RabbitMqSettings>(
 
 builder.Services.AddSignalR();
 
-builder.Services.AddScoped<IRequestHandler<ChatMessageFromUserEventInvalid, CommandResponse>, ChatRoomHandler>();
-builder.Services.AddScoped < IRequestHandler < ChatMessageFromUserEventText, CommandResponse>, ChatRoomHandler>();
+builder.Services.AddScoped<IRequestHandler<ChatMessageTextEvent, CommandResponse>, ChatRoomHandler>(); 
 
 var configuration = new ConfigurationBuilder()
     .SetBasePath(Directory.GetCurrentDirectory())

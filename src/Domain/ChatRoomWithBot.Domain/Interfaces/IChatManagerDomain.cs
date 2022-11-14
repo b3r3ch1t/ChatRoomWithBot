@@ -1,12 +1,10 @@
 ﻿using ChatRoomWithBot.Domain.Bus;
-using ChatRoomWithBot.Domain.Events.FromBot;
-using ChatRoomWithBot.Domain.Events.FromUser;
+using ChatRoomWithBot.Domain.Events;
 
 namespace ChatRoomWithBot.Domain.Interfaces;
 
 public interface IChatManagerDomain : IDisposable
 {
-    Task<CommandResponse> SendMessageFromUserAsync(ChatMessageFromUserEvent message);
+    Task<CommandResponse> SendMessageAsync(Event message);
 
-    Task<CommandResponse> SendMessageFromBotAsync(ChatMessageFromBotEvent message);
 }

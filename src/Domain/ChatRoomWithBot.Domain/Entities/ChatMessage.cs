@@ -11,7 +11,7 @@ namespace ChatRoomWithBot.Domain.Entities
 
         }
 
-        public ChatMessage(Guid userId, string message)
+        public ChatMessage(Guid userId, string message, Guid roomId)
         {
             UserId = userId;
             Message = message;

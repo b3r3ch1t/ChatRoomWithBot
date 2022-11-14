@@ -24,7 +24,7 @@ namespace ChatRoomWithBot.Data.Repository
 
 
 
-        public async Task AddAsync(TEntity obj, string password)
+        public async Task AddAsync(TEntity obj )
         {
             try
             {

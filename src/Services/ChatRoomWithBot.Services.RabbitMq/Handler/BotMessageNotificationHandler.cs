@@ -1,4 +1,5 @@
 ﻿using System.Text;
+using ChatRoomWithBot.Domain.Bus;
 using ChatRoomWithBot.Domain.Events;
 using ChatRoomWithBot.Domain.Interfaces;
 using ChatRoomWithBot.Services.RabbitMq.Settings;
@@ -8,7 +9,7 @@ using RabbitMQ.Client;
 
 namespace ChatRoomWithBot.Services.RabbitMq.Handler
 {
-    internal class BotMessageNotificationHandler : INotificationHandler<Event>
+    internal class BotMessageNotificationHandler : IRequestHandler<ChatMessageCommandEvent, CommandResponse>
     {
 
         private readonly RabbitMqSettings _rabbitMqSettings;
@@ -20,7 +21,7 @@ namespace ChatRoomWithBot.Services.RabbitMq.Handler
             _rabbitMqSettings = rabbitMqSettings.Value;
         }
 
-        public Task Handle(Event notification, CancellationToken cancellationToken)
+        public async  Task<CommandResponse> Handle(ChatMessageCommandEvent notification, CancellationToken cancellationToken)
         {
 
             try
@@ -49,14 +50,16 @@ namespace ChatRoomWithBot.Services.RabbitMq.Handler
                     routingKey: _rabbitMqSettings.BotBundleQueue.Name,
                     basicProperties: null,
                     body: body);
+
+                return CommandResponse.Ok();
             }
             catch (Exception e)
             {
                 _berechitLogger.Error(e);
+                return CommandResponse.Fail( e);
             }
 
-            return Task.CompletedTask;
-
+             
         }
     }
 }
