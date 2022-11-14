@@ -48,7 +48,7 @@ namespace ChatRoomWithBot.UI.MVC.Controllers
             }
 
             model.UserId = user.Id;
-
+            model.UserName = user.Name; 
 
             var result = await _managerChatMessage.SendMessageAsync(model);
 
@@ -125,8 +125,6 @@ namespace ChatRoomWithBot.UI.MVC.Controllers
  
             ViewData["ChatName"] = room.Name;
             ViewData["roomId"] = room.ChatRoomId;
-            ViewData["userId"] = user.Id;
-            ViewData["userName"] = user.Name;
 
             return View("Index");
         }

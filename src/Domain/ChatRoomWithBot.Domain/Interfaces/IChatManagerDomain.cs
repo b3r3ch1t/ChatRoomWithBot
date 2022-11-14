@@ -1,5 +1,4 @@
 ﻿using ChatRoomWithBot.Domain.Bus;
-using ChatRoomWithBot.Domain.Events;
 using ChatRoomWithBot.Domain.Events.FromBot;
 using ChatRoomWithBot.Domain.Events.FromUser;
 

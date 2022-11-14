@@ -12,5 +12,7 @@ namespace ChatRoomWithBot.Domain.Events
 
         public bool IsCommand => Message.StartsWith("/");
 
+        public string UserName { get; set; }
+
     }
 }

@@ -1,6 +1,4 @@
-﻿using System.Diagnostics.Tracing;
-using ChatRoomWithBot.Domain.Bus;
-using ChatRoomWithBot.Domain.Events;
+﻿using ChatRoomWithBot.Domain.Bus;
 using ChatRoomWithBot.Domain.Events.FromBot;
 using ChatRoomWithBot.Domain.Events.FromUser;
 using ChatRoomWithBot.Domain.Interfaces;
@@ -48,32 +46,30 @@ namespace ChatRoomWithBot.Domain.Services
                 result = await _mediatorHandler.SendMessage(publish);
                 return result;
             }
+
+            if (message.IsBotCommand)
+            {
+                publish = new ChatMessageFromUserEventCommand()
+                {
+                    CodeRoom = message.CodeRoom,
+                    IsBotCommand = message.IsBotCommand,
+                    Message = message.Message,
+                    UserId = message.UserId
+                };
+            }
             else
             {
-                if (message.IsBotCommand)
+                publish = new ChatMessageFromUserEventText()
                 {
-                    publish = new ChatMessageFromUserEventCommand()
-                    {
-                        CodeRoom = message.CodeRoom,
-                        IsBotCommand = message.IsBotCommand,
-                        Message = message.Message,
-                        UserId = message.UserId
-                    };
-                }
-                else
-                {
-                    publish = new ChatMessageFromUserEventText()
-                    {
-                        CodeRoom = message.CodeRoom,
-                        IsBotCommand = message.IsBotCommand,
-                        Message = message.Message,
-                        UserId = message.UserId
-                    };
-                }
-
-                result = await _mediatorHandler.SendMessage(publish);
-                return result;
+                    CodeRoom = message.CodeRoom,
+                    IsBotCommand = message.IsBotCommand,
+                    Message = message.Message,
+                    UserId = message.UserId
+                };
             }
+
+            result = await _mediatorHandler.SendMessage(publish);
+            return result;
 
 
             return CommandResponse.Fail("Fail");

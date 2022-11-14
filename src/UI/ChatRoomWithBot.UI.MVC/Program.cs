@@ -9,7 +9,6 @@ using ChatRoomWithBot.Application.IoC;
 using ChatRoomWithBot.Data.IoC;
 using ChatRoomWithBot.UI.MVC.Services;
 using ChatRoomWithBot.Domain.Bus;
-using ChatRoomWithBot.Domain.Events;
 using ChatRoomWithBot.Service.Identity.IoC;
 using ChatRoomWithBot.Services.BerechitLog.IoC;
 using ChatRoomWithBot.Services.RabbitMq.IoC;
@@ -51,7 +50,7 @@ builder.Services.Configure<RabbitMqSettings>(
 builder.Services.AddSignalR();
 
 builder.Services.AddScoped<IRequestHandler<ChatMessageFromUserEventInvalid, CommandResponse>, ChatRoomHandler>();
-
+builder.Services.AddScoped < IRequestHandler < ChatMessageFromUserEventText, CommandResponse>, ChatRoomHandler>();
 
 var configuration = new ConfigurationBuilder()
     .SetBasePath(Directory.GetCurrentDirectory())
