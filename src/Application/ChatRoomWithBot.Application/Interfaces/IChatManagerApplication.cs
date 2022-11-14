@@ -10,5 +10,5 @@ public interface IChatManagerApplication : IDisposable
     Task<ChatRoomViewModel> GetChatRoomByIdAsync(Guid roomId);
     Task<CommandResponse> SendMessageAsync(SendMessageViewModel model);
     Task<CommandResponse> AddCommitedAsync(ChatMessage chatMessage);
-    Task<IEnumerable<ChatMessageViewModel>> GetMessagesAsync();
+    Task<IEnumerable<ChatMessageViewModel>> GetMessagesAsync(Guid roomId);
 }

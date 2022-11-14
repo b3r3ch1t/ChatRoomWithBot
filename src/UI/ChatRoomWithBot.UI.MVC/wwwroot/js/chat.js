@@ -11,16 +11,29 @@ var connection = new signalR.HubConnectionBuilder()
 connection.on("ReceiveMessage", function (user, message) {
 
 
-    console.log("ReceiveMessage", message); 
-    console.log("ReceiveMessage", user);
-     
-
+      
     var li = document.createElement("li");
-    document.getElementById("messagesList").appendChild(li);
-    // We can assign user-supplied strings to an element's textContent because it
-    // is not interpreted as markup. If you're assigning in any other way, you 
-    // should be aware of possible script injection concerns.
-    li.textContent = `${user}(${new Date().toLocaleString()})--> ${message}`;
+    $('#messagesList').val('');
+
+    var arr = $.parseJSON(message);
+    console.log("ReceiveMessage arr ==>", arr);
+
+    $.each(arr, function (index, value) {
+        var li = document.createElement("li");
+
+
+        $('#messagesList').appendChild(li);
+
+        var content = value.UserName ;
+        console.log("ReceiveMessage content ==>", content); 
+    });
+
+    //var li = document.createElement("li");
+    //document.getElementById("messagesList").appendChild(li);
+    //// We can assign user-supplied strings to an element's textContent because it
+    //// is not interpreted as markup. If you're assigning in any other way, you 
+    //// should be aware of possible script injection concerns.
+    //li.textContent = `${user}(${new Date().toLocaleString()})--> ${message}`;
 
 });
 

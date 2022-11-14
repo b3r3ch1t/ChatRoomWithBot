@@ -1,4 +1,5 @@
-﻿using ChatRoomWithBot.Application.Interfaces;
+﻿using System.Text.Json;
+using ChatRoomWithBot.Application.Interfaces;
 using ChatRoomWithBot.Domain.Bus;
 using ChatRoomWithBot.Domain.Entities;
 using ChatRoomWithBot.Domain.Events;
@@ -29,13 +30,15 @@ public class ChatRoomHandler :
         try
         {
             var group = notification.CodeRoom.ToString();
-            var user = notification.UserName;
-            var message = notification.Message;
-            var chatMessage = new ChatMessage(userId: notification.UserId, message: notification.Message, roomId: notification.CodeRoom);
+            var user = notification.UserName; 
+            var chatMessage = new ChatMessage(userId: notification.UserId, message: notification.Message, userName: notification.UserName, roomId: notification.CodeRoom);
             
             var result = await _chatManagerApplication.AddCommitedAsync(chatMessage);
 
-            var messages =await  _chatManagerApplication.GetMessagesAsync();
+            var messages =await  _chatManagerApplication.GetMessagesAsync(notification.CodeRoom);
+
+            var message = JsonSerializer.Serialize(messages);
+
 
             await _hubContext.Clients.Group(group)
                 .SendAsync("ReceiveMessage", user, message);

@@ -10,7 +10,7 @@ namespace ChatRoomWithBot.Application.ViewModel
 
          public string Message { get; set; }
 
-
+        public Guid RoomId { get; set; }
 
     }
 }

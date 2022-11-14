@@ -62,9 +62,9 @@ namespace ChatRoomWithBot.Application.Services
             }
         }
 
-        public async Task<IEnumerable<ChatMessageViewModel>> GetMessagesAsync()
+        public async Task<IEnumerable<ChatMessageViewModel>> GetMessagesAsync(Guid roomId)
         {
-            var result = _chatRoomRepository.GetLastMessagesAsync(50);
+            var result = _chatRoomRepository.GetLastMessagesAsync(50, roomId );
 
             var map = _mapper.Map<IEnumerable<ChatMessageViewModel>>(result);
 

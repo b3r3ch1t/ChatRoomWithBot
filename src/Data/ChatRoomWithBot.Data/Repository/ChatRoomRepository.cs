@@ -17,9 +17,10 @@ namespace ChatRoomWithBot.Data.Repository
             return await Context.ChatRooms.AnyAsync(x => x.Id == roomId);
         }
 
-        public IEnumerable<ChatMessage> GetLastMessagesAsync(int qte)
+        public IEnumerable<ChatMessage> GetLastMessagesAsync(int qte, Guid roomId )
         {
             return  Context.ChatMessages
+                .Where(x=> x.RoomId == roomId)
                 .OrderBy(x=>x.DateCreated)
                 .Take(qte).AsEnumerable()   ;
         }
