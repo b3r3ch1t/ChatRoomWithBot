@@ -17,7 +17,8 @@ namespace ChatRoomWithBot.Domain.IoC
       
             services.AddScoped<IMediatorHandler, MediatorHandler>();
             services.AddScoped<IChatManagerDomain, ChatManagerDomain>();
-            services.AddScoped<ChatMessageEventValidator>(); 
+            services.AddScoped<ChatMessageEventValidator>();
+            
 
             return services;
         }

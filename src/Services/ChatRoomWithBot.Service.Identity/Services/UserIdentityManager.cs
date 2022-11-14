@@ -7,18 +7,18 @@ using ChatRoomWithBot.Data.IdentityModel;
 
 namespace ChatRoomWithBot.Service.Identity.Services
 {
-    public class UserIdentityManager : ClassBase, IUserIdentityManager, IDisposable
+    public class UserIdentityManager :  IUserIdentityManager, IDisposable
     {
         private readonly UserManager<UserIdentity> _userManager;
         private readonly SignInManager<UserIdentity> _signInManager;
-        private readonly IError _error;
+        private readonly IBerechitLogger _berechitLogger;
 
 
-        public UserIdentityManager(UserManager<UserIdentity> userManager, SignInManager<UserIdentity> signInManager, IError error) : base(error)
+        public UserIdentityManager(UserManager<UserIdentity> userManager, SignInManager<UserIdentity> signInManager, IBerechitLogger berechitLogger)  
         {
             _userManager = userManager;
             _signInManager = signInManager;
-            _error = error;
+            _berechitLogger = berechitLogger;
         }
 
         public async Task<OperationResult<SignInResult>> Login(LoginViewModel model)
@@ -38,14 +38,14 @@ namespace ChatRoomWithBot.Service.Identity.Services
                 if (!result.Succeeded) return new OperationResult<SignInResult>(SignInResult.Failed);
 
 
-                _error.Information("User logged in.");
+                _berechitLogger.Information("User logged in.");
                 return new OperationResult<SignInResult>(SignInResult.Success);
 
 
             }
             catch (Exception e)
             {
-                _error.Error(e);
+                _berechitLogger.Error(e);
 
                 return new OperationResult<SignInResult>("User or password is not valid !");
 
@@ -78,7 +78,7 @@ namespace ChatRoomWithBot.Service.Identity.Services
                 }
 
                 var msg = result.Errors.Aggregate(string.Empty, (current, error) => current + (error.Description + @"\"));
-                _error.Error(msg); 
+                _berechitLogger.Error(msg); 
 
 
                 return new OperationResult<IdentityResult>(IdentityResult.Failed( ));
@@ -86,7 +86,7 @@ namespace ChatRoomWithBot.Service.Identity.Services
             }
             catch (Exception e)
             {
-                _error.Error(e);
+                _berechitLogger.Error(e);
                 return new OperationResult<IdentityResult>(IdentityResult.Failed());
 
             }

@@ -17,17 +17,14 @@ namespace ChatRoomWithBot.UI.MVC.Controllers
 
         private readonly IChatManagerApplication _managerChatMessage;
         private readonly IUsersAppService _usersAppService;
-        private readonly IHttpContextAccessor _httpContextAccessor;
-        private readonly IError _error;
-
+        private readonly IBerechitLogger _berechitLogger; 
 
         private const string key = "roomId";
-        public ChatRoomController(IChatManagerApplication managerChatMessage, IUsersAppService usersAppService, IHttpContextAccessor httpContextAccessor, IError error)
+        public ChatRoomController(IChatManagerApplication managerChatMessage, IUsersAppService usersAppService, IBerechitLogger berechitLogger )
         {
             _managerChatMessage = managerChatMessage;
             _usersAppService = usersAppService;
-            _httpContextAccessor = httpContextAccessor;
-            _error = error;
+            _berechitLogger = berechitLogger;
         }
 
 
@@ -35,7 +32,7 @@ namespace ChatRoomWithBot.UI.MVC.Controllers
         [Route("SendMessage")]
         public async Task<IActionResult> SendMessage([FromBody] SendMessageViewModel model)
         {
-
+            
             var user = await _usersAppService.GetCurrentUserAsync();
             if (user == null)
             {
@@ -71,7 +68,7 @@ namespace ChatRoomWithBot.UI.MVC.Controllers
             }
             catch (Exception e)
             {
-                _error.Error(e);
+                _berechitLogger.Error(e);
                 return null;
             }
         }

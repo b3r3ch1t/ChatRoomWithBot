@@ -7,13 +7,13 @@ namespace ChatRoomWithBot.Domain.Bus
     internal class MediatorHandler : IMediatorHandler
     {
         private readonly IMediator _mediator;
-        private readonly IError _error;
+        private readonly IBerechitLogger _berechitLogger;
 
 
-        public MediatorHandler(IMediator mediator, IError error)
+        public MediatorHandler(IMediator mediator, IBerechitLogger berechitLogger)
         {
             _mediator = mediator;
-            _error = error;
+            _berechitLogger = berechitLogger;
         }
 
         public async  Task<CommandResponse> SendMessage<T>(T chatMessage) where T : Event
@@ -25,7 +25,7 @@ namespace ChatRoomWithBot.Domain.Bus
             }
             catch (Exception e)
             {
-                _error.Error(e);
+                _berechitLogger.Error(e);
                 return CommandResponse.Fail(e);
             }
              
@@ -40,7 +40,7 @@ namespace ChatRoomWithBot.Domain.Bus
             }
             catch (Exception e)
             {
-                _error.Error(e);
+                _berechitLogger.Error(e);
                 return CommandResponse.Fail(e);
             }
         }

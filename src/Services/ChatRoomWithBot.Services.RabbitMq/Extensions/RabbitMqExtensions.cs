@@ -8,7 +8,7 @@ namespace ChatRoomWithBot.Services.RabbitMq.Extensions
     public static class RabbitMqExtensions
     {
         private static IRabbitMqManager _rabbitMqReceiver;
-        private static  IError _error;
+        private static  IBerechitLogger _berechitLogger;
 
 
         public static IApplicationBuilder UseRabbitListener(this IApplicationBuilder app)
@@ -19,7 +19,7 @@ namespace ChatRoomWithBot.Services.RabbitMq.Extensions
             var serviceProvider = scopedServices.ServiceProvider;
 
             _rabbitMqReceiver = serviceProvider.GetRequiredService<IRabbitMqManager>();
-            _error = serviceProvider.GetRequiredService<IError>();
+            _berechitLogger = serviceProvider.GetRequiredService<IBerechitLogger>();
 
             var lifetime = app.ApplicationServices.GetService<IApplicationLifetime>();
 
@@ -38,7 +38,7 @@ namespace ChatRoomWithBot.Services.RabbitMq.Extensions
             }
             catch (Exception e)
             {
-                _error.Error(e);
+                _berechitLogger.Error(e);
                 throw;
             }
 

@@ -10,13 +10,13 @@ namespace ChatRoomWithBot.Data.Repository
     {
         protected readonly ChatRoomWithBotContext Context;
         protected readonly DbSet<TEntity> DbSet;
-        private readonly IError _error;
+        private readonly IBerechitLogger _berechitLogger;
 
 
-        public Repository(ChatRoomWithBotContext context, IError error)
+        public Repository(ChatRoomWithBotContext context, IBerechitLogger berechitLogger)
         {
             Context = context;
-            _error = error;
+            _berechitLogger = berechitLogger;
             DbSet = Context.Set<TEntity>();
 
         }
@@ -32,7 +32,7 @@ namespace ChatRoomWithBot.Data.Repository
             }
             catch (Exception e)
             {
-                _error.Error(e);
+                _berechitLogger.Error(e);
             }
         }
 
@@ -51,7 +51,7 @@ namespace ChatRoomWithBot.Data.Repository
             }
             catch (Exception e)
             {
-                _error.Error(e);
+                _berechitLogger.Error(e);
             }
 
             var result= (IEnumerable<TEntity>)new List<TEntity>();
@@ -68,7 +68,7 @@ namespace ChatRoomWithBot.Data.Repository
             }
             catch (Exception e)
             {
-                _error.Error(e);
+                _berechitLogger.Error(e);
 
 
             }

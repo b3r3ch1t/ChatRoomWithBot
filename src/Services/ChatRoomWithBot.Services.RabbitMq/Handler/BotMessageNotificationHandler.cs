@@ -12,11 +12,11 @@ namespace ChatRoomWithBot.Services.RabbitMq.Handler
     {
 
         private readonly RabbitMqSettings _rabbitMqSettings;
-        private readonly IError _error;
+        private readonly IBerechitLogger _berechitLogger;
 
-        public BotMessageNotificationHandler(IOptions<RabbitMqSettings> rabbitMqSettings, IError error)
+        public BotMessageNotificationHandler(IOptions<RabbitMqSettings> rabbitMqSettings, IBerechitLogger berechitLogger)
         {
-            _error = error;
+            _berechitLogger = berechitLogger;
             _rabbitMqSettings = rabbitMqSettings.Value;
         }
 
@@ -52,7 +52,7 @@ namespace ChatRoomWithBot.Services.RabbitMq.Handler
             }
             catch (Exception e)
             {
-                _error.Error(e);
+                _berechitLogger.Error(e);
             }
 
             return Task.CompletedTask;

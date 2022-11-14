@@ -2,7 +2,7 @@
 
 namespace ChatRoomWithBot.Domain.Interfaces;
 
-public interface IError
+public interface IBerechitLogger
 {
 
     void Verbose(string messageTemplate);

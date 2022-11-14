@@ -7,15 +7,15 @@ using ChatRoomWithBot.Domain.Entities;
 
 namespace ChatRoomWithBot.Data
 {
-    public class DataSeeder : ClassBase
+    public class DataSeeder 
     {
         private readonly ChatRoomWithBotContext _context;
         private readonly UserManager<UserIdentity> _userManager;
-        private readonly IError _error; 
+        private readonly IBerechitLogger _berechitLogger; 
 
-        public DataSeeder(IError error, ChatRoomWithBotContext context, UserManager<UserIdentity> userManager) : base(error)
+        public DataSeeder(IBerechitLogger berechitLogger, ChatRoomWithBotContext context, UserManager<UserIdentity> userManager) 
         {
-            _error = error;
+            _berechitLogger = berechitLogger;
             _context = context;
             _userManager = userManager;
         }
@@ -50,7 +50,7 @@ namespace ChatRoomWithBot.Data
             }
             catch (Exception e)
             {
-                _error.Error(e);
+                _berechitLogger.Error(e);
             }
         }
 
@@ -60,8 +60,7 @@ namespace ChatRoomWithBot.Data
             {
                 if (!_context.Users.Any())
                 {
-                    ExecuteSafe(() =>
-                    {
+                     
 
                         _context.Database.EnsureCreated();
                         var user = new UserIdentity()
@@ -89,12 +88,12 @@ namespace ChatRoomWithBot.Data
 
                         _userManager.CreateAsync(user, "Test12345678").GetAwaiter().GetResult();
 
-                    });
+                    
                 }
             }
             catch (Exception e)
             {
-                _error.Error(e);
+                _berechitLogger.Error(e);
                 throw;
             }
         }

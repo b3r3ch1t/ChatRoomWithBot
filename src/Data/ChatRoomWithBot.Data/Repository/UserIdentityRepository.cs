@@ -11,13 +11,13 @@ namespace ChatRoomWithBot.Data.Repository
     {
 
         private readonly UserManager<UserIdentity> _userManager;
-        private readonly IError _error;
+        private readonly IBerechitLogger _berechitLogger;
         private readonly ChatRoomWithBotContext _context;
 
-        public UserIdentityRepository(UserManager<UserIdentity> userManager, IError error, ChatRoomWithBotContext context)
+        public UserIdentityRepository(UserManager<UserIdentity> userManager, IBerechitLogger berechitLogger, ChatRoomWithBotContext context)
         {
             _userManager = userManager;
-            _error = error;
+            _berechitLogger = berechitLogger;
             _context = context;
         }
 
@@ -29,13 +29,13 @@ namespace ChatRoomWithBot.Data.Repository
 
                 if (result.Succeeded)
                 {
-                    _error.Information("the user was created !");
+                    _berechitLogger.Information("the user was created !");
                 }
 
             }
             catch (Exception e)
             {
-                _error.Error(e);
+                _berechitLogger.Error(e);
             }
 
 

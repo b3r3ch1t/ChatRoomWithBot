@@ -11,14 +11,14 @@ namespace ChatRoomWithBot.Services.RabbitMq.Manager
         private readonly IConnection _connection;
         private readonly IModel _channel;
         private readonly RabbitMqSettings _rabbitMqSettings;
-        private readonly IError _error;
+        private readonly IBerechitLogger _berechitLogger;
 
 
-        public RabbitMqManager(IOptions<RabbitMqSettings> rabbitMqSettings, IError error)
+        public RabbitMqManager(IOptions<RabbitMqSettings> rabbitMqSettings, IBerechitLogger berechitLogger)
         {
              
             _rabbitMqSettings = rabbitMqSettings.Value ;
-            _error = error;
+            _berechitLogger = berechitLogger;
 
             try
             {
@@ -33,7 +33,7 @@ namespace ChatRoomWithBot.Services.RabbitMq.Manager
             }
             catch (Exception e)
             {
-                _error.Error(e);
+                _berechitLogger.Error(e);
                 throw;
             }
         }

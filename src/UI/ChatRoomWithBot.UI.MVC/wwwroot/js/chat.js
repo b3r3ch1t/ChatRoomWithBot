@@ -18,21 +18,21 @@ connection.on("ReceiveMessage", function (user, message) {
 
 connection.start().then(function () {
     document.getElementById("sendButton").disabled = false;
-    console.log("ok !"); 
+    console.log("ok !");
 
 
 }).catch(function (err) {
     return console.error(err.toString());
 });
 
-document.getElementById("sendButton").addEventListener("click", function (event) {
 
-    event.preventDefault(); 
-    var message = document.getElementById("messageInput").value;
-    var roomId = document.getElementById("roomId").value
+$("#sendButton").click(function (e) {
+    event.preventDefault();
+    var message = $("#messageInput").val();
+    var roomId = $("#roomId").val()
 
-    var data = `{"Message":"${message}", "RoomId":"${roomId}"}`; 
- 
+    var data = `{"Message":"${message}", "RoomId":"${roomId}"}`;
+
 
     $.ajax({
         url: '/api/ChatRoom/SendMessage',
@@ -42,7 +42,8 @@ document.getElementById("sendButton").addEventListener("click", function (event)
         success: function (data) {
             document.getElementById("messageInput").value = '';
         },
-        data:  data 
+        data: data
     });
-     
-});
+
+
+})

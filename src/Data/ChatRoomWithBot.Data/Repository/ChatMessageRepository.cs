@@ -7,7 +7,7 @@ namespace ChatRoomWithBot.Data.Repository;
 
 public class ChatMessageRepository :Repository<ChatMessage>, IChatMessageRepository
 {
-    public ChatMessageRepository(ChatRoomWithBotContext context, IError error) : base(context, error)
+    public ChatMessageRepository(ChatRoomWithBotContext context, IBerechitLogger berechitLogger) : base(context, berechitLogger)
     {
     }
 
