@@ -1,11 +1,11 @@
 ﻿using ChatRoomWithBot.Domain.Interfaces;
-using ChatRoomWithBot.Services.Log.Extensions;
+using ChatRoomWithBot.Services.BerechitLog.Extensions;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
-namespace ChatRoomWithBot.Services.Log.IoC
+namespace ChatRoomWithBot.Services.BerechitLog.IoC
 {
     public static class RegisterLogDependency 
     {
@@ -16,7 +16,7 @@ namespace ChatRoomWithBot.Services.Log.IoC
             IWebHostEnvironment env)
         {
 
-            services.AddScoped<IError,ErroSentry>(); 
+            services.AddScoped<IBerechitLogger,BerechitLog>(); 
 
 
             var sentryDsn = configuration["SentryDsn"];
