@@ -27,6 +27,7 @@ internal class DomainToViewModelMappingProfile : Profile
                 o => o.MapFrom(map => map.Id))
             ;
 
+        CreateMap<ChatMessage, ChatMessageViewModel>();
     }
 
 }

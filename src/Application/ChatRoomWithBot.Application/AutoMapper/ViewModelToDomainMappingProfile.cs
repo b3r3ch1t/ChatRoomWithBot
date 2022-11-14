@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using AutoMapper.Execution;
 using ChatRoomWithBot.Application.ViewModel;
 using ChatRoomWithBot.Domain.Events;
 

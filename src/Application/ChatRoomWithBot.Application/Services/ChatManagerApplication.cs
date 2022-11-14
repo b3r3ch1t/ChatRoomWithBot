@@ -3,6 +3,7 @@ using ChatRoomWithBot.Application.ViewModel;
 using ChatRoomWithBot.Domain.Interfaces;
 using AutoMapper;
 using ChatRoomWithBot.Domain.Bus;
+using ChatRoomWithBot.Domain.Entities;
 using ChatRoomWithBot.Domain.Events;
 using ChatRoomWithBot.Domain.Interfaces.Repositories;
 
@@ -15,13 +16,15 @@ namespace ChatRoomWithBot.Application.Services
         private readonly IMapper _mapper;
         private readonly IChatManagerDomain _chatManagerDomain;
         private readonly IBerechitLogger _berechitLogger;
+        private readonly IChatMessageRepository _chatMessageRepository;
 
-        public ChatManagerApplication(IChatRoomRepository chatRoomRepository, IMapper mapper, IChatManagerDomain chatManagerDomain, IBerechitLogger berechitLogger)
+        public ChatManagerApplication(IChatRoomRepository chatRoomRepository, IMapper mapper, IChatManagerDomain chatManagerDomain, IBerechitLogger berechitLogger, IChatMessageRepository chatMessageRepository)
         {
             _chatRoomRepository = chatRoomRepository;
             _mapper = mapper;
             _chatManagerDomain = chatManagerDomain;
             _berechitLogger = berechitLogger;
+            _chatMessageRepository = chatMessageRepository;
         }
 
         public async Task<CommandResponse> SendMessageAsync(SendMessageViewModel model)
@@ -45,11 +48,25 @@ namespace ChatRoomWithBot.Application.Services
 
         }
 
-        public async Task<IEnumerable<ChatRoomViewModel>> GetChatRoomsAsync()
+        public async Task<CommandResponse> AddCommitedAsync(ChatMessage chatMessage)
         {
-            var result = await _chatRoomRepository.GetAllAsync();
+            try
+            {
+                return await _chatMessageRepository.AddCommitedAsync(chatMessage);
+            }
+            catch (Exception e)
+            {
+                _berechitLogger.Error(e);
 
-            var map = _mapper.Map<IEnumerable<ChatRoomViewModel>>(result);
+                return CommandResponse.Fail(e);
+            }
+        }
+
+        public async Task<IEnumerable<ChatMessageViewModel>> GetMessagesAsync()
+        {
+            var result = _chatRoomRepository.GetLastMessagesAsync(50);
+
+            var map = _mapper.Map<IEnumerable<ChatMessageViewModel>>(result);
 
             return map;
         }
@@ -66,9 +83,20 @@ namespace ChatRoomWithBot.Application.Services
         }
 
 
+        public async Task<IEnumerable<ChatRoomViewModel>> GetChatRoomsAsync()
+        {
+            var result = await _chatRoomRepository.GetAllAsync();
+
+            var map = _mapper.Map<IEnumerable<ChatRoomViewModel>>(result);
+
+            return map;
+        }
+
         public void Dispose()
         {
             GC.SuppressFinalize(this);
         }
+
+
     }
 }

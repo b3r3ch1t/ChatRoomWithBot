@@ -1,6 +1,4 @@
-﻿using MediatR;
-
-namespace ChatRoomWithBot.Domain.Events
+﻿namespace ChatRoomWithBot.Domain.Events
 {
     public  class Event  
     {
