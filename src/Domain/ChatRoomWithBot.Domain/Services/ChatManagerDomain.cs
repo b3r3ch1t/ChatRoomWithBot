@@ -25,15 +25,7 @@ namespace ChatRoomWithBot.Domain.Services
             GC.SuppressFinalize(this);
         }
 
-        public async Task<bool> JoinChatRoomAsync(Guid roomId, Guid userId)
-        {
-
-            var joinChatRoomCommand = new JoinChatRoomEvent(roomId: roomId, userId: userId);
-
-            var result = await _mediatorHandler.SendMessage(joinChatRoomCommand);
-
-            return result.Success;
-        }
+      
 
         public async Task<CommandResponse> SendMessageFromUserAsync(ChatMessageFromUserEvent message)
         {

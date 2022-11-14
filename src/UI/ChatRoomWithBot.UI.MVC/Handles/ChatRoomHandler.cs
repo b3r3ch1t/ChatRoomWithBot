@@ -8,8 +8,7 @@ using Microsoft.AspNetCore.SignalR;
 
 namespace ChatRoomWithBot.UI.MVC.Handles;
 
-public class ChatRoomHandler :
-    IRequestHandler<JoinChatRoomEvent, CommandResponse>,
+public class ChatRoomHandler : 
     IRequestHandler<ChatMessageFromUserEventInvalid, CommandResponse>
 {
     private readonly IHubContext<ChatRoomHub> _hubContext;
@@ -19,29 +18,7 @@ public class ChatRoomHandler :
         _hubContext = hubContext;
     }
 
-    public async Task<CommandResponse> Handle(JoinChatRoomEvent notification, CancellationToken cancellationToken)
-    {
-
-        try
-        {
-
-
-            await _hubContext.Groups.AddToGroupAsync(connectionId: notification.UserId.ToString(),
-                groupName: notification.RoomId.ToString(), cancellationToken: cancellationToken);
-
-
-            return (CommandResponse.Ok());
-        }
-        catch (Exception e)
-        {
-            
-            Console.WriteLine(e);
-            return CommandResponse.Fail(e);
-        }
-       
-
-    }
-
+    
     public async Task<CommandResponse> Handle(ChatMessageFromUserEventInvalid notification, CancellationToken cancellationToken)
     {
         try
@@ -52,8 +29,7 @@ public class ChatRoomHandler :
 
             await _hubContext.Clients.Group(group)
                 .SendAsync("ReceiveMessage", user, message);
-
-
+           
             return CommandResponse.Ok();
         }
         catch (Exception e)

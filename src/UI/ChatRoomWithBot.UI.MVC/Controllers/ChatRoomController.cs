@@ -33,8 +33,8 @@ namespace ChatRoomWithBot.UI.MVC.Controllers
         public async Task<IActionResult> SendMessage([FromBody] SendMessageFromUserViewModel model)
         {
 
-            var room = await ValidateRoomIdAsync(model.RoomId);
-             
+            var room = await _managerChatMessage.GetChatRoomByIdAsync(model.RoomId);
+
             if (room == null)
             {
                 return BadRequest("user or room invalid !");
@@ -48,7 +48,6 @@ namespace ChatRoomWithBot.UI.MVC.Controllers
             }
 
             model.UserId = user.Id;
-            model.RoomId = room.ChatRoomId.ToString(); 
 
 
             var result = await _managerChatMessage.SendMessageAsync(model);
@@ -67,7 +66,8 @@ namespace ChatRoomWithBot.UI.MVC.Controllers
         public async Task<IActionResult> SendMessage([FromBody] SendMessageFromBotViewModel model)
         {
 
-            var room = await ValidateRoomIdAsync(model.RoomId);
+            var room = await _managerChatMessage.GetChatRoomByIdAsync(model.RoomId);
+
 
             if (room == null)
             {
@@ -102,23 +102,7 @@ namespace ChatRoomWithBot.UI.MVC.Controllers
             return Criptografia.Decrypt(hashBot) == HashId;
         }
 
-        private async Task<ChatRoomViewModel?> ValidateRoomIdAsync(string roomIdString)
-        {
-            try
-            {
-                var roomId = new Guid(Criptografia.Decrypt(roomIdString));
-
-                var result = await _managerChatMessage.GetChatRoomByIdAsync(roomId);
-
-                return result;
-            }
-            catch (Exception e)
-            {
-                _berechitLogger.Error(e);
-                return null;
-            }
-        }
-
+        
 
         [HttpGet("JoinChatRoom/{id}")]
         public async Task<IActionResult> JoinChatRoom(Guid id)
@@ -137,34 +121,15 @@ namespace ChatRoomWithBot.UI.MVC.Controllers
             {
                 return RedirectToAction("Login", "Account");
             }
-
-            await GetOutEveryChatRoomAsync(user.Id);
-
-            var result = await _managerChatMessage.JoinChatRoomAsync(roomId: id, userId: user.Id);
-
-            switch (result)
-            {
-                case false:
-                    TempData["Message"] = "Fail to Join in the room ";
-                    break;
-                case true:
-
-                    ViewData["roomId"] = Criptografia.Encrypt(room.ChatRoomId.ToString());
-
-                    break;
-            }
-
+            
+ 
             ViewData["ChatName"] = room.Name;
+            ViewData["roomId"] = room.ChatRoomId;
+            ViewData["userId"] = user.Id;
+            ViewData["userName"] = user.Name;
 
             return View("Index");
         }
-
-
-        public Task<bool> GetOutEveryChatRoomAsync(Guid userId)
-        {
-            Response.Cookies.Delete(key);
-
-            return Task.FromResult(true);
-        }
+         
     }
 }

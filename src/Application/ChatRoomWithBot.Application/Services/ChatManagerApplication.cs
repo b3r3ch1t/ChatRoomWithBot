@@ -66,14 +66,7 @@ namespace ChatRoomWithBot.Application.Services
             return map;
         }
 
-        public async Task<bool> JoinChatRoomAsync(Guid roomId, Guid userId)
-        {
-
-            var result = await _chatManagerDomain.JoinChatRoomAsync(roomId: roomId, userId: userId);
-
-            return result;
-
-        }
+         
 
         public async Task<ChatRoomViewModel> GetChatRoomByIdAsync(Guid roomId)
         {

@@ -50,7 +50,6 @@ builder.Services.Configure<RabbitMqSettings>(
 
 builder.Services.AddSignalR();
 
-builder.Services.AddScoped<IRequestHandler<JoinChatRoomEvent, CommandResponse>, ChatRoomHandler>();
 builder.Services.AddScoped<IRequestHandler<ChatMessageFromUserEventInvalid, CommandResponse>, ChatRoomHandler>();
 
 
