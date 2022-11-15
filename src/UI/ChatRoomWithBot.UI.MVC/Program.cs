@@ -88,7 +88,7 @@ app.UseEndpoints(endpoints =>
 
 //Configure RabbitMQ
 
-app.UseRabbitListener(); 
+//app.UseRabbitListener(); 
 
 app.SeedData();
 

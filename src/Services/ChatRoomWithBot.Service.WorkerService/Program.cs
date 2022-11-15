@@ -1,8 +1,10 @@
 
 
  
+using ChatRoomWithBot.Domain.Events;
 using ChatRoomWithBot.Service.WorkerService;
 using ChatRoomWithBot.Service.WorkerService.Settings;
+using MassTransit;
 using Quartz;
 using Serilog;
 using Serilog.Events;
@@ -35,13 +37,37 @@ try
                     .WithIdentity("ChatRoomWithBot")
                     .WithCronSchedule("* 0/5 * * * ?"));
 
-
-                services.Configure<RabbitMqSettings>(
-                    hostContext.Configuration.GetSection("RabbitMQ"));
-
-                services.AddQuartzHostedService(q => q.WaitForJobsToComplete = true);
+                
+               // services.AddQuartzHostedService(q => q.WaitForJobsToComplete = true);
 
             });
+
+
+            services.AddMassTransit(x =>
+            {
+                x.AddConsumer<ChatMessageCommandEventConsumer>();
+
+                x.AddBus(provider => Bus.Factory.CreateUsingRabbitMq(cfg =>
+                {
+                    cfg.UseHealthCheck(provider);
+                    cfg.Host(new Uri("rabbitmq://localhost"), h =>
+                    {
+                        h.Username("guest");
+                        h.Password("guest");
+                    });
+
+                    cfg.ReceiveEndpoint("botBundleQueue", ep =>
+                    {
+                        ep.ConfigureConsumer<ChatMessageCommandEventConsumer>(provider);
+                    });
+                }));
+            });
+
+            services.AddMassTransitHostedService();
+
+
+            services.Configure<RabbitMqSettings>(
+                hostContext.Configuration.GetSection("RabbitMQ"));
 
 
         })

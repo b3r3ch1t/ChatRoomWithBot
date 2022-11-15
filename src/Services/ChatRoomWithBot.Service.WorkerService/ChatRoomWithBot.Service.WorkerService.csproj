@@ -10,12 +10,18 @@
 	<ItemGroup>
 		<PackageReference Include="Microsoft.Extensions.Hosting" Version="6.0.1" />
 
-
-		<PackageReference Include="RabbitMQ.Client" Version="6.4.0" />
+		<PackageReference Include="MassTransit" Version="7.1.8" />
+		<PackageReference Include="MassTransit.AspNetCore" Version="7.1.8" />
+		<PackageReference Include="MassTransit.RabbitMQ" Version="7.1.8" />
+		 
 		<PackageReference Include="Quartz" Version="3.5.0" />
 		<PackageReference Include="Quartz.Extensions.Hosting" Version="3.5.0" />
 		<PackageReference Include="Serilog.Extensions.Hosting" Version="4.2.0" />
 		<PackageReference Include="Serilog.Sinks.Console" Version="4.1.0" />
 
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\..\Domain\ChatRoomWithBot.Domain\ChatRoomWithBot.Domain.csproj" />
 	</ItemGroup>
 </Project>
