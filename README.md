@@ -1,4 +1,4 @@
-# ChatRoomWithBot with .NET CORE 6
+# ChatRoomWithBot with .NET CORE 6 | SignalR | RabbitMQ
 This system is a browser-based chat application using .NET CORE 6.
 
 This application allow several users to talk in a chatroom and also to get stock quotes from an API using a specific command.
@@ -38,18 +38,55 @@ The chats show the last 50 messages ordered by timestamp.
 
 ## Technologies implemented:
 
-- ASP.NET 6.0
-- ASP.NET Identity Core
-- Entity Framework Core 6.0
-- .NET Core Native DI
-- AutoMapper
-- FluentValidator
-- MediatR
-- SignalR
-- Serilog
-- Sentry
-- MassTransit
-- CsvHelper
-- Bogus
-- Moq
-- Docker
+- ASP.NET 6.0 - (https://dotnet.microsoft.com/en-us/download/dotnet/6.0)
+- ASP.NET Identity Core - (https://learn.microsoft.com/pt-br/aspnet/core/security/authentication/?view=aspnetcore-6.0)
+- Entity Framework Core 6.0 - (https://learn.microsoft.com/en-us/ef/core/what-is-new/ef-core-6.0/plan)
+- .NET Core Native DI - (https://learn.microsoft.com/en-us/aspnet/core/fundamentals/dependency-injection?view=aspnetcore-6.0)
+- AutoMapper - (https://automapper.org/)
+- FluentValidator - (https://fluentvalidation.net/) 
+- MediatR - (https://github.com/jbogard/MediatR)
+- SignalR - (https://dotnet.microsoft.com/en-us/apps/aspnet/signalr)
+- Serilog - (https://serilog.net/) 
+- Sentry - (https://sentry.io/)
+- MassTransit - (https://masstransit-project.com/)
+- CsvHelper - (https://github.com/JoshClose/CsvHelper)
+- Bogus - (https://github.com/bchavez/Bogus)
+- Moq - (https://github.com/moq/moq4)
+- Docker (https://www.docker.com/)
+
+
+## Projects Structure:
+
+| Project | Description |
+| ------ | ------ |
+| ChatRoomWithBot.UI.MVC | Web Application  |
+| ChatRoomWithBot.Application | Only coordinates tasks and delegates work to collaborations of domain objects and repositories  |
+| ChatRoomWithBot.Domain | Is the heart of the business. It is based on a set of ideas, knowledge and business processes.  |
+| ChatRoomWithBot.Service.Identity | Responsible for Authentication using ASP.NET Identity Core  |
+| ChatRoomWithBot.Services.BerechitLogger | Implements Logs   |
+| ChatRoomWithBot.Services.RabbitMq | Publish messages to RabbitMQ and Consumer answers messages from RabbitMQ   |
+| ChatRoomWithBot.Data | Contains all repositories and connction with MS SQL Server   |
+| ChatRoomWithBot.Service.WorkerService | Worker Service to process messages in RabbitMQ   |
+| ChatRoomWithBot.Data.Test | Unity tests in Data Layer   |
+| ChatRoomWithBot.Domain.Test | Unity tests in Domain Layer   |
+
+
+*This project doen't intend to have a ideal rate of code coverage. The tests in this project just show some techniques and tools that can be replicated throughout the project
+
+## Configuration
+
+You can run this project using Docker or directly in Visual Studio or Visual Code :
+
+  - For Docker
+  
+  Execute this command in the root folder
+  
+  ```sh
+  $ docker-compose up -d 
+  ```
+  
+- For Visual Studio or Visual Code
+  
+  Configure the solution for multiple startup projects and select this projects :
+    - ChatRoomWithBot.UI.MVC
+    - ChatRoomWithBot.Service.WorkerService
