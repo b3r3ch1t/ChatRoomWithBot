@@ -4,13 +4,9 @@ using Bogus;
 using ChatRoomWithBot.Domain.Bus;
 using ChatRoomWithBot.Domain.Events;
 using ChatRoomWithBot.Domain.Interfaces;
-using ChatRoomWithBot.Domain.Interfaces.Repositories;
 using ChatRoomWithBot.Domain.Services;
 using ChatRoomWithBot.Domain.Validators;
 using Moq;
-
-using FluentValidation;
-using FluentValidation.TestHelper;
 
 namespace ChatRoomWithBot.Domain.Test
 {
