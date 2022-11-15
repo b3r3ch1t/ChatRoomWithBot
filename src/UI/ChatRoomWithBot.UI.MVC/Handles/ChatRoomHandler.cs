@@ -18,6 +18,9 @@ public class ChatRoomHandler :
     private readonly IHubContext<ChatRoomHub> _hubContext;
     private readonly IBerechitLogger _berechitLogger; 
     private readonly IChatManagerApplication _chatManagerApplication;
+
+    const int qteMessages = 50;
+
     public ChatRoomHandler(IHubContext<ChatRoomHub> hubContext, IBerechitLogger berechitLogger, IChatManagerApplication chatManagerApplication)
     {
         _hubContext = hubContext;
@@ -37,7 +40,7 @@ public class ChatRoomHandler :
             
             var result = await _chatManagerApplication.AddCommitedAsync(chatMessage);
 
-            var messages =await  _chatManagerApplication.GetMessagesAsync(notification.CodeRoom);
+            var messages =await  _chatManagerApplication.GetMessagesAsync(notification.CodeRoom, qteMessages);
 
             var message = JsonSerializer.Serialize(messages);
 
@@ -73,7 +76,7 @@ public class ChatRoomHandler :
             };
 
 
-            var messages =( await _chatManagerApplication.GetMessagesAsync(notification.CodeRoom) ).ToList();
+            var messages =( await _chatManagerApplication.GetMessagesAsync(notification.CodeRoom, qteMessages) ).ToList();
 
             messages.Add(chatMessage );
 
