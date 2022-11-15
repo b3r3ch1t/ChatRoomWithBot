@@ -1,11 +1,10 @@
 ﻿using ChatRoomWithBot.Domain.Bus;
 using ChatRoomWithBot.Domain.Events;
-using ChatRoomWithBot.Domain.Interfaces;
 using ChatRoomWithBot.Services.RabbitMq.Consumers;
 using ChatRoomWithBot.Services.RabbitMq.Handler;
-using ChatRoomWithBot.Services.RabbitMq.Manager;
 using MassTransit;
 using MediatR;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace ChatRoomWithBot.Services.RabbitMq.IoC
@@ -14,10 +13,17 @@ namespace ChatRoomWithBot.Services.RabbitMq.IoC
     {
 
         public static IServiceCollection RegisterServicesRabbitMqDependencies(
-            this IServiceCollection services)
+            this IServiceCollection services,
+            IConfiguration configuration)
         {
             services.AddScoped<IRequestHandler<ChatMessageCommandEvent, CommandResponse>, BotMessageNotificationHandler>();
-            services.AddScoped<IRabbitMqManager, RabbitMqManager>();
+
+            var host = configuration.GetSection("RabbitMQ:Connection:HostName").Value;
+
+            var username = configuration.GetSection("RabbitMQ:Connection:Username").Value;
+            var password = configuration.GetSection("RabbitMQ:Connection:Password").Value;
+            var receiveEndpoint = configuration.GetSection("RabbitMQ:botChatQueue").Value; 
+
 
 
             services.AddMassTransit(x =>
@@ -27,13 +33,13 @@ namespace ChatRoomWithBot.Services.RabbitMq.IoC
                 x.AddBus(provider => Bus.Factory.CreateUsingRabbitMq(config =>
                 {
                     config.UseHealthCheck(provider);
-                    config.Host(new Uri("rabbitmq://localhost"), h =>
+                    config.Host(new Uri($"rabbitmq://{host}"), h =>
                     {
-                        h.Username("guest");
-                        h.Password("guest");
+                        h.Username(username);
+                        h.Password(password);
                     });
 
-                    config.ReceiveEndpoint("botChatQueue", ep =>
+                    config.ReceiveEndpoint(receiveEndpoint, ep =>
                     {
                         ep.ConfigureConsumer<ChatResponseCommandEventConsumer>(provider);
                     });

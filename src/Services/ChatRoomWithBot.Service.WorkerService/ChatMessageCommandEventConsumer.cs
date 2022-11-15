@@ -4,7 +4,6 @@ using ChatRoomWithBot.Domain.Events;
 using MassTransit;
 using System.Globalization;
 using System.Net.Http.Headers;
-using ChatRoomWithBot.Domain.Entities;
 using ChatRoomWithBot.Service.WorkerService.Interface;
 using CsvHelper;
 using CsvHelper.Configuration;

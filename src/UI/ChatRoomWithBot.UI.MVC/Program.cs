@@ -26,7 +26,7 @@ builder.Services
     .RegisterLogDependencies(builder.Configuration, builder.Environment)
     .RegisterApplicationDependencies(builder.Configuration)
     .RegisterDataDependencies(builder.Configuration)
-    .RegisterServicesRabbitMqDependencies()
+    .RegisterServicesRabbitMqDependencies(builder.Configuration)
     .RegisterIdentityDependencies();
 
 

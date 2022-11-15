@@ -3,7 +3,7 @@
     public class RabbitMqSettings
     {
         public Connection Connection { get; set; }
-        public Queue botCommandQueue { get; set; }
-        public Queue BotResponseQueue { get; set; }
+        public string BotChatQueue { get; set; }
+        public string BotCommandQueue { get; set; }
     }
 }

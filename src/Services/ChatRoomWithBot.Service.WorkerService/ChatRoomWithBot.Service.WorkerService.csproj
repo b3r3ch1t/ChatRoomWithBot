@@ -22,10 +22,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Folder Include="Events\" />
-	</ItemGroup>
-
-	<ItemGroup>
 	  <ProjectReference Include="..\..\Domain\ChatRoomWithBot.Domain\ChatRoomWithBot.Domain.csproj" />
 	</ItemGroup>
 </Project>

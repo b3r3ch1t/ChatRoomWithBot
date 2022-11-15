@@ -1,6 +1,6 @@
 ﻿ 
 
-namespace ChatRoomWithBot.Domain.Entities
+namespace ChatRoomWithBot.Service.WorkerService
 {
     public class Stock
     {

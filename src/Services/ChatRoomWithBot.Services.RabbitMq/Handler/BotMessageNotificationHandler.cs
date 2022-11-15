@@ -27,7 +27,7 @@ namespace ChatRoomWithBot.Services.RabbitMq.Handler
             try
             {
                 var teste = JsonSerializer.Serialize(notification);
-                var uri = new Uri("rabbitmq://localhost/botCommandQueue");
+                var uri = new Uri($"rabbitmq://{_rabbitMqSettings.Connection.HostName}/{_rabbitMqSettings.BotCommandQueue}");
                 var endPoint = await _bus.GetSendEndpoint(uri);
                 await endPoint.Send(notification);
                 return CommandResponse.Ok();
