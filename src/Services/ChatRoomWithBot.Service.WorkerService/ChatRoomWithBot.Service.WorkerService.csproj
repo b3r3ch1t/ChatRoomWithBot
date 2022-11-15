@@ -5,6 +5,8 @@
 		<Nullable>enable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<UserSecretsId>dotnet-ChatRoomWithBot.Service.WorkerService-137f9633-d0c9-4365-9bcc-0fe2cbcb0471</UserSecretsId>
+		<DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+		<DockerfileContext>..\..\..</DockerfileContext>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -14,6 +16,7 @@
 		<PackageReference Include="MassTransit" Version="7.1.8" />
 		<PackageReference Include="MassTransit.AspNetCore" Version="7.1.8" />
 		<PackageReference Include="MassTransit.RabbitMQ" Version="7.1.8" />
+		<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.17.0" />
 		 
 		
 		<PackageReference Include="Serilog.Extensions.Hosting" Version="4.2.0" />

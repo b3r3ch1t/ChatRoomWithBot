@@ -23,6 +23,18 @@ try
         .ConfigureServices((hostContext, services) =>
         {
 
+
+            IConfiguration configuration = hostContext.Configuration;
+
+
+
+            var host = configuration.GetSection("RabbitMQ:Connection:HostName").Value;
+
+            var username = configuration.GetSection("RabbitMQ:Connection:Username").Value;
+            var password = configuration.GetSection("RabbitMQ:Connection:Password").Value;
+            var receiveEndpoint = configuration.GetSection("RabbitMQ:botCommandQueue").Value;
+
+
             services.AddMassTransit(x =>
             {
                 x.AddConsumer<ChatMessageCommandEventConsumer>();
@@ -30,13 +42,13 @@ try
                 x.AddBus(provider => Bus.Factory.CreateUsingRabbitMq(cfg =>
                 {
                     cfg.UseHealthCheck(provider);
-                    cfg.Host(new Uri("rabbitmq://localhost"), h =>
+                    cfg.Host(new Uri($"rabbitmq://{host}"), h =>
                     {
-                        h.Username("guest");
-                        h.Password("guest");
+                        h.Username(username);
+                        h.Password(password);
                     });
 
-                    cfg.ReceiveEndpoint("botCommandQueue", ep =>
+                    cfg.ReceiveEndpoint(receiveEndpoint, ep =>
                     {
                         ep.ConfigureConsumer<ChatMessageCommandEventConsumer>(provider);
                     });

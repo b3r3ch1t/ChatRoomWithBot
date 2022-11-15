@@ -6,10 +6,16 @@ EXPOSE 80
 
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
-COPY ["ChatRoomWithBot.UI.MVC/ChatRoomWithBot.UI.MVC.csproj", "ChatRoomWithBot.UI.MVC/"]
-RUN dotnet restore "ChatRoomWithBot.UI.MVC/ChatRoomWithBot.UI.MVC.csproj"
+COPY ["src/UI/ChatRoomWithBot.UI.MVC/ChatRoomWithBot.UI.MVC.csproj", "src/UI/ChatRoomWithBot.UI.MVC/"]
+COPY ["src/Application/ChatRoomWithBot.Application/ChatRoomWithBot.Application.csproj", "src/Application/ChatRoomWithBot.Application/"]
+COPY ["src/Data/ChatRoomWithBot.Data/ChatRoomWithBot.Data.csproj", "src/Data/ChatRoomWithBot.Data/"]
+COPY ["src/Domain/ChatRoomWithBot.Domain/ChatRoomWithBot.Domain.csproj", "src/Domain/ChatRoomWithBot.Domain/"]
+COPY ["src/Services/ChatRoomWithBot.Service.Identity/ChatRoomWithBot.Service.Identity.csproj", "src/Services/ChatRoomWithBot.Service.Identity/"]
+COPY ["src/Services/ChatRoomWithBot.Services.BerechitLogger/ChatRoomWithBot.Services.BerechitLogger.csproj", "src/Services/ChatRoomWithBot.Services.BerechitLogger/"]
+COPY ["src/Services/ChatRoomWithBot.Services.RabbitMq/ChatRoomWithBot.Services.RabbitMq.csproj", "src/Services/ChatRoomWithBot.Services.RabbitMq/"]
+RUN dotnet restore "src/UI/ChatRoomWithBot.UI.MVC/ChatRoomWithBot.UI.MVC.csproj"
 COPY . .
-WORKDIR "/src/ChatRoomWithBot.UI.MVC"
+WORKDIR "/src/src/UI/ChatRoomWithBot.UI.MVC"
 RUN dotnet build "ChatRoomWithBot.UI.MVC.csproj" -c Release -o /app/build
 
 FROM build AS publish

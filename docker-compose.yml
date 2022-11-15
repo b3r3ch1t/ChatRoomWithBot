@@ -1,0 +1,62 @@
+version: '3.4'
+
+services:
+  chatroomwithbot.ui.mvc:
+    image: ${DOCKER_REGISTRY-}chatroomwithbotuimvc
+    build:
+      context: .
+      dockerfile: src/UI/ChatRoomWithBot.UI.MVC/Dockerfile
+    ports:
+     - "8080:80"
+    depends_on:
+     - db
+     - rabbitmq
+    restart: always
+    networks:
+        - chatroomwithbot
+  
+  chatroomwithbot.ui.consumer:
+    image: ${DOCKER_REGISTRY-}consumer
+    build:
+      context: .
+      dockerfile: src/Services/ChatRoomWithBot.Service.WorkerService/Dockerfile 
+    depends_on: 
+     - rabbitmq
+    restart: always
+    networks:
+        - chatroomwithbot
+
+
+
+
+  db:
+    image: "mcr.microsoft.com/mssql/server:2022-latest"
+    container_name: 'database'
+    ports:
+     - "1433:1433"
+
+    environment:
+     SA_PASSWORD: "S3cur3P@ssW0rd!"
+     ACCEPT_EULA: "Y"
+    restart: always
+    networks:
+        - chatroomwithbot
+
+
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    container_name: 'rabbitmq'
+    ports:
+        - 5672:5672
+        - 15672:15672
+    volumes:
+        - ~/.docker-conf/rabbitmq/data/:/var/lib/rabbitmq/
+        - ~/.docker-conf/rabbitmq/log/:/var/log/rabbitmq
+    networks:
+        - chatroomwithbot
+
+
+
+networks:
+  chatroomwithbot:
+    driver: bridge
