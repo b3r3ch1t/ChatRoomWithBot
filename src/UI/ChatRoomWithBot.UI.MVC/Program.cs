@@ -1,5 +1,4 @@
 using ChatRoomWithBot.Domain.IoC;
-using ChatRoomWithBot.Services.RabbitMq.Extensions;
 using ChatRoomWithBot.Services.RabbitMq.Settings;
 using ChatRoomWithBot.UI.MVC.Extensions;
 using System.Reflection;

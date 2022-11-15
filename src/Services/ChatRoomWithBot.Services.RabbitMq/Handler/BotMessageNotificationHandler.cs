@@ -1,8 +1,4 @@
-﻿using System.Net.Sockets;
-using System.Reflection.Metadata.Ecma335;
-using System.Text;
-using System.Text.Json;
-using System.Text.Json.Nodes;
+﻿using System.Text.Json;
 using ChatRoomWithBot.Domain.Bus;
 using ChatRoomWithBot.Domain.Events;
 using ChatRoomWithBot.Domain.Interfaces;
@@ -31,7 +27,7 @@ namespace ChatRoomWithBot.Services.RabbitMq.Handler
             try
             {
                 var teste = JsonSerializer.Serialize(notification);
-                var uri = new Uri("rabbitmq://localhost/botBundleQueue");
+                var uri = new Uri("rabbitmq://localhost/botCommandQueue");
                 var endPoint = await _bus.GetSendEndpoint(uri);
                 await endPoint.Send(notification);
                 return CommandResponse.Ok();

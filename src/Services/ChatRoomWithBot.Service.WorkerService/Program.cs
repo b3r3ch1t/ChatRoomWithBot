@@ -1,11 +1,8 @@
-
-
- 
-using ChatRoomWithBot.Domain.Events;
 using ChatRoomWithBot.Service.WorkerService;
+using ChatRoomWithBot.Service.WorkerService.Interface;
+using ChatRoomWithBot.Service.WorkerService.Services;
 using ChatRoomWithBot.Service.WorkerService.Settings;
 using MassTransit;
-using Quartz;
 using Serilog;
 using Serilog.Events;
 
@@ -25,23 +22,6 @@ try
     var host = Host.CreateDefaultBuilder(args)
         .ConfigureServices((hostContext, services) =>
         {
-               
-            services.AddQuartz(q =>
-            {
-                q.UseMicrosoftDependencyInjectionScopedJobFactory();
-                var jobKey = new JobKey("ChatRoomWithBot");
-                q.AddJob<ConsumerRabbitMq>(opts => opts.WithIdentity(jobKey));
-
-                q.AddTrigger(opts => opts
-                    .ForJob(jobKey)
-                    .WithIdentity("ChatRoomWithBot")
-                    .WithCronSchedule("* 0/5 * * * ?"));
-
-                
-               // services.AddQuartzHostedService(q => q.WaitForJobsToComplete = true);
-
-            });
-
 
             services.AddMassTransit(x =>
             {
@@ -56,7 +36,7 @@ try
                         h.Password("guest");
                     });
 
-                    cfg.ReceiveEndpoint("botBundleQueue", ep =>
+                    cfg.ReceiveEndpoint("botCommandQueue", ep =>
                     {
                         ep.ConfigureConsumer<ChatMessageCommandEventConsumer>(provider);
                     });
@@ -65,6 +45,7 @@ try
 
             services.AddMassTransitHostedService();
 
+            services.AddScoped<IRabbitMqPublish, RabbitMqPublish>();
 
             services.Configure<RabbitMqSettings>(
                 hostContext.Configuration.GetSection("RabbitMQ"));

@@ -1,20 +1,82 @@
-﻿using ChatRoomWithBot.Domain.Events;
+﻿
+
+using ChatRoomWithBot.Domain.Events;
 using MassTransit;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Globalization;
+using System.Net.Http.Headers;
+using ChatRoomWithBot.Domain.Entities;
+using ChatRoomWithBot.Service.WorkerService.Interface;
+using CsvHelper;
+using CsvHelper.Configuration;
 
 namespace ChatRoomWithBot.Service.WorkerService
 {
     internal class ChatMessageCommandEventConsumer : IConsumer<ChatMessageCommandEvent>
     {
-        public Task Consume(ConsumeContext<ChatMessageCommandEvent> context)
-        {
-            Console.WriteLine(context.Message );
+        private readonly IRabbitMqPublish _rabbitMqPublish;
 
-            return Task.CompletedTask;
+        public ChatMessageCommandEventConsumer(IRabbitMqPublish rabbitMqPublish)
+        {
+            _rabbitMqPublish = rabbitMqPublish;
+        }
+
+
+        public async Task Consume(ConsumeContext<ChatMessageCommandEvent> context)
+        {
+            try
+            {
+                var stockCode = context.Message.Message.Replace("/stock=", "").ToLowerInvariant();
+
+                var httpclient = new HttpClient();
+
+                var url = $"https://stooq.com/q/l/?s={stockCode}&f=sd2t2ohlcv&h&e=csv";
+
+                using var msg = new HttpRequestMessage(HttpMethod.Get, new Uri(url));
+                msg.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("text/csv"));
+                using var resp = await httpclient.SendAsync(msg);
+                resp.EnsureSuccessStatusCode();
+
+
+                var csvConfig = new CsvConfiguration(CultureInfo.CurrentCulture)
+                {
+                    HasHeaderRecord = true,
+                    Comment = '#',
+                    AllowComments = true,
+                    Delimiter = ",",
+                };
+
+                await using var s = await resp.Content.ReadAsStreamAsync();
+                using var sr = new StreamReader(s);
+                using var csvReader = new CsvReader(sr, csvConfig);
+                var record = csvReader.GetRecords<Stock>().First();
+                var result = string.Empty;
+                if (record != null)
+                {
+                      result = $"{stockCode.ToUpper()} quote is ${record.Open} per share";
+                    Console.WriteLine(result);
+                }
+
+
+                var chatMessageCommandEvent = new ChatMessageCommandEvent()
+                {
+                    CodeRoom = context.Message.CodeRoom,
+                    Message = result,
+                    UserId = Guid.Empty,
+                    UserName = "bot"
+
+                };
+
+               await  _rabbitMqPublish.SendMessage("localhost", "botChatQueue", chatMessageCommandEvent); 
+
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
+           
+
+
         }
     }
 }
