@@ -39,6 +39,8 @@ Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-co
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{0314DB10-092C-4EF5-86E4-710874563BAD}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChatRoomWithBot.Data.Test", "tests\ChatRoomWithBot.Data.Test\ChatRoomWithBot.Data.Test.csproj", "{D3ABC8EE-033F-4B73-8308-E65C3961F07C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -85,6 +87,10 @@ Global
 		{8AD56144-BEBB-4EB0-9653-85BC4F74D077}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8AD56144-BEBB-4EB0-9653-85BC4F74D077}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8AD56144-BEBB-4EB0-9653-85BC4F74D077}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D3ABC8EE-033F-4B73-8308-E65C3961F07C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D3ABC8EE-033F-4B73-8308-E65C3961F07C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D3ABC8EE-033F-4B73-8308-E65C3961F07C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D3ABC8EE-033F-4B73-8308-E65C3961F07C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -99,6 +105,7 @@ Global
 		{ACBCEDB6-41FD-4C24-8D7D-A4C68485B334} = {A01CFF16-82C6-4076-9CF1-27B9682451BE}
 		{411A013B-935C-4B40-9A95-7D21AC86780D} = {6DAC24A0-049C-4D90-BBEB-F4EEB2F4CA8F}
 		{BC3B24E9-3A72-4088-92B1-75BA5B0DC81F} = {87EF2877-AF59-446C-9A47-69B8764CFC6C}
+		{D3ABC8EE-033F-4B73-8308-E65C3961F07C} = {6DAC24A0-049C-4D90-BBEB-F4EEB2F4CA8F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {4DDB3289-2997-4250-A3EF-62CEAB97C30A}
