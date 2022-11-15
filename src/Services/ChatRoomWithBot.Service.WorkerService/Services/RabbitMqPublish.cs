@@ -12,7 +12,7 @@ namespace ChatRoomWithBot.Service.WorkerService.Services
         {
             _bus = bus;
         }
-        public async  Task SendMessage(string host, string queue, ChatMessageCommandEvent chatMessageCommandEvent)
+        public async  Task SendMessage(string host, string queue, ChatResponseCommandEvent chatMessageCommandEvent)
         {
             try
             {

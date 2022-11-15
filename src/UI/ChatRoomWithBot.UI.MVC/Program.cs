@@ -48,15 +48,17 @@ builder.Services.Configure<RabbitMqSettings>(
 
 builder.Services.AddSignalR();
 
-builder.Services.AddScoped<IRequestHandler<ChatMessageTextEvent, CommandResponse>, ChatRoomHandler>(); 
+builder.Services.AddScoped<IRequestHandler<ChatMessageTextEvent, CommandResponse>, ChatRoomHandler>();
+builder.Services.AddScoped<IRequestHandler<ChatResponseCommandEvent, CommandResponse>, ChatRoomHandler>();
 
-var configuration = new ConfigurationBuilder()
-    .SetBasePath(Directory.GetCurrentDirectory())
-    .AddJsonFile("appsettings.json")
-    .AddJsonFile($"appsettings.Local.json", optional: true)
-    .AddJsonFile($"appsettings.{Environment.GetEnvironmentVariable(AspNetCoreEnvironment)}.json", optional: true)
-    .AddEnvironmentVariables()
-    .Build();
+
+new ConfigurationBuilder()
+.SetBasePath(Directory.GetCurrentDirectory())
+.AddJsonFile("appsettings.json")
+.AddJsonFile($"appsettings.Local.json", optional: true)
+.AddJsonFile($"appsettings.{Environment.GetEnvironmentVariable(AspNetCoreEnvironment)}.json", optional: true)
+.AddEnvironmentVariables()
+.Build();
 
 var app = builder.Build();
 
@@ -70,7 +72,7 @@ if (!app.Environment.IsDevelopment())
 app.UseStaticFiles();
 
 app.UseRouting();
- 
+
 
 app.UseAuthentication();
 app.UseAuthorization();

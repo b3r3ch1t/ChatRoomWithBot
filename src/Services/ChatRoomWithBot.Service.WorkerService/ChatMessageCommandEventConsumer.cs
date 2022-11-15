@@ -57,7 +57,7 @@ namespace ChatRoomWithBot.Service.WorkerService
                 }
 
 
-                var chatMessageCommandEvent = new ChatMessageCommandEvent()
+                var chatResponseCommandEvent = new ChatResponseCommandEvent()
                 {
                     CodeRoom = context.Message.CodeRoom,
                     Message = result,
@@ -66,7 +66,7 @@ namespace ChatRoomWithBot.Service.WorkerService
 
                 };
 
-               await  _rabbitMqPublish.SendMessage("localhost", "botChatQueue", chatMessageCommandEvent); 
+               await  _rabbitMqPublish.SendMessage("localhost", "botChatQueue", chatResponseCommandEvent); 
 
             }
             catch (Exception e)

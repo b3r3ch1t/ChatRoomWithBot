@@ -4,5 +4,5 @@ namespace ChatRoomWithBot.Service.WorkerService.Interface;
 
 public interface IRabbitMqPublish
 {
-    Task SendMessage(string host, string queue, ChatMessageCommandEvent chatMessageCommandEvent);
+    Task SendMessage(string host, string queue, ChatResponseCommandEvent chatMessageCommandEvent);
 }

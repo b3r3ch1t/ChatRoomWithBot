@@ -1,5 +1,6 @@
 ﻿using System.Text.Json;
 using ChatRoomWithBot.Application.Interfaces;
+using ChatRoomWithBot.Application.ViewModel;
 using ChatRoomWithBot.Domain.Bus;
 using ChatRoomWithBot.Domain.Entities;
 using ChatRoomWithBot.Domain.Events;
@@ -11,7 +12,8 @@ using Microsoft.AspNetCore.SignalR;
 namespace ChatRoomWithBot.UI.MVC.Handles;
 
 public class ChatRoomHandler :
-    IRequestHandler<ChatMessageTextEvent, CommandResponse>
+    IRequestHandler<ChatMessageTextEvent, CommandResponse>, 
+    IRequestHandler<ChatResponseCommandEvent, CommandResponse>
 {
     private readonly IHubContext<ChatRoomHub> _hubContext;
     private readonly IBerechitLogger _berechitLogger; 
@@ -48,6 +50,40 @@ public class ChatRoomHandler :
             
 
             return result ;
+        }
+        catch (Exception e)
+        {
+            _berechitLogger.Error(e);
+            return CommandResponse.Fail(e);
+        }
+    }
+
+    public async  Task<CommandResponse> Handle(ChatResponseCommandEvent notification, CancellationToken cancellationToken)
+    {
+        try
+        {
+            var group = notification.CodeRoom.ToString();
+            var user = notification.UserName;
+            var chatMessage = new ChatMessageViewModel
+            {
+                UserName = notification.UserName, 
+                Date = DateTime.Now,
+                Message = notification.Message,
+                RoomId = notification.CodeRoom,
+            };
+
+
+            var messages =( await _chatManagerApplication.GetMessagesAsync(notification.CodeRoom) ).ToList();
+
+            messages.Add(chatMessage );
+
+            var message = JsonSerializer.Serialize(messages);
+
+
+            await _hubContext.Clients.Group(group)
+                .SendAsync("ReceiveMessage", user, message);
+             
+            return CommandResponse.Ok();
         }
         catch (Exception e)
         {

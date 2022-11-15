@@ -1,6 +1,7 @@
 ﻿using ChatRoomWithBot.Domain.Bus;
 using ChatRoomWithBot.Domain.Events;
 using ChatRoomWithBot.Domain.Interfaces;
+using ChatRoomWithBot.Services.RabbitMq.Consumers;
 using ChatRoomWithBot.Services.RabbitMq.Handler;
 using ChatRoomWithBot.Services.RabbitMq.Manager;
 using MassTransit;
@@ -21,6 +22,8 @@ namespace ChatRoomWithBot.Services.RabbitMq.IoC
 
             services.AddMassTransit(x =>
             {
+
+                x.AddConsumer<ChatResponseCommandEventConsumer>();
                 x.AddBus(provider => Bus.Factory.CreateUsingRabbitMq(config =>
                 {
                     config.UseHealthCheck(provider);
@@ -29,6 +32,13 @@ namespace ChatRoomWithBot.Services.RabbitMq.IoC
                         h.Username("guest");
                         h.Password("guest");
                     });
+
+                    config.ReceiveEndpoint("botChatQueue", ep =>
+                    {
+                        ep.ConfigureConsumer<ChatResponseCommandEventConsumer>(provider);
+                    });
+
+
                 }));
             });
 
