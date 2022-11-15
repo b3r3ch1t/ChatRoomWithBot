@@ -73,7 +73,44 @@ The chats show the last 50 messages ordered by timestamp.
 
 *This project doen't intend to have a ideal rate of code coverage. The tests in this project just show some techniques and tools that can be replicated throughout the project
 
+
+### Settings Files
+
+  - [ChatRoomWithBot.UI.MVC/appsettings.json] File with `ConnectionStrings` and `RabbitMQ Server credentials`.
+  - [ChatRoomWithBot.Service.WorkerService/appsettings.json] File with credentials and settings to `RabbitMQ Consumer` for sending and receiving bot commands.
+
+
+
 ## Configuration
+
+*Is not necessary to create initial users and chat rooms. The system is configured to seed the database with initial faker users and chat rooms. 
+
+
+```
+public void Seed()
+ {
+
+  _context.Database.EnsureCreated();
+
+  SeedUsers();
+
+  SeedChatRooms();
+ }
+```
+
+
+| User | Password |
+| ------ | ------ |
+| user1@teste.com | Test12345678 |
+| user2@teste.com | Test12345678 | 
+
+
+| Chat Room  | 
+| ------ |
+| Room 1 |
+| Room 2 | 
+| Room 3 |
+
 
 You can run this project using Docker or directly in Visual Studio or Visual Code :
 
