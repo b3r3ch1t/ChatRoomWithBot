@@ -27,10 +27,6 @@ namespace ChatRoomWithBot.Data
             SeedUsers();
 
             SeedChatRooms();
-
-
-            
-
         }
 
         private void SeedChatRooms()

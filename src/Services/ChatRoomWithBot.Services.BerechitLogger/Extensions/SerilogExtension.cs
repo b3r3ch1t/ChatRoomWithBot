@@ -5,7 +5,7 @@ using Serilog.Events;
 using Serilog.Exceptions;
 using Serilog.Filters;
 
-namespace ChatRoomWithBot.Services.BerechitLog.Extensions
+namespace ChatRoomWithBot.Services.BerechitLogger.Extensions
 {
     internal static class SerilogExtension
     {

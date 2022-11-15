@@ -9,13 +9,11 @@ namespace ChatRoomWithBot.Domain.Services
     public class ChatManagerDomain : IChatManagerDomain
     {
         private readonly IMediatorHandler _mediatorHandler;
-        private readonly EventValidator _validator;
         private readonly IBerechitLogger _berechitLogger;
 
         public ChatManagerDomain(IMediatorHandler mediatorHandler, EventValidator validator, IBerechitLogger berechitLogger)
         {
             _mediatorHandler = mediatorHandler;
-            _validator = validator;
             _berechitLogger = berechitLogger;
 
         }
@@ -29,13 +27,10 @@ namespace ChatRoomWithBot.Domain.Services
        
         public async Task<CommandResponse> SendMessageAsync(Event message)
         {
-            var validate = await _validator.ValidateAsync(message);
- 
-            CommandResponse result;
-
             try
             {
-                if (!validate.IsValid)
+                CommandResponse result;
+                if (!message.IsValid())
                 {
                     message.Message = $"This message is not valid : {message.Message}";
                     result = await _mediatorHandler.SendMessage(message);
@@ -56,10 +51,9 @@ namespace ChatRoomWithBot.Domain.Services
               _berechitLogger.Error(e);
               return CommandResponse.Fail(e);
             }
+ 
 
-            result = await  _mediatorHandler.SendMessage(message);
-
-            return result;
+            return CommandResponse.Fail("Fail to send message !");
 
         }
          

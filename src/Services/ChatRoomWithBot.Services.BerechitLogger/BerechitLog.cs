@@ -2,7 +2,7 @@
 using ChatRoomWithBot.Domain.Interfaces;
 using Microsoft.Extensions.Logging;
 
-namespace ChatRoomWithBot.Services.BerechitLog;
+namespace ChatRoomWithBot.Services.BerechitLogger;
 
 public class BerechitLog : IBerechitLogger
 {

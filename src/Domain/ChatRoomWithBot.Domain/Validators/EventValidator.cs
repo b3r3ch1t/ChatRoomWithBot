@@ -1,18 +1,14 @@
 ﻿using ChatRoomWithBot.Domain.Events;
-using ChatRoomWithBot.Domain.Interfaces.Repositories;
 using FluentValidation;
 
 namespace ChatRoomWithBot.Domain.Validators
 {
     public class EventValidator : AbstractValidator<Event>
-    {
-        private readonly IChatRoomRepository _chatRoomRepository;
-        public EventValidator(IChatRoomRepository chatRoomRepository)
+    { 
+        
+        public EventValidator(  )
         {
-            _chatRoomRepository = chatRoomRepository;
-
-
-            ValidateCodeRoom();
+             
             ValidateMessage();
             ValidateCommand();
         }
@@ -22,15 +18,15 @@ namespace ChatRoomWithBot.Domain.Validators
             When(x => x.IsCommand , () =>
             {
                 RuleFor(x => x.Message)
-                    .MustAsync(CommandIsValid)
+                    .Must(CommandIsValid)
                     .WithMessage("The command is not valid ");
             });
 
         }
 
-        private Task<bool> CommandIsValid(string command, CancellationToken cancellationToken)
+        private bool CommandIsValid(string command )
         {
-            return Task.FromResult(command.StartsWith("/stock="));
+            return command.StartsWith("/stock=");
         }
 
         private void ValidateMessage()
@@ -39,22 +35,8 @@ namespace ChatRoomWithBot.Domain.Validators
                 .NotEmpty().NotNull().WithMessage(" the message is Invalid");
         }
 
-         
-         
+        
 
-        private void ValidateCodeRoom()
-        {
-            RuleFor(x => x.CodeRoom)
-                .MustAsync(ExistsRoomIdAsync)
-                .WithMessage(" This room is invalid !");
-        }
-
-        private async Task<bool> ExistsRoomIdAsync(Guid roomId, CancellationToken cancellationToken)
-        {
-            var result = await _chatRoomRepository.ExistsRoomIdAsync(roomId);
-
-            return result;
-
-        }
+        
     }
 }

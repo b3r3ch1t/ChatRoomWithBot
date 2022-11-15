@@ -1,11 +1,11 @@
 ﻿using ChatRoomWithBot.Domain.Interfaces;
-using ChatRoomWithBot.Services.BerechitLog.Extensions;
+using ChatRoomWithBot.Services.BerechitLogger.Extensions;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
-namespace ChatRoomWithBot.Services.BerechitLog.IoC
+namespace ChatRoomWithBot.Services.BerechitLogger.IoC
 {
     public static class RegisterLogDependency 
     {

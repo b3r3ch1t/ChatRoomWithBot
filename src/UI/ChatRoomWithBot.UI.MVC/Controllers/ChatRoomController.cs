@@ -99,7 +99,7 @@ namespace ChatRoomWithBot.UI.MVC.Controllers
 
             if (string.IsNullOrWhiteSpace(hashBot)) return false;
 
-            return Criptografia.Decrypt(hashBot) == HashId;
+            return Criptografy.Decrypt(hashBot) == HashId;
         }
 
         

@@ -3,7 +3,7 @@ using System.Text;
 
 namespace ChatRoomWithBot.Domain;
 
-public static  class Criptografia
+public static  class Criptografy
 {
 
     private static readonly byte[] Iv = Encoding.UTF8.GetBytes("N9#^:uTjRFTK%O+G");

@@ -10,10 +10,10 @@ using ChatRoomWithBot.Data.IoC;
 using ChatRoomWithBot.Domain.Bus;
 using ChatRoomWithBot.UI.MVC.Services;
 using ChatRoomWithBot.Service.Identity.IoC;
-using ChatRoomWithBot.Services.BerechitLog.IoC;
 using ChatRoomWithBot.Services.RabbitMq.IoC;
 using ChatRoomWithBot.UI.MVC.Handles;
 using ChatRoomWithBot.Domain.Events;
+using ChatRoomWithBot.Services.BerechitLogger.IoC;
 
 const string AspNetCoreEnvironment = "ASPNETCORE_ENVIRONMENT";
 
