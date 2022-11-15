@@ -40,10 +40,17 @@ namespace ChatRoomWithBot.Domain.Services
                 if (message.IsCommand)
                 {
                     message.UserName = "bot";
+                    message.UserId = Guid.Empty;
+                    
 
                     result = await _mediatorHandler.SendMessage(message);
                     return result;
                 }
+
+
+                result = await _mediatorHandler.SendMessage(message);
+                return result;
+
 
             }
             catch (Exception e)

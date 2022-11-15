@@ -9,6 +9,6 @@
         public string? HashBot { get; set; }
         public string Message { get; set; }
 
-        public bool IsCommand { get; set; } 
+        public bool IsCommand => Message.StartsWith("/");
     }
 }

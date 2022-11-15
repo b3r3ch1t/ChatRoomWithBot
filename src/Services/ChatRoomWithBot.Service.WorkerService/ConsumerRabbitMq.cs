@@ -33,6 +33,8 @@ namespace ChatRoomWithBot.Service.WorkerService
                 };
                 using var connection = factory.CreateConnection();
                 using var channel = connection.CreateModel();
+
+
                 channel.QueueDeclare(
                     queue: _rabbitMqSettings.BotBundleQueue.Name,
                     durable: _rabbitMqSettings.BotBundleQueue.Durable,
@@ -43,14 +45,26 @@ namespace ChatRoomWithBot.Service.WorkerService
                 var consumer = new EventingBasicConsumer(channel);
                 consumer.Received += (model, ea) =>
                 {
-                    var body = ea.Body.ToArray();
-                    var message = Encoding.UTF8.GetString(body);
-                    var chatBotMessage =  JsonSerializer.Deserialize<ChatBotMessage>(message);
+                    try
+                    {
+                        var body = ea.Body.ToArray() ;
+                        var message = Encoding.UTF8.GetString(body);
+                        var order =  JsonSerializer.Deserialize<ChatBotMessage>(message);
+                        Console.WriteLine(" [x] Received {0}", message);
 
-                    Console.WriteLine($"chatBotMessage", chatBotMessage); 
+                        channel.BasicAck(ea.DeliveryTag, false);
+                    }
+                    catch (Exception ex)
+                    {
+                        //Logger
+                        channel.BasicNack(ea.DeliveryTag, false, true);
+                    }
 
 
-                    channel.BasicAck(ea.DeliveryTag, false);
+                    channel.BasicConsume(queue: _rabbitMqSettings.BotBundleQueue.Name,
+                        autoAck: false,
+                        consumer: consumer);
+
                 };
                  
 

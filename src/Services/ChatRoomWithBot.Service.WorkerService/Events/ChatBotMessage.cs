@@ -2,7 +2,7 @@
 
 namespace ChatRoomWithBot.Service.WorkerService.Events
 {
-    internal class ChatBotMessage
+    public  class ChatBotMessage
     {
 
         public string Message { get; set; }

@@ -33,7 +33,7 @@ try
                 q.AddTrigger(opts => opts
                     .ForJob(jobKey)
                     .WithIdentity("ChatRoomWithBot")
-                    .WithCronSchedule("0/25 * * * * ?"));
+                    .WithCronSchedule("* 0/5 * * * ?"));
 
 
                 services.Configure<RabbitMqSettings>(

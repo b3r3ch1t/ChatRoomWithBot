@@ -33,6 +33,9 @@ namespace ChatRoomWithBot.Data
         {
             try
             {
+                if (_context.ChatRooms.Any()) return; 
+
+
                 var listChatRooms = new List<ChatRoom>()
                 {
                     new ChatRoom(name: "Room 1"),
