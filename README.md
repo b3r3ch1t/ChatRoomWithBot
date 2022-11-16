@@ -1,13 +1,13 @@
 # ChatRoomWithBot with .NET CORE 6 | SignalR | RabbitMQ
 This system is a browser-based chat application using .NET CORE 6.
 
-This application allow several users to talk in a chatroom and also to get stock quotes from an API using a specific command.
+This application allows several users to talk in a chatroom and also to get stock quotes from an API using a specific command.
 
 The users are stored in MS SQL Server using Microsoft Identity and Entiframework CORE as ORM. 
 
 Only authentication users can send messages in chat rooms. 
 
-The system allows to setup the number of roow as how many as need just adding it at ChatRoom table. 
+The system allows to setup the number of rooms as how many as need just adding it at ChatRoom table. 
 
 In the rooms allows to send commands that use the message broker (RabbitMQ) that call the API https://stooq.com.
 
@@ -16,6 +16,8 @@ There are a Worker Service running from chat(https://learn.microsoft.com/en-us/d
 The Workers Services receive the CSV file and send a message back into the chatroom using a message broker (RabbitMQ); 
 
 The chats show the last 50 messages ordered by timestamp. 
+
+*This system is not a real project, just a prove of concept; 
 
 
 ## Features
@@ -26,7 +28,9 @@ The chats show the last 50 messages ordered by timestamp.
   
 ## Architecture:
 
-- Full architecture with responsibility separation concerns, SOLID and Clean Code
+- Full architecture with responsibility separation concerns
+- SOLID and Clean Code
+- Clean Architecture
 - Domain Driven Design (Layers and Domain Model Pattern)
 - Domain Events
 - Domain Validations
@@ -52,7 +56,7 @@ The chats show the last 50 messages ordered by timestamp.
 - CsvHelper - (https://github.com/JoshClose/CsvHelper)
 - Bogus - (https://github.com/bchavez/Bogus)
 - Moq - (https://github.com/moq/moq4)
-- Docker (https://www.docker.com/)
+- Docker - (https://www.docker.com/)
 
 
 ## Projects Structure:
@@ -71,7 +75,7 @@ The chats show the last 50 messages ordered by timestamp.
 | ChatRoomWithBot.Domain.Test | Unity tests in Domain Layer   |
 
 
-*This project doen't intend to have a ideal rate of code coverage. The tests in this project just show some techniques and tools that can be replicated throughout the project
+*This project doesn't intend to have a ideal rate of code coverage. The tests in this project just show some techniques and tools that can be replicated in this project or in a real project.
 
 
 ### Settings Files
