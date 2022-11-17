@@ -32,7 +32,28 @@ namespace ChatRoomWithBot.Domain.Services
                 CommandResponse result;
                 if (!message.IsValid())
                 {
-                    message.Message = $"This message is not valid : {message.Message}";
+
+                    if (message.Message.StartsWith("/"))
+                    {
+                        message = new ChatMessageTextEvent()
+                        {
+                            CodeRoom = message.CodeRoom,
+                            Message = $"This command is not valid : {message.Message}",
+                            UserId = Guid.Empty,
+                            UserName = "bot"
+                        };
+
+                        result = await _mediatorHandler.SendMessage(message);
+
+                        return result;
+                    }
+                    else
+                    {
+                        message.Message = $"This message is not valid : {message.Message}";
+
+                    }
+
+
                     result = await _mediatorHandler.SendMessage(message);
                     return result;
                 }
@@ -41,7 +62,9 @@ namespace ChatRoomWithBot.Domain.Services
                 {
                     message.UserName = "bot";
                     message.UserId = Guid.Empty;
-                    
+
+
+                   
 
                     result = await _mediatorHandler.SendMessage(message);
                     return result;
