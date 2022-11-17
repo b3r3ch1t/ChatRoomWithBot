@@ -12,11 +12,11 @@ using Microsoft.AspNetCore.SignalR;
 namespace ChatRoomWithBot.UI.MVC.Handles;
 
 public class ChatRoomHandler :
-    IRequestHandler<ChatMessageTextEvent, CommandResponse>, 
+    IRequestHandler<ChatMessageTextEvent, CommandResponse>,
     IRequestHandler<ChatResponseCommandEvent, CommandResponse>
 {
     private readonly IHubContext<ChatRoomHub> _hubContext;
-    private readonly IBerechitLogger _berechitLogger; 
+    private readonly IBerechitLogger _berechitLogger;
     private readonly IChatManagerApplication _chatManagerApplication;
 
     const int qteMessages = 50;
@@ -35,12 +35,23 @@ public class ChatRoomHandler :
         try
         {
             var group = notification.CodeRoom.ToString();
-            var user = notification.UserName; 
+            var user = notification.UserName;
             var chatMessage = new ChatMessage(userId: notification.UserId, message: notification.Message, userName: notification.UserName, roomId: notification.CodeRoom);
-            
-            var result = await _chatManagerApplication.AddCommitedAsync(chatMessage);
+            var result = CommandResponse.Fail("Fail to send");
 
-            var messages =await  _chatManagerApplication.GetMessagesAsync(notification.CodeRoom, qteMessages);
+            var messages = (await _chatManagerApplication.GetMessagesAsync(notification.CodeRoom, qteMessages)).ToList();
+
+
+            result = await _chatManagerApplication.AddCommitedAsync(chatMessage);
+
+
+            messages.Add(new ChatMessageViewModel()
+            {
+                Date = DateTime.Now,
+                Message = notification.Message,
+                RoomId = notification.CodeRoom,
+                UserName = "bot",
+            });
 
             var message = JsonSerializer.Serialize(messages);
 
@@ -49,10 +60,10 @@ public class ChatRoomHandler :
                 .SendAsync("ReceiveMessage", user, message);
 
 
-           
-            
 
-            return result ;
+
+
+            return result;
         }
         catch (Exception e)
         {
@@ -61,7 +72,7 @@ public class ChatRoomHandler :
         }
     }
 
-    public async  Task<CommandResponse> Handle(ChatResponseCommandEvent notification, CancellationToken cancellationToken)
+    public async Task<CommandResponse> Handle(ChatResponseCommandEvent notification, CancellationToken cancellationToken)
     {
         try
         {
@@ -69,23 +80,23 @@ public class ChatRoomHandler :
             var user = notification.UserName;
             var chatMessage = new ChatMessageViewModel
             {
-                UserName = notification.UserName, 
+                UserName = notification.UserName,
                 Date = DateTime.Now,
                 Message = notification.Message,
                 RoomId = notification.CodeRoom,
             };
 
 
-            var messages =( await _chatManagerApplication.GetMessagesAsync(notification.CodeRoom, qteMessages) ).ToList();
+            var messages = (await _chatManagerApplication.GetMessagesAsync(notification.CodeRoom, qteMessages)).ToList();
 
-            messages.Add(chatMessage );
+            messages.Add(chatMessage);
 
             var message = JsonSerializer.Serialize(messages);
 
 
             await _hubContext.Clients.Group(group)
                 .SendAsync("ReceiveMessage", user, message);
-             
+
             return CommandResponse.Ok();
         }
         catch (Exception e)

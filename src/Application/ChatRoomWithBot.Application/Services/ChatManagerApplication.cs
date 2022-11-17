@@ -52,6 +52,8 @@ namespace ChatRoomWithBot.Application.Services
         {
             try
             {
+                if (chatMessage.Message.StartsWith("This command is not valid : /")) return CommandResponse.Ok();
+                 
                 return await _chatMessageRepository.AddCommitedAsync(chatMessage);
             }
             catch (Exception e)
