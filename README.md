@@ -58,7 +58,7 @@ This is a browser-based chat application built with .NET CORE 8. It supports rea
 | ChatRoomWithBot.Domain.Test | Unit tests for Domain Layer |
 
 ## Configuration
-No need to manually create initial users and chat rooms—the system is pre-configured to seed the database with sample users and chat rooms using the `Seed()` method.
+No need to manually create initial users and chat roomsâ€”the system is pre-configured to seed the database with sample users and chat rooms using the `Seed()` method.
 
 | User | Password |
 | ------ | ------ |
@@ -84,3 +84,21 @@ You can run the project using Docker or directly in Visual Studio or Visual Code
   Configure the solution for multiple startup projects and select:
   - ChatRoomWithBot.UI.MVC
   - ChatRoomWithBot.Service.WorkerService
+
+ ## Connect with Me
+
+Let's connect on LinkedIn:
+
+[Anderson Meneses on LinkedIn](https://www.linkedin.com/in/anderson-meneses)
+
+## License
+
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+
+## Contributions
+
+Contributions are welcome! Please submit a pull request or open an issue to suggest improvements or report bugs.
+
+## Contact
+
+For any questions or support, feel free to contact the repository owner via [GitHub](https://github.com/b3r3ch1t).
