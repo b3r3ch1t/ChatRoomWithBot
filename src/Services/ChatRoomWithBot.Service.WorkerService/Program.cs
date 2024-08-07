@@ -5,79 +5,63 @@ using ChatRoomWithBot.Service.WorkerService.Settings;
 using MassTransit;
 using Serilog;
 using Serilog.Events;
-
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 
 Log.Logger = new LoggerConfiguration()
-    .MinimumLevel.Debug()
-    .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
-    .Enrich.FromLogContext()
-    .WriteTo.Console()
-    .CreateLogger();
-
+	.MinimumLevel.Debug()
+	.MinimumLevel.Override("Microsoft", LogEventLevel.Information)
+	.Enrich.FromLogContext()
+	.WriteTo.Console()
+	.CreateLogger();
 
 try
 {
-    Log.Information("Starting host");
+	Log.Information("Starting host");
 
-    var host = Host.CreateDefaultBuilder(args)
-        .ConfigureServices((hostContext, services) =>
-        {
+	var host = Host.CreateDefaultBuilder(args)
+		.ConfigureServices((hostContext, services) =>
+		{
+			IConfiguration configuration = hostContext.Configuration;
 
+			var hostName = configuration.GetSection("RabbitMQ:Connection:HostName").Value;
+			var receiveEndpoint = configuration.GetValue<string>("RabbitMQ:botCommandQueue");
 
-            IConfiguration configuration = hostContext.Configuration;
+			services.AddMassTransit(x =>
+			{
+				x.AddConsumer<ChatMessageCommandEventConsumer>();
 
+				x.AddBus(provider => Bus.Factory.CreateUsingRabbitMq(cfg =>
+				{
+					cfg.Host(new Uri($"rabbitmq://{hostName}") );
 
+					cfg.ReceiveEndpoint(receiveEndpoint, ep =>
+					{
+						ep.ConfigureConsumer<ChatMessageCommandEventConsumer>(provider);
+					});
+				}));
+			});
 
-            var host = configuration.GetSection("RabbitMQ:Connection:HostName").Value;
+			services.AddScoped<IRabbitMqPublish, RabbitMqPublish>();
 
-            var username = configuration.GetSection("RabbitMQ:Connection:Username").Value;
-            var password = configuration.GetSection("RabbitMQ:Connection:Password").Value;
-            var receiveEndpoint = configuration.GetSection("RabbitMQ:botCommandQueue").Value;
+			services.Configure<RabbitMqSettings>(
+				hostContext.Configuration.GetSection("RabbitMQ"));
+		})
+		.UseSerilog()
+		.Build();
 
+	await host.RunAsync();
 
-            services.AddMassTransit(x =>
-            {
-                x.AddConsumer<ChatMessageCommandEventConsumer>();
-
-                x.AddBus(provider => Bus.Factory.CreateUsingRabbitMq(cfg =>
-                {
-                    cfg.UseHealthCheck(provider);
-                    cfg.Host(new Uri($"rabbitmq://{host}"), h =>
-                    {
-                        h.Username(username);
-                        h.Password(password);
-                    });
-
-                    cfg.ReceiveEndpoint(receiveEndpoint, ep =>
-                    {
-                        ep.ConfigureConsumer<ChatMessageCommandEventConsumer>(provider);
-                    });
-                }));
-            });
-
-            services.AddMassTransitHostedService();
-
-            services.AddScoped<IRabbitMqPublish, RabbitMqPublish>();
-
-            services.Configure<RabbitMqSettings>(
-                hostContext.Configuration.GetSection("RabbitMQ"));
-
-
-        })
-        .UseSerilog()
-        .Build();
-
-    await host.RunAsync();
-
-    return 0;
+	return 0;
 }
 catch (Exception ex)
 {
-    Log.Fatal(ex, "Host terminated unexpectedly");
+	Log.Fatal(ex, "Host terminated unexpectedly");
 
-    return 1;
+	return 1;
 }
 finally
 {
-    Log.CloseAndFlush();
+	Log.CloseAndFlush();
 }

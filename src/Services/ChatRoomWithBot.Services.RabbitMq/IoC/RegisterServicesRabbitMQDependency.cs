@@ -32,7 +32,7 @@ namespace ChatRoomWithBot.Services.RabbitMq.IoC
                 x.AddConsumer<ChatResponseCommandEventConsumer>();
                 x.AddBus(provider => Bus.Factory.CreateUsingRabbitMq(config =>
                 {
-                    config.UseHealthCheck(provider);
+                    
                     config.Host(new Uri($"rabbitmq://{host}"), h =>
                     {
                         h.Username(username);

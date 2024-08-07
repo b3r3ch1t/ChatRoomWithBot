@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.Extensions.DependencyInjection;
+using System;
 
 namespace ChatRoomWithBot.Application.AutoMapper;
 

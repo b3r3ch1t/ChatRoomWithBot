@@ -22,17 +22,18 @@ var builder = WebApplication.CreateBuilder(args);
 
 
 builder.Services
-    .RegisterDomainDependencies()
-    .RegisterLogDependencies(builder.Configuration, builder.Environment)
-    .RegisterApplicationDependencies(builder.Configuration)
-    .RegisterDataDependencies(builder.Configuration)
-    .RegisterServicesRabbitMqDependencies(builder.Configuration)
-    .RegisterIdentityDependencies();
+	.RegisterDomainDependencies()
+	.RegisterLogDependencies(builder.Configuration, builder.Environment)
+	.RegisterApplicationDependencies(builder.Configuration)
+	.RegisterDataDependencies(builder.Configuration)
+	.RegisterServicesRabbitMqDependencies(builder.Configuration)
+	.RegisterIdentityDependencies();
 
 
 #region Mediator
 
-builder.Services.AddMediatR(Assembly.GetExecutingAssembly());
+builder.Services.AddMediatR(cfg => cfg
+	.RegisterServicesFromAssembly(typeof(RegisterDomainDependency).Assembly));
 
 #endregion
 
@@ -44,7 +45,7 @@ builder.Services.AddAutoMapperSetup();
 #endregion
 
 builder.Services.Configure<RabbitMqSettings>(
-    builder.Configuration.GetSection("RabbitMQ"));
+	builder.Configuration.GetSection("RabbitMQ"));
 
 builder.Services.AddSignalR();
 
@@ -66,7 +67,7 @@ var app = builder.Build();
 
 if (!app.Environment.IsDevelopment())
 {
-    app.UseExceptionHandler("/Home/Error");
+	app.UseExceptionHandler("/Home/Error");
 }
 
 app.UseStaticFiles();
@@ -78,13 +79,13 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(
-    name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+	name: "default",
+	pattern: "{controller=Home}/{action=Index}/{id?}");
 
 
 app.UseEndpoints(endpoints =>
 {
-    endpoints.MapHub<ChatRoomHub>("/chatroom");
+	endpoints.MapHub<ChatRoomHub>("/chatroom");
 });
 
 //Configure RabbitMQ
