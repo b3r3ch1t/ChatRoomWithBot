@@ -74,6 +74,7 @@
     </PackageReference>
     <PackageReference Include="Microsoft.Graph" Version="5.69.0" />
     <PackageReference Include="Microsoft.Graph.Core" Version="3.2.3" />
+    <PackageReference Include="Microsoft.Identity.Client" Version="4.67.2" />
     <PackageReference Include="Microsoft.Identity.Web" Version="3.7.0" />
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.21.1" /> 
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="8.0.1" />

@@ -11,6 +11,9 @@ using ChatRoomWithBot.Domain.Events;
 using ChatRoomWithBot.Services.BerechitLogger.IoC;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.Identity.Web;
+using Microsoft.Graph;
+using Microsoft.Identity.Client;
+using Azure.Identity;
 
 const string AspNetCoreEnvironment = "ASPNETCORE_ENVIRONMENT";
 
@@ -29,6 +32,19 @@ builder.Services.Configure<OpenIdConnectOptions>(OpenIdConnectDefaults.Authentic
 {
 	options.SignedOutRedirectUri = builder.Configuration["AzureAd:PostLogoutRedirectUri"];
 });
+
+
+var clientId = builder.Configuration.GetSection("AzureAd:clientId").Value;
+var tenantId = builder.Configuration.GetSection("AzureAd:tenantId").Value ;
+var clientSecret = builder.Configuration.GetSection("AzureAd:clientSecret").Value;
+
+var credential = new ClientSecretCredential(tenantId, clientId, clientSecret);
+
+var graphClient = new GraphServiceClient(credential);
+
+
+builder.Services.AddScoped<GraphServiceClient>(x=> graphClient); 
+
 
 builder.Services
 	.RegisterDomainDependencies()
