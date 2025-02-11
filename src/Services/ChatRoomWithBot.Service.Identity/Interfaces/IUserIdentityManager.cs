@@ -1,4 +1,5 @@
 ﻿using ChatRoomWithBot.Domain;
+using ChatRoomWithBot.Domain.OperationResults;
 using ChatRoomWithBot.Service.Identity.ViewModels;
 using Microsoft.AspNetCore.Identity;
 

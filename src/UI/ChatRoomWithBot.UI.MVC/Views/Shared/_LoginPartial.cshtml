@@ -5,7 +5,7 @@
     @if (_usersAppService.IsAuthenticated())
     {
         <li class="nav-item">
-            <a class="nav-link text-dark" asp-controller="Home" asp-action="Index">Hello @User.Identity.Name!</a>
+            <a class="nav-link text-dark" asp-controller="Home" asp-action="Index">Hello @_usersAppService.GetUserName() - @_usersAppService.GetTenantId()  </a>
         </li>
         <li class="nav-item">
             <a class="nav-link text-dark" asp-controller="Account" asp-action="Logoff">Logout</a>

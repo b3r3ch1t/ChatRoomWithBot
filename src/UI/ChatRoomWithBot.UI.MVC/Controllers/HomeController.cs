@@ -6,46 +6,50 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ChatRoomWithBot.UI.MVC.Controllers
 {
-    public class HomeController : Controller
-    {
-        private readonly IChatManagerApplication _managerChat;
+	public class HomeController : Controller
+	{
+		private readonly IChatManagerApplication _managerChat;
+		private readonly IUsersAppService _usersAppService;
+		public HomeController(IChatManagerApplication managerChat, IUsersAppService usersAppService)
+		{
+			_managerChat = managerChat;
+			_usersAppService = usersAppService;
+		}
 
-        public HomeController(IChatManagerApplication managerChat)
-        {
-            _managerChat = managerChat;
-        }
+		[AllowAnonymous]
 
-        [AllowAnonymous]
+		public IActionResult Index()
+		{
 
-        public IActionResult Index()
-        {
-            return View();
-        }
-
-
-        [Authorize]
-        public IActionResult Privacy()
-        {
-            return View();
-        }
+			var userName = _usersAppService.GetUserName();
+			var tenantId = _usersAppService.GetTenantId();
+			return View();
+		}
 
 
-
-        [Authorize]
-        [HttpGet]
-        public async Task<IActionResult> ChatRooms()
-        {
-
-            var model = await _managerChat.GetChatRoomsAsync();
+		[Authorize]
+		public IActionResult Privacy()
+		{
+			return View();
+		}
 
 
-            return View(model);
-        }
 
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-        }
-    }
+		[Authorize]
+		[HttpGet]
+		public async Task<IActionResult> ChatRooms()
+		{
+
+			var model = await _managerChat.GetChatRoomsAsync();
+
+
+			return View(model);
+		}
+
+		[ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+		public IActionResult Error()
+		{
+			return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+		}
+	}
 }

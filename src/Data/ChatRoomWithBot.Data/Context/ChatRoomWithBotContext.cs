@@ -1,13 +1,11 @@
-﻿using ChatRoomWithBot.Data.IdentityModel;
-using ChatRoomWithBot.Domain.Entities;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿ 
+using ChatRoomWithBot.Domain.Entities; 
 using Microsoft.EntityFrameworkCore;
 using ChatRoomWithBot.Domain.Interfaces;
 
 namespace ChatRoomWithBot.Data.Context
 {
-    public class ChatRoomWithBotContext : IdentityDbContext<UserIdentity, IdentityRole<Guid>, Guid>
+    public class ChatRoomWithBotContext :DbContext
     {
 
         public ChatRoomWithBotContext(
@@ -17,8 +15,7 @@ namespace ChatRoomWithBot.Data.Context
         }
 
         #region DbSet
-
-        public DbSet<UserIdentity> Users { get; set; }
+         
         public DbSet<ChatMessage> ChatMessages { get; set; }
          
         public DbSet<ChatRoom> ChatRooms { get; set; }

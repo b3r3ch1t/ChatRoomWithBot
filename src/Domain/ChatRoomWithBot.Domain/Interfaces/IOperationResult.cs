@@ -1,8 +1,14 @@
-﻿namespace ChatRoomWithBot.Domain.Interfaces;
-
-public interface IOperationResult<TResult>
+﻿namespace ChatRoomWithBot.Domain.Interfaces
 {
-    TResult Result { get; set; }
-    bool Error { get; set; }
-    string Message { get; set; }
+
+	public interface IOperationResult<T>
+	{
+		T Data { get; set; }
+		public bool Error => !Success;
+
+		public bool Success { get; internal set; }
+
+		public string Message { get;   }
+
+	}
 }

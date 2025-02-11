@@ -1,0 +1,18 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+	<TargetFramework>net9.0</TargetFramework>
+	<ImplicitUsings>enable</ImplicitUsings>
+	<Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+	<ProjectReference Include="..\..\Domain\ChatRoomWithBot.Domain\ChatRoomWithBot.Domain.csproj" />
+  </ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Polly" Version="8.5.2" />
+		<PackageReference Include="StackExchange.Redis" Version="2.8.24" />
+	</ItemGroup>
+
+</Project>

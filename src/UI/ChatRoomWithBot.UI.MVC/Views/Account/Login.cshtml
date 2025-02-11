@@ -1,8 +1,6 @@
-﻿@using Microsoft.AspNetCore.Mvc.TagHelpers
-@using ChatRoomWithBot.Application.Interfaces
-@inject IUsersAppService _usersAppService
+﻿@using Microsoft.AspNetCore.Mvc.TagHelpers 
 
-@model ChatRoomWithBot.Service.Identity.ViewModels.LoginViewModel
+@model  ChatRoomWithBot.Services.EntraId.ViewModels.LoginViewModel
 @{
     ViewData["Title"] = "Log in";
 }
@@ -52,9 +50,9 @@
 
 <div class="row">
     @{
-        var model = await  _usersAppService.GetAllUsersAsync();
+        // var model = await  _usersAppService.GetAllUsersAsync();
     }
     
     <div class="text-danger">The password to default users is Test12345678 </div>
-    <partial name="_Users" model="model" />
+    @* <partial name="_Users" model="model" /> *@
 </div>

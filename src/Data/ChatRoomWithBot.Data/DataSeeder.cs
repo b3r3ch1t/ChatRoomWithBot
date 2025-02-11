@@ -1,22 +1,18 @@
-﻿using ChatRoomWithBot.Data.Context;
-using ChatRoomWithBot.Data.IdentityModel;
-using ChatRoomWithBot.Domain.Interfaces;
-using Microsoft.AspNetCore.Identity;
+﻿using ChatRoomWithBot.Data.Context; 
+using ChatRoomWithBot.Domain.Interfaces; 
 using ChatRoomWithBot.Domain.Entities;
 
 namespace ChatRoomWithBot.Data
 {
     public class DataSeeder 
     {
-        private readonly ChatRoomWithBotContext _context;
-        private readonly UserManager<UserIdentity> _userManager;
+        private readonly ChatRoomWithBotContext _context; 
         private readonly IBerechitLogger _berechitLogger; 
 
-        public DataSeeder(IBerechitLogger berechitLogger, ChatRoomWithBotContext context, UserManager<UserIdentity> userManager) 
+        public DataSeeder(IBerechitLogger berechitLogger, ChatRoomWithBotContext context ) 
         {
             _berechitLogger = berechitLogger;
-            _context = context;
-            _userManager = userManager;
+            _context = context; 
         }
 
         public void Seed()
@@ -58,38 +54,38 @@ namespace ChatRoomWithBot.Data
         {
             try
             {
-                if (!_context.Users.Any())
-                {
+                //if (!_context.Users.Any())
+                //{
                      
 
-                        _context.Database.EnsureCreated();
-                        var user = new UserIdentity()
-                        {
+                //        _context.Database.EnsureCreated();
+                //        var user = new UserIdentity()
+                //        {
 
-                            Email = "user1@teste.com",
-                            UserName = "user1@teste.com",
-                            Name = "Jane Doe",
-                            EmailConfirmed = true,
+                //            Email = "user1@teste.com",
+                //            UserName = "user1@teste.com",
+                //            Name = "Jane Doe",
+                //            EmailConfirmed = true,
 
-                        };
+                //        };
 
-                        var x = _userManager.CreateAsync(user, "Test12345678").GetAwaiter().GetResult();
+                //        var x = _userManager.CreateAsync(user, "Test12345678").GetAwaiter().GetResult();
 
 
-                        user = new UserIdentity()
-                        {
+                //        user = new UserIdentity()
+                //        {
 
-                            Email = "user2@teste.com",
-                            UserName = "user2@teste.com",
-                            Name = "John Doe",
-                            EmailConfirmed = true,
+                //            Email = "user2@teste.com",
+                //            UserName = "user2@teste.com",
+                //            Name = "John Doe",
+                //            EmailConfirmed = true,
 
-                        };
+                //        };
 
-                        _userManager.CreateAsync(user, "Test12345678").GetAwaiter().GetResult();
+                //        _userManager.CreateAsync(user, "Test12345678").GetAwaiter().GetResult();
 
                     
-                }
+                //}
             }
             catch (Exception e)
             {

@@ -5,9 +5,6 @@ using ChatRoomWithBot.Service.WorkerService.Settings;
 using MassTransit;
 using Serilog;
 using Serilog.Events;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
 
 Log.Logger = new LoggerConfiguration()
 	.MinimumLevel.Debug()

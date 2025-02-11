@@ -4,6 +4,7 @@ using ChatRoomWithBot.Service.Identity.Interfaces;
 using ChatRoomWithBot.Service.Identity.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using ChatRoomWithBot.Data.IdentityModel;
+using ChatRoomWithBot.Domain.OperationResults;
 
 namespace ChatRoomWithBot.Service.Identity.Services
 {

@@ -1,32 +1,31 @@
-version: '3.4'
 
 services:
-  chatroomwithbot.ui.mvc:
-    image: ${DOCKER_REGISTRY-}chatroomwithbotuimvc
-    container_name: 'ChatRoomWithBot.MVC'
-    build:
-      context: .
-      dockerfile: src/UI/ChatRoomWithBot.UI.MVC/Dockerfile
-    ports:
-     - "8080:80"
-    depends_on:
-     - db
-     - rabbitmq
-    restart: always
-    networks:
-        - chatroomwithbot
+  # chatroomwithbot.ui.mvc:
+  #   image: ${DOCKER_REGISTRY-}chatroomwithbotuimvc
+  #   container_name: 'ChatRoomWithBot.MVC'
+  #   build:
+  #     context: .
+  #     dockerfile: src/UI/ChatRoomWithBot.UI.MVC/Dockerfile
+  #   ports:
+  #    - "8080:80"
+  #   depends_on:
+  #    - db
+  #    - rabbitmq
+  #   restart: always
+  #   networks:
+  #       - chatroomwithbot
   
-  chatroomwithbot.ui.consumer:
-    image: ${DOCKER_REGISTRY-}consumer
-    container_name: 'ChatRoomWithBot.Consumer'
-    build:
-      context: .
-      dockerfile: src/Services/ChatRoomWithBot.Service.WorkerService/Dockerfile 
-    depends_on: 
-     - rabbitmq
-    restart: always
-    networks:
-        - chatroomwithbot
+  # chatroomwithbot.ui.consumer:
+  #   image: ${DOCKER_REGISTRY-}consumer
+  #   container_name: 'ChatRoomWithBot.Consumer'
+  #   build:
+  #     context: .
+  #     dockerfile: src/Services/ChatRoomWithBot.Service.WorkerService/Dockerfile 
+  #   depends_on: 
+  #    - rabbitmq
+  #   restart: always
+  #   networks:
+  #       - chatroomwithbot
 
 
 
@@ -45,17 +44,17 @@ services:
         - chatroomwithbot
 
 
-  rabbitmq:
-    image: rabbitmq:3-management-alpine    
-    container_name: 'ChatRoomWithBot.Rabbitmq' 
-    ports:
-        - 5672:5672
-        - 15672:15672
-    volumes:
-        - ~/.docker-conf/rabbitmq/data/:/var/lib/rabbitmq/
-        - ~/.docker-conf/rabbitmq/log/:/var/log/rabbitmq
-    networks:
-        - chatroomwithbot
+  # rabbitmq:
+  #   image: rabbitmq:3-management-alpine    
+  #   container_name: 'ChatRoomWithBot.Rabbitmq' 
+  #   ports:
+  #       - 5672:5672
+  #       - 15672:15672
+  #   volumes:
+  #       - ~/.docker-conf/rabbitmq/data/:/var/lib/rabbitmq/
+  #       - ~/.docker-conf/rabbitmq/log/:/var/log/rabbitmq
+  #   networks:
+  #       - chatroomwithbot
 
 
 

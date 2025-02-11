@@ -1,24 +1,30 @@
 using ChatRoomWithBot.Domain.IoC;
 using ChatRoomWithBot.Services.RabbitMq.Settings;
-using ChatRoomWithBot.UI.MVC.Extensions;
-using System.Reflection;
+using ChatRoomWithBot.UI.MVC.Extensions; 
 using MediatR;
 using ChatRoomWithBot.Application.AutoMapper;
 using ChatRoomWithBot.Application.IoC;
 using ChatRoomWithBot.Data.IoC;
 using ChatRoomWithBot.Domain.Bus;
-using ChatRoomWithBot.UI.MVC.Services;
-using ChatRoomWithBot.Service.Identity.IoC;
+using ChatRoomWithBot.UI.MVC.Services; 
 using ChatRoomWithBot.Services.RabbitMq.IoC;
 using ChatRoomWithBot.UI.MVC.Handles;
 using ChatRoomWithBot.Domain.Events;
 using ChatRoomWithBot.Services.BerechitLogger.IoC;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
+using Microsoft.Identity.Web;
 
 const string AspNetCoreEnvironment = "ASPNETCORE_ENVIRONMENT";
 
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Add services to the container.
+builder.Services.AddControllersWithViews();
+
+builder.Services.AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
+	.AddMicrosoftIdentityWebApp(builder.Configuration.GetSection("AzureAd"))
+	;
 
 
 builder.Services
@@ -26,8 +32,7 @@ builder.Services
 	.RegisterLogDependencies(builder.Configuration, builder.Environment)
 	.RegisterApplicationDependencies(builder.Configuration)
 	.RegisterDataDependencies(builder.Configuration)
-	.RegisterServicesRabbitMqDependencies(builder.Configuration)
-	.RegisterIdentityDependencies();
+	.RegisterServicesRabbitMqDependencies(builder.Configuration) ;
 
 
 #region Mediator
@@ -69,8 +74,7 @@ if (!app.Environment.IsDevelopment())
 {
 	app.UseExceptionHandler("/Home/Error");
 }
-
-app.UseStaticFiles();
+ 
 
 app.UseRouting();
 
@@ -78,9 +82,12 @@ app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 
+app.MapStaticAssets();
+
 app.MapControllerRoute(
-	name: "default",
-	pattern: "{controller=Home}/{action=Index}/{id?}");
+		name: "default",
+		pattern: "{controller=Home}/{action=Index}/{id?}")
+	.WithStaticAssets();
 
 
 app.UseEndpoints(endpoints =>
@@ -92,7 +99,7 @@ app.UseEndpoints(endpoints =>
 
 //app.UseRabbitListener(); 
 
-app.SeedData();
+//app.SeedData();
 
 app.Run();
 

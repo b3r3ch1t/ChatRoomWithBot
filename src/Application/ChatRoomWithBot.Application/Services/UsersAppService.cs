@@ -1,71 +1,84 @@
-﻿using AutoMapper;
+﻿using System.Security.Claims;
+using AutoMapper;
 using ChatRoomWithBot.Application.Interfaces;
-using ChatRoomWithBot.Application.ViewModel;
-using ChatRoomWithBot.Data.IdentityModel;
-using ChatRoomWithBot.Data.Interfaces;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
+using ChatRoomWithBot.Application.ViewModel; 
+using Microsoft.AspNetCore.Http; 
 
 namespace ChatRoomWithBot.Application.Services
 {
-    public  class UsersAppService : IUsersAppService
-    {
-        private readonly IUserIdentityRepository _userIdentityRepository;
-        private readonly IMapper _mapper;
-        private readonly IHttpContextAccessor _accessor;
+	public class UsersAppService : IUsersAppService
+	{
 
-        private readonly UserManager<UserIdentity> _userManager;
+		private readonly IMapper _mapper;
+		private readonly IHttpContextAccessor _accessor;
 
-        public UsersAppService(IUserIdentityRepository userIdentityRepository, IMapper mapper, IHttpContextAccessor accessor, UserManager<UserIdentity> userManager)
-        {
-            _userIdentityRepository = userIdentityRepository;
-            _mapper = mapper;
-            _accessor = accessor;
-            _userManager = userManager;
-        }
+		public UsersAppService(IMapper mapper, IHttpContextAccessor accessor)
+		{
 
-        public void Dispose()
-        {
-            _userIdentityRepository.Dispose();
-            GC.SuppressFinalize(this);
-        }
+			_mapper = mapper;
+			_accessor = accessor;
+		}
 
-        public bool IsAuthenticated()
-        {
-            return _accessor.HttpContext.User.Identity.IsAuthenticated;
-        }
+		public void Dispose()
+		{
+			GC.SuppressFinalize(this);
+		}
 
-       
+		public bool IsAuthenticated()
+		{
+			return  _accessor.HttpContext?.User?.Identity?.IsAuthenticated ?? false;
 
-        public async Task<UserViewModel> GetUserByIdAsync(Guid userId)
-        {
-            var result = _userIdentityRepository.GetUserByIdAsync(userId);
 
-            var map = _mapper.Map<UserViewModel>(result);
+		}
 
-            return map;
-        }
 
-        public async Task<IEnumerable<UserViewModel>> GetAllUsersAsync()
-        {
-            var result = await _userIdentityRepository.GetAllUsersAsync();
 
-            var map = _mapper.Map<IEnumerable<UserViewModel>>(result);
+		public async Task<UserViewModel> GetUserByIdAsync(Guid userId)
+		{
+			// To Implement
 
-            return map;
-        }
+			//var map = _mapper.Map<UserViewModel>(result);
 
-        public async Task<UserViewModel> GetCurrentUserAsync()
-        {
-            var userEmail = _accessor.HttpContext.User
-                .Identities.FirstOrDefault()
-                ?.Claims.FirstOrDefault(x => x.Type == "userEmail")
-                ?.Value;
+			//return map;
 
-            var user = await _userManager.FindByEmailAsync(userEmail);
+			return new UserViewModel();
+		}
 
-            var map = _mapper.Map<UserViewModel>(user);
-            return map;
-        }
-    }
+		public async Task<IEnumerable<UserViewModel>> GetAllUsersAsync()
+		{
+			// To Implement
+
+			//var map = _mapper.Map<IEnumerable<UserViewModel>>(result);
+
+			//return map;
+
+			return new List<UserViewModel>();
+		}
+
+		public async Task<UserViewModel> GetCurrentUserAsync()
+		{
+			// To Implement
+
+			//var map = _mapper.Map<UserViewModel>(user);
+			//return map;
+
+			return new UserViewModel();
+		}
+
+		public string GetUserName()
+		{
+
+			if (!IsAuthenticated()) return string.Empty; 
+
+			return _accessor.HttpContext?.User?.Claims.First(x=> x.Type == "name")?.Value ?? "Usuário não encontrado";
+		}
+
+		public string GetTenantId()
+		{
+			if (!IsAuthenticated()) return string.Empty;
+
+			return _accessor.HttpContext?.User?
+				.FindFirst("http://schemas.microsoft.com/identity/claims/tenantid")?.Value ?? "Tenant não encontrado";
+		}
+	}
 }

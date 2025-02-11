@@ -9,4 +9,10 @@ public interface IUsersAppService:IDisposable
     Task<UserViewModel> GetCurrentUserAsync();
 
     bool IsAuthenticated();
+
+
+    string GetUserName();
+
+    string GetTenantId();
+
 }
