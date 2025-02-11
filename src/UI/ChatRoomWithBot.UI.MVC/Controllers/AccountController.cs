@@ -8,131 +8,125 @@ using Microsoft.AspNetCore.Mvc;
 namespace ChatRoomWithBot.UI.MVC.Controllers
 {
 
-	[Authorize]
-	public class AccountController : Controller
-	{ 
-		public AccountController( )
-		{
-			
-		}
+    [Authorize]
+    public class AccountController : Controller
+    {
+        public AccountController()
+        {
 
-		[AllowAnonymous]
-		[HttpGet]
-		public IActionResult Login()
-		{
-			return View();
-		}
+        }
 
-		[AllowAnonymous]
-		[HttpPost]
-		[ValidateAntiForgeryToken]
-		public async Task<IActionResult> Login(LoginViewModel model)
-		{
-			//if (!ModelState.IsValid) return View();
-			//var result = await _userIdentityManager.Login(model);
-			//if (!result.Error && result.Result.Succeeded)
-			//{
-			//    var claims = new List<Claim>() {
-			//        new Claim(ClaimTypes.NameIdentifier, Convert.ToString(model.Email)),
-			//        new Claim(ClaimTypes.Name, model.Email),
-			//        new Claim("userEmail", model.Email),
-			//    };
+        [AllowAnonymous]
+        [HttpGet]
+        public IActionResult Login()
+        {
+            return View();
+        }
 
-			//    var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-			//    //Initialize a new instance of the ClaimsPrincipal with ClaimsIdentity    
-			//    var principal = new ClaimsPrincipal(identity);
+        [AllowAnonymous]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Login(LoginViewModel model)
+        {
+            //if (!ModelState.IsValid) return View();
+            //var result = await _userIdentityManager.Login(model);
+            //if (!result.Error && result.Result.Succeeded)
+            //{
+            //    var claims = new List<Claim>() {
+            //        new Claim(ClaimTypes.NameIdentifier, Convert.ToString(model.Email)),
+            //        new Claim(ClaimTypes.Name, model.Email),
+            //        new Claim("userEmail", model.Email),
+            //    };
 
-			//    await HttpContext.SignInAsync(
-			//        CookieAuthenticationDefaults.AuthenticationScheme,
-			//        new ClaimsPrincipal(identity));
-			//}
+            //    var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+            //    //Initialize a new instance of the ClaimsPrincipal with ClaimsIdentity    
+            //    var principal = new ClaimsPrincipal(identity);
 
-		   // if (result.Result.Succeeded) return RedirectToAction("ChatRooms", "Home");
+            //    await HttpContext.SignInAsync(
+            //        CookieAuthenticationDefaults.AuthenticationScheme,
+            //        new ClaimsPrincipal(identity));
+            //}
 
-
-			TempData["Message"] = "User or password is invalid.";
-			return RedirectToAction("Login", "Account");
-
-		}
+            // if (result.Result.Succeeded) return RedirectToAction("ChatRooms", "Home");
 
 
-		[HttpGet]
+            TempData["Message"] = "User or password is invalid.";
+            return RedirectToAction("Login", "Account");
 
-		public async Task<IActionResult> Logoff()
-		{
-
-			var callbackUrl = Url.Action("index", "Home", values: null, protocol: Request.Scheme);
-
-			return SignOut(
-				new AuthenticationProperties { RedirectUri = callbackUrl },
-				OpenIdConnectDefaults.AuthenticationScheme,
-				CookieAuthenticationDefaults.AuthenticationScheme
-			);
-		}
-
-		[HttpGet]
-		[AllowAnonymous]
-		public IActionResult Register()
-		{
-			return View();
-		}
-
-		[HttpPost]
-		[ValidateAntiForgeryToken]
-		[AllowAnonymous]
-
-		public async Task<IActionResult> Register(RegisterViewModel model)
-		{
-			if (!ModelState.IsValid)
-			{
-				TempData["Message"] = "Error in data";
-
-				return View(model);
-			}
+        }
 
 
-			//var result = await _userIdentityManager.Register(model);
+        [HttpGet]
 
-			//if (!result.Error && result.Result.Succeeded)
-			//{
-			//    TempData["Message"] = "User created with success !";
+        public async Task<IActionResult> Logoff()
+        {
 
-			//}
-			return View();
-		}
+            var callbackUrl = Url.Action("index", "Home", values: null, protocol: Request.Scheme);
 
-		public async Task<IActionResult> Users()
-		{
-			//var users = await  _usersAppService.GetAllUsersAsync();
+            return SignOut(
+                new AuthenticationProperties { RedirectUri = callbackUrl },
+                OpenIdConnectDefaults.AuthenticationScheme,
+                CookieAuthenticationDefaults.AuthenticationScheme
+            );
+        }
 
-			//return View(users); 
+        [HttpGet]
+        [AllowAnonymous]
+        public IActionResult Register()
+        {
+            return View();
+        }
 
-			return View();
-		}
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [AllowAnonymous]
+
+        public async Task<IActionResult> Register(RegisterViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                TempData["Message"] = "Error in data";
+
+                return View(model);
+            }
 
 
-		[HttpGet("logout")]
+            //var result = await _userIdentityManager.Register(model);
 
-		[AllowAnonymous]
-		public IActionResult Logout()
-		{
-			var callbackUrl = Url.Action(nameof(Index), "Home", null, Request.Scheme);
+            //if (!result.Error && result.Result.Succeeded)
+            //{
+            //    TempData["Message"] = "User created with success !";
 
-			var r=  SignOut(
-				new AuthenticationProperties { RedirectUri = callbackUrl },
-				OpenIdConnectDefaults.AuthenticationScheme,
-				CookieAuthenticationDefaults.AuthenticationScheme
-			);
+            //}
+            return View();
+        }
 
-			return r; 
+        public async Task<IActionResult> Users()
+        {
+            //var users = await  _usersAppService.GetAllUsersAsync();
 
-		}
+            //return View(users); 
 
-		[HttpGet("loggedout")]
-		[AllowAnonymous]
-		public IActionResult LoggedOut()
-		{
-			return Ok("Você saiu com sucesso.");
-		}
-	}
+            return View();
+        }
+
+
+        [HttpGet("logout")]
+
+        [AllowAnonymous]
+        public IActionResult Logout()
+        {
+            var callbackUrl = Url.Action(nameof(Index), "Home", null, Request.Scheme);
+
+            return SignOut(
+                new AuthenticationProperties { RedirectUri = callbackUrl },
+                OpenIdConnectDefaults.AuthenticationScheme,
+                CookieAuthenticationDefaults.AuthenticationScheme
+            );
+
+
+
+        }
+
+    }
 }
