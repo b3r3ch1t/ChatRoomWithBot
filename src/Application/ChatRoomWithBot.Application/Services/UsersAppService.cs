@@ -57,10 +57,12 @@ namespace ChatRoomWithBot.Application.Services
 		{
 			if (!IsAuthenticated()) return new UserViewModel();
 
-			var result = new UserViewModel()
+			var result = new UserViewModel
 			{
 				Email = _accessor.HttpContext?.User?.Claims.First(x => x.Type == "preferred_username")?.Value,
 				Name = _accessor.HttpContext?.User?.Claims.First(x => x.Type == "name")?.Value,
+				TenantId = _accessor.HttpContext?.User?
+					.FindFirst("http://schemas.microsoft.com/identity/claims/tenantid")?.Value
 
 			};
 

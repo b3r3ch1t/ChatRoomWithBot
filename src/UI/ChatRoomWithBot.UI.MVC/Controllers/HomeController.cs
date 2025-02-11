@@ -34,13 +34,12 @@ namespace ChatRoomWithBot.UI.MVC.Controllers
         {
 
             //var user = await _graphServiceClient.Me.GetAsync();
+            var u = await _usersAppService.GetCurrentUserAsync();
 
 
-            var userId = "anderson@BerechitSolucoesemIT.onmicrosoft.com"; // Replace with the target user's ID or user principal name
-            var user = _graphServiceClient.Users[userId].Photo;
+            var user = _graphServiceClient.Users[u.Email].Photo;
 
 
-            var u =await  _usersAppService.GetCurrentUserAsync();
 
            //var organization = await _graphServiceClient.Organization.GetAsync();
 
