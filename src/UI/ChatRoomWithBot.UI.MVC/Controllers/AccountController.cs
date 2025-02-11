@@ -109,5 +109,27 @@ namespace ChatRoomWithBot.UI.MVC.Controllers
 
 			return View();
 		}
+
+
+		[HttpGet("logout")]
+		public IActionResult Logout()
+		{
+			var callbackUrl = Url.Action(nameof(LoggedOut), "Account", null, Request.Scheme);
+
+			var r=  SignOut(
+				new AuthenticationProperties { RedirectUri = callbackUrl },
+				OpenIdConnectDefaults.AuthenticationScheme,
+				CookieAuthenticationDefaults.AuthenticationScheme
+			);
+
+			return r; 
+
+		}
+
+		[HttpGet("loggedout")]
+		public IActionResult LoggedOut()
+		{
+			return Ok("Você saiu com sucesso.");
+		}
 	}
 }

@@ -27,6 +27,11 @@ builder.Services.AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
 	;
 
 
+builder.Services.Configure<OpenIdConnectOptions>(OpenIdConnectDefaults.AuthenticationScheme, options =>
+{
+	options.SignedOutRedirectUri = builder.Configuration["AzureAd:PostLogoutRedirectUri"];
+});
+
 builder.Services
 	.RegisterDomainDependencies()
 	.RegisterLogDependencies(builder.Configuration, builder.Environment)
