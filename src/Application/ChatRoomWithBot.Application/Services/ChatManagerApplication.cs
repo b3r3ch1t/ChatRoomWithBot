@@ -1,7 +1,6 @@
 ﻿using ChatRoomWithBot.Application.Interfaces;
 using ChatRoomWithBot.Application.ViewModel;
 using ChatRoomWithBot.Domain.Interfaces;
-using AutoMapper;
 using ChatRoomWithBot.Domain.Bus;
 using ChatRoomWithBot.Domain.Entities;
 using ChatRoomWithBot.Domain.Events;
@@ -13,15 +12,13 @@ namespace ChatRoomWithBot.Application.Services
     {
 
         private readonly IChatRoomRepository _chatRoomRepository;
-        private readonly IMapper _mapper;
         private readonly IChatManagerDomain _chatManagerDomain;
         private readonly IBerechitLogger _berechitLogger;
         private readonly IChatMessageRepository _chatMessageRepository;
 
-        public ChatManagerApplication(IChatRoomRepository chatRoomRepository, IMapper mapper, IChatManagerDomain chatManagerDomain, IBerechitLogger berechitLogger, IChatMessageRepository chatMessageRepository)
+        public ChatManagerApplication(IChatRoomRepository chatRoomRepository, IChatManagerDomain chatManagerDomain, IBerechitLogger berechitLogger, IChatMessageRepository chatMessageRepository)
         {
             _chatRoomRepository = chatRoomRepository;
-            _mapper = mapper;
             _chatManagerDomain = chatManagerDomain;
             _berechitLogger = berechitLogger;
             _chatMessageRepository = chatMessageRepository;
@@ -32,8 +29,13 @@ namespace ChatRoomWithBot.Application.Services
 
             try
             {
-                var chatMessageEvent = _mapper.Map<Event>(model);
-
+                var chatMessageEvent = new Event
+                {
+                    CodeRoom = model.RoomId,
+                    Message = model.Message,
+                    UserId = model.UserId.Value,
+                    UserName = model.UserName
+                };
 
                 var result = await _chatManagerDomain.SendMessageAsync(chatMessageEvent);
 
@@ -53,7 +55,7 @@ namespace ChatRoomWithBot.Application.Services
             try
             {
                 if (chatMessage.Message.StartsWith("This command is not valid : /")) return CommandResponse.Ok();
-                 
+
                 return await _chatMessageRepository.AddCommitedAsync(chatMessage);
             }
             catch (Exception e)
@@ -66,9 +68,16 @@ namespace ChatRoomWithBot.Application.Services
 
         public async Task<IEnumerable<ChatMessageViewModel>> GetMessagesAsync(Guid roomId, int qte)
         {
-            var result = _chatRoomRepository.GetLastMessagesAsync(qte, roomId );
+            var result = _chatRoomRepository.GetLastMessagesAsync(qte, roomId);
 
-            var map = _mapper.Map<IEnumerable<ChatMessageViewModel>>(result);
+            var map = result.Select(x => new ChatMessageViewModel()
+            {
+
+                UserName = x.UserName,
+                Date = x.DateCreated,
+                Message = x.Message,
+                RoomId = x.RoomId
+            });
 
             return map;
         }
@@ -79,7 +88,11 @@ namespace ChatRoomWithBot.Application.Services
         {
             var result = await _chatRoomRepository.GetByIdAsync(roomId);
 
-            var map = _mapper.Map<ChatRoomViewModel>(result);
+            var map =new ChatRoomViewModel()
+            {
+                ChatRoomId = result.Id,
+                Name = result.Name,
+            };
 
             return map;
         }
@@ -89,7 +102,11 @@ namespace ChatRoomWithBot.Application.Services
         {
             var result = await _chatRoomRepository.GetAllAsync();
 
-            var map = _mapper.Map<IEnumerable<ChatRoomViewModel>>(result);
+            var map = result.Select( x=> new ChatRoomViewModel()
+            {
+                ChatRoomId = x.Id,
+                Name = x.Name,
+            });
 
             return map;
         }

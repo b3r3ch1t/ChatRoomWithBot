@@ -1,21 +1,20 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net9.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
+	<TargetFramework>net9.0</TargetFramework>
+	<ImplicitUsings>enable</ImplicitUsings>
+	<Nullable>enable</Nullable>
   </PropertyGroup>
 
-  <ItemGroup>
-	  <PackageReference Include="AutoMapper" Version="13.0.1" />
+  <ItemGroup> 
 	  <PackageReference Include="Microsoft.AspNetCore.Http" Version="2.3.0" />
 	  <PackageReference Include="Microsoft.AspNetCore.Mvc.Abstractions" Version="2.3.0" />
 	  <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="9.0.1" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Data\ChatRoomWithBot.Data\ChatRoomWithBot.Data.csproj" />
-    <ProjectReference Include="..\..\Domain\ChatRoomWithBot.Domain\ChatRoomWithBot.Domain.csproj" />
+	<ProjectReference Include="..\..\Data\ChatRoomWithBot.Data\ChatRoomWithBot.Data.csproj" />
+	<ProjectReference Include="..\..\Domain\ChatRoomWithBot.Domain\ChatRoomWithBot.Domain.csproj" />
   </ItemGroup>
 
 </Project>

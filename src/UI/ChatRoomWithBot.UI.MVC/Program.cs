@@ -1,8 +1,6 @@
 using ChatRoomWithBot.Domain.IoC;
 using ChatRoomWithBot.Services.RabbitMq.Settings;
-using ChatRoomWithBot.UI.MVC.Extensions; 
-using MediatR;
-using ChatRoomWithBot.Application.AutoMapper;
+using MediatR; 
 using ChatRoomWithBot.Application.IoC;
 using ChatRoomWithBot.Data.IoC;
 using ChatRoomWithBot.Domain.Bus;
@@ -47,12 +45,7 @@ builder.Services.AddMediatR(cfg => cfg
 
 #endregion
 
-
-#region AutoMapper
-
-builder.Services.AddAutoMapperSetup();
-
-#endregion
+ 
 
 builder.Services.Configure<RabbitMqSettings>(
 	builder.Configuration.GetSection("RabbitMQ"));

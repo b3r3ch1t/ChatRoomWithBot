@@ -4,10 +4,6 @@ namespace ChatRoomWithBot.Domain.Events
 {
     public  class Event  
     {
-        protected Event()
-        {
-
-        }
         
 
         public string Message { get; set; }

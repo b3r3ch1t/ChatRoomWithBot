@@ -1,5 +1,4 @@
-﻿using System.Security.Claims;
-using AutoMapper;
+﻿ 
 using ChatRoomWithBot.Application.Interfaces;
 using ChatRoomWithBot.Application.ViewModel; 
 using Microsoft.AspNetCore.Http; 
@@ -9,13 +8,12 @@ namespace ChatRoomWithBot.Application.Services
 	public class UsersAppService : IUsersAppService
 	{
 
-		private readonly IMapper _mapper;
+		 
 		private readonly IHttpContextAccessor _accessor;
 
-		public UsersAppService(IMapper mapper, IHttpContextAccessor accessor)
+		public UsersAppService(  IHttpContextAccessor accessor)
 		{
-
-			_mapper = mapper;
+ 
 			_accessor = accessor;
 		}
 
