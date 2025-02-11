@@ -40,9 +40,9 @@ namespace ChatRoomWithBot.UI.MVC.Controllers
             var user = _graphServiceClient.Users[userId].Photo;
 
 
+            var u =await  _usersAppService.GetCurrentUserAsync();
 
-
-            //var organization = await _graphServiceClient.Organization.GetAsync();
+           //var organization = await _graphServiceClient.Organization.GetAsync();
 
 
            // var signIns = await _graphServiceClient.AuditLogs.SignIns
@@ -51,8 +51,9 @@ namespace ChatRoomWithBot.UI.MVC.Controllers
            // var users = await _graphServiceClient.Users.GetAsync();
 
 
-           // var groups = await _graphServiceClient.Groups.GetAsync();
-            return View();
+           var groups = await _graphServiceClient.Groups.GetAsync();
+           
+           return View();
         }
 
 

@@ -55,12 +55,18 @@ namespace ChatRoomWithBot.Application.Services
 
 		public async Task<UserViewModel> GetCurrentUserAsync()
 		{
-			// To Implement
+			if (!IsAuthenticated()) return new UserViewModel();
 
-			//var map = _mapper.Map<UserViewModel>(user);
-			//return map;
+			var result = new UserViewModel()
+			{
+				Email = _accessor.HttpContext?.User?.Claims.First(x => x.Type == "preferred_username")?.Value,
+				Name = _accessor.HttpContext?.User?.Claims.First(x => x.Type == "name")?.Value,
 
-			return new UserViewModel();
+			};
+
+			return result;
+			
+
 		}
 
 		public string GetUserName()
