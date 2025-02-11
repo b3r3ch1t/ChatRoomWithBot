@@ -84,6 +84,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Application\ChatRoomWithBot.Application\ChatRoomWithBot.Application.csproj" />
     <ProjectReference Include="..\..\Data\ChatRoomWithBot.Data\ChatRoomWithBot.Data.csproj" />
+    <ProjectReference Include="..\..\Infra\ChatRoomWithBot.Infra.Cache\ChatRoomWithBot.Infra.Cache.csproj" />
     <ProjectReference Include="..\..\Services\ChatRoomWithBot.Services.BerechitLogger\ChatRoomWithBot.Services.BerechitLogger.csproj" />
     <ProjectReference Include="..\..\Services\ChatRoomWithBot.Services.EntraId\ChatRoomWithBot.Services.EntraId.csproj" />
     <ProjectReference Include="..\..\Services\ChatRoomWithBot.Services.RabbitMq\ChatRoomWithBot.Services.RabbitMq.csproj" />

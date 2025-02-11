@@ -16,9 +16,9 @@ namespace ChatRoomWithBot.Infra.Cache
 		{
 			_logFramework = logFramework;
 
-			var hostname = SharedSettings.Current.RedisSettings.HostName;
-			var port = SharedSettings.Current.RedisSettings.Port;
-			var password = SharedSettings.Current.RedisSettings.Password;
+			var hostname = SharedSettings.Current.Redis.HostName;
+			var port = SharedSettings.Current.Redis.Port;
+			var password = SharedSettings.Current.Redis.Password;
 
 
 			var config = new ConfigurationOptions

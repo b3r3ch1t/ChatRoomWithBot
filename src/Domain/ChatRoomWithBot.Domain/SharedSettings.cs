@@ -1,120 +1,85 @@
-﻿namespace ChatRoomWithBot.Domain
+﻿using System.Runtime.Serialization;
+
+namespace ChatRoomWithBot.Domain
 {
-	public class SharedSettings
-	{
-		public static SharedSettings Current;
+    public class SharedSettings
+    {
+        public static SharedSettings Current;
 
-		public SharedSettings()
-		{
-			Current = this;
-		}
-
-
-		public RabbitMqSettings RabbitMqSettings { get; set; }
-		public MySqlSettings MySqlSettings { get; set; }
-
-		public MongoDblSettings MongoDblSettings { get; set; }
-
-		public RedisSettings RedisSettings { get; set; }
-		public string CurrencyRateKey { get; set; } = string.Empty;
-		public string CurrencyRateUrl { get; set; } = string.Empty;
-		public OtelExporter OtelExporter { get; set; } 
-	}
-
-	 
-	public class OtelExporter
-	{
-		public string HostName { get; set; }
-		public int Port { get; set; }
-
-		public string OtelExporterEndpoint
-		{
-			get
-			{
-				var printableStr = $"{HostName}:{Port}";
-				Console.WriteLine($"Using OtelExporter connection: {printableStr}");
-				return $"http://{HostName}:{Port}";
-			}
-		}
-	}
-
-	public class RedisSettings
-	{
-		public string HostName { get; set; }
-		public int Port { get; set; }
-		public string Password { get; set; }
-		public string ConnectionString
-		{
-
-			get
-			{
-
-				var printableStr = $"{HostName}:{Port}";
-				Console.WriteLine($"Using Redis connection: {printableStr}");
-				return $"{HostName}:{Port},abortConnect=false";
-			}
-
-		}
-	}
+        public SharedSettings()
+        {
+            Current = this;
+        }
 
 
-	public class MySqlSettings
-	{
+        public AzureAd AzureAd { get; set; }
 
-		public string Hostname { get; set; }
-		public int Port { get; set; }
-		public string Database { get; set; }
-		public string User { get; set; }
-		public string Password { get; set; }
+        public string Sentry { get; set; }
 
+        public RabbitMq RabbitMq { get; set; }
 
-		public string ConnectionString
-		{
-			get
-			{
+        public SQLServer SQLServer { get; set; }
 
-				var printableStr = $"{Hostname}:{Port}";
-				Console.WriteLine($"Using MySQL connection: {printableStr}");
-				return $"Server={Hostname};Port={Port};Database={Database};User={User};Password={Password};";
-			}
-		}
-
-	}
+        public Redis Redis { get; set; }
+    }
 
 
-	public class MongoDblSettings
-	{
-		public string Hostname { get; set; }
-		public int Port { get; set; }
-		public string Database { get; set; }
-		 
+    public class AzureAd
+    {
+        public string Instance { get; set; } = string.Empty;
+        public string Domain { get; set; } = string.Empty;
+        public string TenantId { get; set; } = string.Empty;
+        public string ClientId { get; set; } = string.Empty;
+        public string CallbackPath { get; set; } = string.Empty;
+        public string ClientSecret { get; set; } = string.Empty;
+        public string PostLogoutRedirectUri { get; set; } = string.Empty;
 
-		public string ConnectionString
-		{
+    }
 
-			get
-			{
+    public class RabbitMq
+    {
+        public string Host { get; set; } = string.Empty;
+        public string Port { get; set; } = string.Empty;
+        public string Username { get; set; } = string.Empty;
+        public string Password { get; set; } = string.Empty;
+        public string Queue { get; set; } = string.Empty;
+    }
 
-				var printableStr = $"{Hostname}:{8080}";
-				Console.WriteLine($"Using MongoDb connection: {printableStr}");
-				return $"mongodb://{Hostname}:{Port}";
-			}
-		}
-
-
-	}
-
-	public class RabbitMqSettings
-	{
-
-		public string Hostname { get; set; }
-		public int Port { get; set; }
-		public string Username { get; set; }
-		public string Password { get; set; }
-		public ushort PrefetchCount { get; set; }
+    public class SQLServer
+    {
+        public string Hostname { get; set; } = string.Empty;
+        public int Port { get; set; } = 0;
+        public string Database { get; set; } = string.Empty;
+        public string User { get; set; } = string.Empty;
+        public string Password { get; set; } = string.Empty;
+        public string TrustServerCertificate { get; set; } = string.Empty;
 
 
-		public string ConnectionString => $"amqp://{Username}:{Password}@{Hostname}:{Port}/";
+        public string ConnectionString
+        {
+            get
+            {
+                var trustServerCertificate = false;
+                try
+                {
+                    trustServerCertificate = Convert.ToBoolean(TrustServerCertificate);
+                }
+                catch (Exception e)
+                {
+                    trustServerCertificate = false;
+                }
 
-	}
+                var printableStr = $"{Hostname}:{Port}";
+                Console.WriteLine($"Using SQL server connection: {printableStr}");
+                return $"Server={Hostname};Port={Port};Database={Database};User={User};Password={Password};TrustServerCertificate={trustServerCertificate}";
+            }
+        }
+    }
+
+    public class Redis
+    {
+        public string HostName { get; set; } = string.Empty;
+        public string Port { get; set; } = string.Empty;
+        public string Password { get; set; } = string.Empty;
+    }
 }

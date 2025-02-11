@@ -1,8 +1,8 @@
 ﻿using ChatRoomWithBot.Data.Context;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore; 
 using ChatRoomWithBot.Data.Repository;
+using ChatRoomWithBot.Domain;
 using ChatRoomWithBot.Domain.Interfaces.Repositories;
 
 namespace ChatRoomWithBot.Data.IoC
@@ -10,8 +10,7 @@ namespace ChatRoomWithBot.Data.IoC
 	public static class RegisterDataDependency
 	{
 		public static IServiceCollection RegisterDataDependencies(
-			this IServiceCollection services,
-			IConfiguration configuration)
+			this IServiceCollection services )
 		{
 
 
@@ -21,7 +20,7 @@ namespace ChatRoomWithBot.Data.IoC
 			services.AddScoped<IChatRoomRepository, ChatRoomRepository>();
 			services.AddScoped<IChatMessageRepository, ChatMessageRepository>();
 
-			var connection = configuration.GetConnectionString("Default");
+			var connection = SharedSettings.Current.SQLServer.ConnectionString;
 
 			services.AddDbContext<ChatRoomWithBotContext>(options =>
 				options.UseSqlServer(connection));

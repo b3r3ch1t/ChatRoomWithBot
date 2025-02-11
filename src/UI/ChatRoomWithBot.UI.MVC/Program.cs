@@ -12,46 +12,83 @@ using ChatRoomWithBot.Services.BerechitLogger.IoC;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.Identity.Web;
 using Microsoft.Graph;
-using Microsoft.Identity.Client;
 using Azure.Identity;
+using System.Reflection;
+using ChatRoomWithBot.Domain;
+using ChatRoomWithBot.Infra.Cache.IoC;
 
-const string AspNetCoreEnvironment = "ASPNETCORE_ENVIRONMENT";
+
+Utils.AppName = Assembly.GetExecutingAssembly().GetName().Name;
+
+Console.WriteLine($"AppName: {Utils.AppName}");
+Console.WriteLine($"Checking UTC time: {Utils.Now} - Utils.NowBr: {Utils.NowBr}");
+Console.WriteLine("Current Environment: " + Utils.EnvironmentName);
+
+
+
 
 
 var builder = WebApplication.CreateBuilder(args);
 
+if (Utils.IsStagingEnvironment || Utils.IsProductionEnvironment)
+{
+	builder.Configuration.AddEnvironmentVariables();
+}
+
+if (Utils.IsDevelopmentEnvironment)
+{
+	builder.Configuration.AddUserSecrets<Program>();
+}
+
+
+
+var sharedSettings = new SharedSettings();
+ 
+
+builder.Configuration.Bind("SharedSettings", sharedSettings);
+
+
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
+
+#region Microsoft Entra ID
 builder.Services.AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
-	.AddMicrosoftIdentityWebApp(builder.Configuration.GetSection("AzureAd"))
+	.AddMicrosoftIdentityWebApp(builder.Configuration.GetSection("SharedSettings:AzureAd"))
 	;
 
 
 builder.Services.Configure<OpenIdConnectOptions>(OpenIdConnectDefaults.AuthenticationScheme, options =>
 {
-	options.SignedOutRedirectUri = builder.Configuration["AzureAd:PostLogoutRedirectUri"];
+	options.SignedOutRedirectUri = sharedSettings.AzureAd.PostLogoutRedirectUri;
 });
 
+#endregion
 
-var clientId = builder.Configuration.GetSection("AzureAd:clientId").Value;
-var tenantId = builder.Configuration.GetSection("AzureAd:tenantId").Value ;
-var clientSecret = builder.Configuration.GetSection("AzureAd:clientSecret").Value;
+#region Graph
+
+
+var clientId = sharedSettings.AzureAd.ClientId;
+var tenantId = sharedSettings.AzureAd.TenantId;
+var clientSecret = sharedSettings.AzureAd.ClientSecret;
 
 var credential = new ClientSecretCredential(tenantId, clientId, clientSecret);
 
 var graphClient = new GraphServiceClient(credential);
 
 
-builder.Services.AddScoped<GraphServiceClient>(x=> graphClient); 
+builder.Services.AddScoped<GraphServiceClient>(x=> graphClient);
 
+
+#endregion
 
 builder.Services
 	.RegisterDomainDependencies()
-	.RegisterLogDependencies(builder.Configuration, builder.Environment)
-	.RegisterApplicationDependencies(builder.Configuration)
-	.RegisterDataDependencies(builder.Configuration)
-	.RegisterServicesRabbitMqDependencies(builder.Configuration) ;
+	.RegisterLogDependencies()
+	.RegisterApplicationDependencies( )
+	.RegisterDataDependencies( )
+	.RegisterServicesRabbitMqDependencies() 
+	.RegisterCacheDependencies();
 
 
 #region Mediator
@@ -63,8 +100,7 @@ builder.Services.AddMediatR(cfg => cfg
 
  
 
-builder.Services.Configure<RabbitMqSettings>(
-	builder.Configuration.GetSection("RabbitMQ"));
+ 
 
 builder.Services.AddSignalR();
 
@@ -72,13 +108,6 @@ builder.Services.AddScoped<IRequestHandler<ChatMessageTextEvent, CommandResponse
 builder.Services.AddScoped<IRequestHandler<ChatResponseCommandEvent, CommandResponse>, ChatRoomHandler>();
 
 
-new ConfigurationBuilder()
-.SetBasePath(Directory.GetCurrentDirectory())
-.AddJsonFile("appsettings.json")
-.AddJsonFile($"appsettings.Local.json", optional: true)
-.AddJsonFile($"appsettings.{Environment.GetEnvironmentVariable(AspNetCoreEnvironment)}.json", optional: true)
-.AddEnvironmentVariables()
-.Build();
 
 var app = builder.Build();
 

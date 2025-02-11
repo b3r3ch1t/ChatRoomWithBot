@@ -42,16 +42,16 @@ namespace ChatRoomWithBot.UI.MVC.Controllers
 
 
 
-            var organization = await _graphServiceClient.Organization.GetAsync();
+            //var organization = await _graphServiceClient.Organization.GetAsync();
 
 
-            var signIns = await _graphServiceClient.AuditLogs.SignIns
-                .GetAsync();
+           // var signIns = await _graphServiceClient.AuditLogs.SignIns
+           //     .GetAsync();
 
-            var users = await _graphServiceClient.Users.GetAsync();
+           // var users = await _graphServiceClient.Users.GetAsync();
 
 
-            var groups = await _graphServiceClient.Groups.GetAsync();
+           // var groups = await _graphServiceClient.Groups.GetAsync();
             return View();
         }
 

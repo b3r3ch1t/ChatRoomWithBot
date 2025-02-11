@@ -1,4 +1,5 @@
 ﻿using System.Text.Json;
+using ChatRoomWithBot.Domain;
 using ChatRoomWithBot.Domain.Bus;
 using ChatRoomWithBot.Domain.Events;
 using ChatRoomWithBot.Domain.Interfaces;
@@ -12,20 +13,19 @@ namespace ChatRoomWithBot.Services.RabbitMq.Handler
 	internal class BotMessageNotificationHandler : IRequestHandler<ChatMessageCommandEvent, CommandResponse>
 	{
 
-		private readonly RabbitMqSettings _rabbitMqSettings;
+	 
 		private readonly IBus _bus;
-		public BotMessageNotificationHandler(IOptions<RabbitMqSettings> rabbitMqSettings, IBerechitLogger berechitLogger, IBus bus)
+		public BotMessageNotificationHandler(  IBerechitLogger berechitLogger, IBus bus)
 		{
-			_bus = bus;
-			_rabbitMqSettings = rabbitMqSettings.Value;
+			_bus = bus; 
 		}
 
 		public async Task<CommandResponse> Handle(ChatMessageCommandEvent notification, CancellationToken cancellationToken)
 		{
 			try
 			{
-				var teste = JsonSerializer.Serialize(notification);
-				var uri = new Uri($"rabbitmq://{_rabbitMqSettings.Connection.HostName}/{_rabbitMqSettings.BotCommandQueue}");
+				 
+				var uri = new Uri($"rabbitmq://{SharedSettings.Current.RabbitMq.Host}/BotCommandQueue");
 				var endPoint = await _bus.GetSendEndpoint(uri);
 				await endPoint.Send(notification);
 				return CommandResponse.Ok();

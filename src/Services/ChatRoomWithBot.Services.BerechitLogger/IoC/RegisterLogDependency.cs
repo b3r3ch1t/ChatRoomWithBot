@@ -1,9 +1,7 @@
-﻿using ChatRoomWithBot.Domain.Interfaces;
+﻿using ChatRoomWithBot.Domain;
+using ChatRoomWithBot.Domain.Interfaces;
 using ChatRoomWithBot.Services.BerechitLogger.Extensions;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 
 namespace ChatRoomWithBot.Services.BerechitLogger.IoC
 {
@@ -11,17 +9,16 @@ namespace ChatRoomWithBot.Services.BerechitLogger.IoC
     {
 
         public static IServiceCollection RegisterLogDependencies(
-            this IServiceCollection services,
-            IConfiguration configuration,
-            IWebHostEnvironment env)
+            this IServiceCollection services)
         {
 
-            services.AddScoped<IBerechitLogger,BerechitLog>(); 
+            services.AddScoped<IBerechitLogger,BerechitLog>();
 
 
-            var sentryDsn = configuration["SentryDsn"];
+            var sentryDsn = SharedSettings.Current.Sentry; 
 
-            if (!string.IsNullOrEmpty(sentryDsn) && (env.IsStaging() || env.IsProduction()))
+
+            if (!string.IsNullOrEmpty(sentryDsn) && ( Utils.IsStagingEnvironment || Utils.IsProductionEnvironment ))
             {
                 services.AddSerilogApiSentry(sentryDsn);
 
