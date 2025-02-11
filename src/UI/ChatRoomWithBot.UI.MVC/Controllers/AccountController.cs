@@ -112,9 +112,11 @@ namespace ChatRoomWithBot.UI.MVC.Controllers
 
 
 		[HttpGet("logout")]
+
+		[AllowAnonymous]
 		public IActionResult Logout()
 		{
-			var callbackUrl = Url.Action(nameof(LoggedOut), "Account", null, Request.Scheme);
+			var callbackUrl = Url.Action(nameof(Index), "Home", null, Request.Scheme);
 
 			var r=  SignOut(
 				new AuthenticationProperties { RedirectUri = callbackUrl },
@@ -127,6 +129,7 @@ namespace ChatRoomWithBot.UI.MVC.Controllers
 		}
 
 		[HttpGet("loggedout")]
+		[AllowAnonymous]
 		public IActionResult LoggedOut()
 		{
 			return Ok("Você saiu com sucesso.");

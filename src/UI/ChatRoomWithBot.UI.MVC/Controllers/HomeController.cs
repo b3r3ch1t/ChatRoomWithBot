@@ -21,8 +21,7 @@ namespace ChatRoomWithBot.UI.MVC.Controllers
 		public IActionResult Index()
 		{
 
-			var userName = _usersAppService.GetUserName();
-			var tenantId = _usersAppService.GetTenantId();
+			 
 			return View();
 		}
 
