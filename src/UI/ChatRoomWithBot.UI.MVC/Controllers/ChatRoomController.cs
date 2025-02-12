@@ -82,7 +82,7 @@ namespace ChatRoomWithBot.UI.MVC.Controllers
             ViewData["ChatName"] = room.Name;
             ViewData["roomId"] = room.Id ;
 
-            return View("Index");
+            return View( );
         }
 
 
