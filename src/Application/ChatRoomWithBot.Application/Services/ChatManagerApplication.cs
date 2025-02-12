@@ -29,7 +29,7 @@ namespace ChatRoomWithBot.Application.Services
 
             try
             {
-                var chatMessageEvent = new Event
+                var chatMessageEvent = new ChatMessageTextEvent
                 {
                     CodeRoom = model.RoomId,
                     Message = model.Message,
