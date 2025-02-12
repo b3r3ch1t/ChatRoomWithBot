@@ -38,8 +38,8 @@ namespace ChatRoomWithBot.Application.Services
                     {
                         CodeRoom = model.RoomId,
                         Message = model.Message,
-                        UserId = model.UserId.Value,
-                        UserName = model.UserName
+                        UserId = Guid.NewGuid() ,
+                        UserName = "bot"
                     };
 
                 }

@@ -3,8 +3,7 @@
 using ChatRoomWithBot.Domain.Events;
 using MassTransit;
 using System.Globalization;
-using System.Net.Http.Headers;
-using ChatRoomWithBot.Service.WorkerService.Interface;
+using System.Net.Http.Headers; 
 using CsvHelper;
 using CsvHelper.Configuration;
 
@@ -12,12 +11,8 @@ namespace ChatRoomWithBot.Service.WorkerService
 {
     internal class ChatMessageCommandEventConsumer : IConsumer<ChatMessageCommandEvent>
     {
-        private readonly IRabbitMqPublish _rabbitMqPublish;
-
-        public ChatMessageCommandEventConsumer(IRabbitMqPublish rabbitMqPublish)
-        {
-            _rabbitMqPublish = rabbitMqPublish;
-        }
+       
+       
 
 
         public async Task Consume(ConsumeContext<ChatMessageCommandEvent> context)
@@ -63,9 +58,7 @@ namespace ChatRoomWithBot.Service.WorkerService
                     UserId = Guid.Empty,
                     UserName = "bot"
 
-                };
-
-               await  _rabbitMqPublish.SendMessage("localhost", "botChatQueue", chatResponseCommandEvent); 
+                }; 
 
             }
             catch (Exception e)

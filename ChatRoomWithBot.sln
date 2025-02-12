@@ -23,10 +23,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChatRoomWithBot.Application
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChatRoomWithBot.Services.BerechitLogger", "src\Services\ChatRoomWithBot.Services.BerechitLogger\ChatRoomWithBot.Services.BerechitLogger.csproj", "{ACBCEDB6-41FD-4C24-8D7D-A4C68485B334}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChatRoomWithBot.Service.WorkerService", "src\Services\ChatRoomWithBot.Service.WorkerService\ChatRoomWithBot.Service.WorkerService.csproj", "{BC3B24E9-3A72-4088-92B1-75BA5B0DC81F}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "6. RabbitMQ Consumer", "6. RabbitMQ Consumer", "{87EF2877-AF59-446C-9A47-69B8764CFC6C}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChatRoomWithBot.Infra.Cache", "src\Infra\ChatRoomWithBot.Infra.Cache\ChatRoomWithBot.Infra.Cache.csproj", "{32FB0722-8B1F-45D9-9752-124EF2DB8ED6}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChatRoomWithBot.Infra.HttpRequest.Infra.HttpRequest", "src\Infra\ChatRoomWithBot.Infra.HttpRequest\ChatRoomWithBot.Infra.HttpRequest.Infra.HttpRequest.csproj", "{9561B313-D7D9-4DA1-AF46-34129382BAF7}"
@@ -35,7 +31,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChatRoomWithBot.Services.En
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChatRoomWithBot.Services.RabbitMq", "src\Services\ChatRoomWithBot.Services.RabbitMq\ChatRoomWithBot.Services.RabbitMq.csproj", "{E3CF9AC2-2732-4685-9E71-5B5D35D97306}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "7. Infra", "7. Infra", "{0C84B024-CBE6-42D6-9C37-F983D112841D}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "6.Infra", "6.Infra", "{0C84B024-CBE6-42D6-9C37-F983D112841D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -63,10 +59,6 @@ Global
 		{ACBCEDB6-41FD-4C24-8D7D-A4C68485B334}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{ACBCEDB6-41FD-4C24-8D7D-A4C68485B334}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{ACBCEDB6-41FD-4C24-8D7D-A4C68485B334}.Release|Any CPU.Build.0 = Release|Any CPU
-		{BC3B24E9-3A72-4088-92B1-75BA5B0DC81F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{BC3B24E9-3A72-4088-92B1-75BA5B0DC81F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{BC3B24E9-3A72-4088-92B1-75BA5B0DC81F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{BC3B24E9-3A72-4088-92B1-75BA5B0DC81F}.Release|Any CPU.Build.0 = Release|Any CPU
 		{32FB0722-8B1F-45D9-9752-124EF2DB8ED6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{32FB0722-8B1F-45D9-9752-124EF2DB8ED6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{32FB0722-8B1F-45D9-9752-124EF2DB8ED6}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -93,7 +85,6 @@ Global
 		{FC6A5E9D-B303-4F96-B078-D6B15636780A} = {A63DE393-C64D-4E86-9E83-6F8FA788F9DF}
 		{8DC8F619-CF40-4DA9-A075-BBB38F802D23} = {1980187D-666E-4242-8488-1F6F1712A74F}
 		{ACBCEDB6-41FD-4C24-8D7D-A4C68485B334} = {A01CFF16-82C6-4076-9CF1-27B9682451BE}
-		{BC3B24E9-3A72-4088-92B1-75BA5B0DC81F} = {87EF2877-AF59-446C-9A47-69B8764CFC6C}
 		{32FB0722-8B1F-45D9-9752-124EF2DB8ED6} = {0C84B024-CBE6-42D6-9C37-F983D112841D}
 		{9561B313-D7D9-4DA1-AF46-34129382BAF7} = {0C84B024-CBE6-42D6-9C37-F983D112841D}
 		{1A71F8BF-BD41-4BCD-AFF4-69707ECBCF65} = {A01CFF16-82C6-4076-9CF1-27B9682451BE}

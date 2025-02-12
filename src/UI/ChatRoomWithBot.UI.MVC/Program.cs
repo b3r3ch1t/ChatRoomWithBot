@@ -14,7 +14,11 @@ using Microsoft.Graph;
 using Azure.Identity;
 using System.Reflection;
 using ChatRoomWithBot.Domain;
+using ChatRoomWithBot.Domain.Interfaces;
 using ChatRoomWithBot.Infra.Cache.IoC;
+using ChatRoomWithBot.Infra.HttpRequest.Infra.HttpRequest.IoC;
+using ChatRoomWithBot.UI.MVC;
+using ChatRoomWithBot.UI.MVC.BackgroundServices;
 
 
 Utils.AppName = Assembly.GetExecutingAssembly().GetName().Name;
@@ -87,7 +91,8 @@ builder.Services
 	.RegisterApplicationDependencies( )
 	.RegisterDataDependencies( )
 	.RegisterServicesRabbitMqDependencies() 
-	.RegisterCacheDependencies();
+	.RegisterCacheDependencies()
+	.RegisterHttpRequestDependencies();
 
 
 #region Mediator
@@ -97,9 +102,14 @@ builder.Services.AddMediatR(cfg => cfg
 
 #endregion
 
- 
 
- 
+builder.Services
+	.AddHostedService<Worker>();
+
+builder.Services.AddScoped<IProcessarChatMessageCommandEvent, ProcessarChatMessageCommandEvent>();
+
+
+
 
 builder.Services.AddSignalR();
 
