@@ -1,6 +1,4 @@
-﻿using System.Runtime.Serialization;
-
-namespace ChatRoomWithBot.Domain
+﻿namespace ChatRoomWithBot.Domain
 {
     public class SharedSettings
     {

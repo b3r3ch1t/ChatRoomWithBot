@@ -1,4 +1,5 @@
 ﻿using ChatRoomWithBot.Application.ViewModel;
+using ChatRoomWithBot.Domain.Entities;
 
 namespace ChatRoomWithBot.Application.Interfaces;
 
@@ -15,4 +16,7 @@ public interface IUsersAppService:IDisposable
 
     string GetTenantId();
 
+
+    Task<IEnumerable<ChatRoom>> GetChats();
+    Task<ChatRoom?> GetChat(Guid id);
 }

@@ -16,9 +16,8 @@ namespace ChatRoomWithBot.UI.MVC.Controllers
 
         private readonly IChatManagerApplication _managerChatMessage;
         private readonly IUsersAppService _usersAppService;
-        private readonly IBerechitLogger _berechitLogger;
+        private readonly IBerechitLogger _berechitLogger; 
 
-        private const string key = "roomId";
         public ChatRoomController(IChatManagerApplication managerChatMessage, IUsersAppService usersAppService, IBerechitLogger berechitLogger)
         {
             _managerChatMessage = managerChatMessage;
@@ -32,7 +31,7 @@ namespace ChatRoomWithBot.UI.MVC.Controllers
         public async Task<IActionResult> SendMessage([FromBody] SendMessageViewModel model)
         {
 
-            var room = await _managerChatMessage.GetChatRoomByIdAsync(model.RoomId);
+            var room = await _usersAppService.GetChat(model.RoomId);
 
             if (room == null)
             {
@@ -46,8 +45,8 @@ namespace ChatRoomWithBot.UI.MVC.Controllers
                 return BadRequest("user or room invalid ! ");
             }
 
-            model.UserId = user.Id;
-            model.UserName = user.Name; 
+            model.UserId =Guid.Parse(  user.TenantId ) ;
+            model.UserName = user.Name;
 
             var result = await _managerChatMessage.SendMessageAsync(model);
 
@@ -59,32 +58,50 @@ namespace ChatRoomWithBot.UI.MVC.Controllers
 
         }
 
-         
+
 
         [HttpGet("JoinChatRoom/{id}")]
         public async Task<IActionResult> JoinChatRoom(Guid id)
         {
 
-            var room = await _managerChatMessage.GetChatRoomByIdAsync(roomId: id);
+            var room = await _usersAppService.GetChat(id);
             if (room == null)
             {
                 TempData["Message"] = "This room is invalid !";
 
-                return RedirectToAction("ChatRooms", "Home");
+                return RedirectToAction("index", "ChatRoom");
             }
 
             var user = await _usersAppService.GetCurrentUserAsync();
-            if (user == null || user.Id == Guid.Empty)
+            if (user == null || Guid.Parse( user.TenantId ) == Guid.Empty)
             {
                 return RedirectToAction("Login", "Account");
             }
-            
- 
+
+
             ViewData["ChatName"] = room.Name;
-            ViewData["roomId"] = room.ChatRoomId;
+            ViewData["roomId"] = room.Id ;
 
             return View("Index");
         }
-         
+
+
+        [HttpGet]
+        public async Task<IActionResult> Index()
+        {
+            try
+            {
+                var rooms = await _usersAppService
+                    .GetChats();
+
+                return View(rooms);
+            }
+            catch (Exception e)
+            {
+                _berechitLogger.Error(e);
+
+                return RedirectToAction("index", "Home");
+            }
+        }
     }
 }

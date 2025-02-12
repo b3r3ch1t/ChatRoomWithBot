@@ -84,32 +84,10 @@ namespace ChatRoomWithBot.Application.Services
 
 
 
-        public async Task<ChatRoomViewModel> GetChatRoomByIdAsync(Guid roomId)
-        {
-            var result = await _chatRoomRepository.GetByIdAsync(roomId);
-
-            var map =new ChatRoomViewModel()
-            {
-                ChatRoomId = result.Id,
-                Name = result.Name,
-            };
-
-            return map;
-        }
+        
 
 
-        public async Task<IEnumerable<ChatRoomViewModel>> GetChatRoomsAsync()
-        {
-            var result = await _chatRoomRepository.GetAllAsync();
-
-            var map = result.Select( x=> new ChatRoomViewModel()
-            {
-                ChatRoomId = x.Id,
-                Name = x.Name,
-            });
-
-            return map;
-        }
+       
 
         public void Dispose()
         {

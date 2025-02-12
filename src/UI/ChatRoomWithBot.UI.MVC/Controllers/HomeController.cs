@@ -57,16 +57,7 @@ namespace ChatRoomWithBot.UI.MVC.Controllers
 
 
 
-        [Authorize]
-        [HttpGet]
-        public async Task<IActionResult> ChatRooms()
-        {
-
-            var model = await _managerChat.GetChatRoomsAsync();
-
-
-            return View(model);
-        }
+       
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()

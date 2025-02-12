@@ -14,8 +14,6 @@ namespace ChatRoomWithBot.Data.IoC
 		{
 
 
-			services.AddTransient<DataSeeder>();
-
  
 			services.AddScoped<IChatRoomRepository, ChatRoomRepository>();
 			services.AddScoped<IChatMessageRepository, ChatMessageRepository>();

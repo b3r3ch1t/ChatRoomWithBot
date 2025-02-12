@@ -1,12 +1,9 @@
-﻿using System.Text.Json;
-using ChatRoomWithBot.Domain;
+﻿using ChatRoomWithBot.Domain;
 using ChatRoomWithBot.Domain.Bus;
 using ChatRoomWithBot.Domain.Events;
 using ChatRoomWithBot.Domain.Interfaces;
-using ChatRoomWithBot.Services.RabbitMq.Settings;
 using MassTransit;
 using MediatR;
-using Microsoft.Extensions.Options;
 
 namespace ChatRoomWithBot.Services.RabbitMq.Handler
 {

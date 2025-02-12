@@ -1,90 +1,144 @@
-﻿ 
-using ChatRoomWithBot.Application.Interfaces;
-using ChatRoomWithBot.Application.ViewModel; 
-using Microsoft.AspNetCore.Http; 
+﻿using ChatRoomWithBot.Application.Interfaces;
+using ChatRoomWithBot.Application.ViewModel;
+using ChatRoomWithBot.Domain.Entities;
+using ChatRoomWithBot.Domain.Interfaces;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Graph;
 
 namespace ChatRoomWithBot.Application.Services
 {
-	public class UsersAppService : IUsersAppService
-	{
-
-		 
-		private readonly IHttpContextAccessor _accessor;
-
-		public UsersAppService(  IHttpContextAccessor accessor)
-		{
- 
-			_accessor = accessor;
-		}
-
-		public void Dispose()
-		{
-			GC.SuppressFinalize(this);
-		}
-
-		public bool IsAuthenticated()
-		{
-			return  _accessor.HttpContext?.User?.Identity?.IsAuthenticated ?? false;
+    public class UsersAppService : IUsersAppService
+    {
 
 
-		}
+        private readonly IHttpContextAccessor _accessor;
+
+        private readonly GraphServiceClient _graphServiceClient;
+
+        private readonly IBerechitLogger _berechitLogger;
+
+        public UsersAppService(IHttpContextAccessor accessor, GraphServiceClient graphServiceClient, IBerechitLogger berechitLogger)
+        {
+            _accessor = accessor;
+            _graphServiceClient = graphServiceClient;
+            _berechitLogger = berechitLogger;
+        }
+
+        public void Dispose()
+        {
+            GC.SuppressFinalize(this);
+        }
+
+        public bool IsAuthenticated()
+        {
+            return _accessor.HttpContext?.User?.Identity?.IsAuthenticated ?? false;
+
+
+        }
 
 
 
-		public async Task<UserViewModel> GetUserByIdAsync(Guid userId)
-		{
-			// To Implement
+        public async Task<UserViewModel> GetUserByIdAsync(Guid userId)
+        {
+            // To Implement
 
-			//var map = _mapper.Map<UserViewModel>(result);
+            //var map = _mapper.Map<UserViewModel>(result);
 
-			//return map;
+            //return map;
 
-			return new UserViewModel();
-		}
+            return new UserViewModel();
+        }
 
-		public async Task<IEnumerable<UserViewModel>> GetAllUsersAsync()
-		{
-			// To Implement
+        public async Task<IEnumerable<UserViewModel>> GetAllUsersAsync()
+        {
+            // To Implement
 
-			//var map = _mapper.Map<IEnumerable<UserViewModel>>(result);
+            //var map = _mapper.Map<IEnumerable<UserViewModel>>(result);
 
-			//return map;
+            //return map;
 
-			return new List<UserViewModel>();
-		}
+            return new List<UserViewModel>();
+        }
 
-		public async Task<UserViewModel> GetCurrentUserAsync()
-		{
-			if (!IsAuthenticated()) return new UserViewModel();
+        public async Task<UserViewModel> GetCurrentUserAsync()
+        {
+            if (!IsAuthenticated()) return new UserViewModel();
 
-			var result = new UserViewModel
-			{
-				Email = _accessor.HttpContext?.User?.Claims.First(x => x.Type == "preferred_username")?.Value,
-				Name = _accessor.HttpContext?.User?.Claims.First(x => x.Type == "name")?.Value,
-				TenantId = _accessor.HttpContext?.User?
-					.FindFirst("http://schemas.microsoft.com/identity/claims/tenantid")?.Value
+            var result = new UserViewModel
+            {
+                Email = _accessor.HttpContext?.User?.Claims.First(x => x.Type == "preferred_username")?.Value,
+                Name = _accessor.HttpContext?.User?.Claims.First(x => x.Type == "name")?.Value,
+                TenantId = _accessor.HttpContext?.User?
+                    .FindFirst("http://schemas.microsoft.com/identity/claims/tenantid")?.Value
 
-			};
+            };
 
-			return result;
-			
+            return result;
 
-		}
 
-		public string GetUserName()
-		{
+        }
 
-			if (!IsAuthenticated()) return string.Empty; 
+        public string GetUserName()
+        {
 
-			return _accessor.HttpContext?.User?.Claims.First(x=> x.Type == "name")?.Value ?? "Usuário não encontrado";
-		}
+            if (!IsAuthenticated()) return string.Empty;
 
-		public string GetTenantId()
-		{
-			if (!IsAuthenticated()) return string.Empty;
+            return _accessor.HttpContext?.User?.Claims.First(x => x.Type == "name")?.Value ?? "Usuário não encontrado";
+        }
 
-			return _accessor.HttpContext?.User?
-				.FindFirst("http://schemas.microsoft.com/identity/claims/tenantid")?.Value ?? "Tenant não encontrado";
-		}
-	}
+        public string GetTenantId()
+        {
+            if (!IsAuthenticated()) return string.Empty;
+
+            return _accessor.HttpContext?.User?
+                .FindFirst("http://schemas.microsoft.com/identity/claims/tenantid")?.Value ?? "Tenant não encontrado";
+        }
+
+        public async Task<IEnumerable<ChatRoom>> GetChats()
+        {
+            try
+            {
+                var result = new List<ChatRoom>();
+
+                var chatRoomDefault = ChatRoom.GetChatRoomDefault();
+
+                result.Add(chatRoomDefault);
+
+                if (!IsAuthenticated()) return new List<ChatRoom>(); 
+
+                var groups = (await _graphServiceClient
+                    .Groups
+                    .GetAsync())?.Value;
+
+
+                result.AddRange(groups
+                    .Where(x => !string.IsNullOrWhiteSpace(x.Id) && !string.IsNullOrWhiteSpace(x.DisplayName))
+                    .Select(x => new ChatRoom(Guid.Parse(x.Id), x.DisplayName)));
+
+                return result.OrderBy(x=> x.Name);
+
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
+        }
+
+        public async Task<ChatRoom?> GetChat(Guid id)
+        {
+            try
+            {
+                var chats = await GetChats();
+                var result = chats.FirstOrDefault(x => x.Id == id);
+
+                return result ?? null;
+            }
+            catch (Exception ex)
+            {
+                _berechitLogger.Error(ex);
+                return null;
+            }
+        }
+    }
 }

@@ -1,50 +1,36 @@
-﻿@using ChatRoomWithBot.Application.Interfaces
-@ViewData["ChatName"]
-@inject IUsersAppService _usersAppService;
+﻿@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model IEnumerable< ChatRoomWithBot.Domain.Entities.ChatRoom>
+
 @{
-    var user = await _usersAppService.GetCurrentUserAsync();
+    ViewData["Title"] = "Chats";
 }
 
+<div class="container">
+    <h1 class="my-4">Chats</h1>
 
-<div id="chat" class="container">
-    <h3 class=" text-center ">Chat Room - @ViewData["ChatName"]</h3>
-
-    <input hidden id="roomId" value="@ViewData["roomId"]" />
-    <input hidden id="userId" value="@ViewData["userId"]" />
-    <input hidden id="userName" value="@ViewData["userName"]" />
-
-    <div class="container">
-        <div class="row">&nbsp;</div>
-
-        <div class="row">
-            <div class="col-2">Message</div>
-            <div class="col-4"><input type="text" id="messageInput" /></div>
+    @if (Model != null && Model.Any())
+    {
+        <div class="list-group">
+            @foreach (var chat in Model)
+            {
+                <a class="list-group-item list-group-item-action d-flex justify-content-between align-items-center"
+                   asp-controller="ChatRoom" asp-action="JoinChatRoom" asp-route-id="@chat.Id">
+                    <span>@chat.Name</span>
+                    <span class="badge bg-primary">Entrar</span>
+                </a>
+            }
         </div>
-        <div class="row">&nbsp;</div>
-        <div class="row">
+    }
+    else
+    {
+        <div class="alert alert-info" role="alert">
+            Nenhum chat disponível no momento.
+        </div>
+    }
+</div>
 
-            <div class="text-danger">
-                <input type="text" id="messageError" class="text-danger" />
-                @TempData["Message"]
-            </div>
-            <div class="col-6">
-                <input type="button" disabled id="sendButton" value="Send Message" />
-            </div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-12">
-            <hr />
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-6">
-            <ul id="messagesList"></ul>
-        </div>
-    </div>
     <script src="~/js/signalr/dist/browser/signalr.js"></script>
     <script src="~/js/chat.js"></script>
 
 
 
-</div>

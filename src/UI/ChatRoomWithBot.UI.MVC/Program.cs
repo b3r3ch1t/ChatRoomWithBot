@@ -1,5 +1,4 @@
 using ChatRoomWithBot.Domain.IoC;
-using ChatRoomWithBot.Services.RabbitMq.Settings;
 using MediatR; 
 using ChatRoomWithBot.Application.IoC;
 using ChatRoomWithBot.Data.IoC;

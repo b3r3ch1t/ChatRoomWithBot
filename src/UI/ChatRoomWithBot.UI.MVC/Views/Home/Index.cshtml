@@ -1,8 +1,39 @@
-﻿@{
+﻿@using ChatRoomWithBot.Application.Interfaces
+@inject IUsersAppService _usersAppService
+
+@{
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+@if (_usersAppService.IsAuthenticated())
+{
+    var user = await _usersAppService.GetCurrentUserAsync();
+    <div class="text-center">
+        <h1 class="display-4">Dados do Usuário Atual</h1>
+        <div class="col-md-12">
+            <table class="table table-bordered table-striped">
+                <thead class="table-dark">
+                <tr>
+                    <th>Nome</th>
+                    <th>Tenant Id</th>
+                    <th>Email</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>@user.Name</td>
+                    <td>@user.TenantId</td>
+                    <td>@user.Email</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+}
+else
+{
+    <div class="text-center">
+        <h1 class="display-4 text-danger">Usuário não está logado</h1>
+        <p>Por favor, faça login para visualizar os dados.</p>
+    </div>
+}

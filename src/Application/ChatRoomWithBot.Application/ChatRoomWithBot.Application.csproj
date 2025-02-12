@@ -10,6 +10,7 @@
 	  <PackageReference Include="Microsoft.AspNetCore.Http" Version="2.3.0" />
 	  <PackageReference Include="Microsoft.AspNetCore.Mvc.Abstractions" Version="2.3.0" />
 	  <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="9.0.1" />
+	  <PackageReference Include="Microsoft.Graph" Version="5.69.0" />
   </ItemGroup>
 
   <ItemGroup>

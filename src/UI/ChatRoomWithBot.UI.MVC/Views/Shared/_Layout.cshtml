@@ -28,18 +28,11 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
-                        @if (_usersAppService.IsAuthenticated())
-                        {
-
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-controller="Home" asp-action="ChatRooms">ChatRooms</a>
-                            </li>
-
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-controller="Account" asp-action="Users">List of Users</a>
-                            </li>
-
-                        }
+                        
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-controller="ChatRoom" asp-action="Index">Chats</a>
+                        </li>
+                       
                     </ul>
                 </div>
             </div>
@@ -53,7 +46,7 @@
 
     <footer class="border-top footer text-muted">
         <div class="container">
-            &copy; 2022 - ChatRoomWithBot - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            &copy; 2022 - ChatRoomWithBot 
         </div>
     </footer>
 
