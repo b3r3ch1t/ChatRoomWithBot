@@ -1,104 +1,107 @@
-
 # ChatRoomWithBot with .NET CORE 8 | SignalR | RabbitMQ
-This is a browser-based chat application built with .NET CORE 8. It supports real-time communication in chat rooms and allows users to retrieve stock quotes using specific commands.
 
-
-## Release Notes
-
-**Version Upgrade**:
-- Updated from ASP.NET Core 6 to ASP.NET Core 8.
-- Updated from Entity Framework Core 6 to Entity Framework Core 8.
-
-**Fixes**:
-- General bug fixes and performance improvements.
-
+This is a browser-based chat application built with .NET CORE 8. It supports real-time communication in chat rooms and allows users to retrieve stock quotes using specific commands. The system integrates with Entra ID to fetch user groups, which function as chat rooms. Messages are processed using RabbitMQ, where a message is published and subsequently consumed to trigger a RestAPI request. The solution follows Clean Architecture principles and Domain-Driven Design (DDD).
 
 ## Key Features
-- **Chat Room**: Users can engage in conversations within browser-based chat rooms.
-- **User Authentication**: Authentication is managed using ASP.NET Identity Core and Entity Framework Core with MS SQL Server.
+
+- **Chat Room**: Users can engage in real-time conversations within browser-based chat rooms.
+
+- **User Authentication**: Authentication is managed using ASP.NET Identity Core and integrated with Entra ID.
+
+- **Group-Based Chat Rooms**: The system retrieves groups from Entra ID, with each group representing a chat room.
+
 - **Stock Commands**: Users can retrieve stock quotes by entering commands in the format `/stock=stock_code`. Examples: `/stock=AAPL.US`, `/stock=MSFT.US`.
+
 - **Message Broker**: RabbitMQ is used for message brokering between chat rooms and the stock quote API (https://stooq.com).
+
 - **Worker Service**: A background worker service processes commands and returns the data to the chat room.
+
+- **Message Processing with RabbitMQ**: Messages are sent to RabbitMQ, processed asynchronously, and trigger a REST API request.
+
 - **Message History**: Displays the last 50 messages in each chat room, ordered by timestamp.
 
+- **Robust Logging and Monitoring**: Includes Serilog and Sentry for logging and error tracking.
+
+- **Resilient API Communication**: Implements Polly for retry policies and error handling.
+
 ## Technologies Used
-- ASP.NET Core 8.0
+
+- .NET Core 8.0
+
 - Entity Framework Core 8.0
+
 - ASP.NET Identity Core
+
 - SignalR
+
 - RabbitMQ with MassTransit
-- AutoMapper
-- FluentValidator
+
 - MediatR
+
+- FluentValidation
+
 - Serilog
+
 - Sentry
+
+- Polly
+
+- RestSharp
+
+- AutoMapper
+
 - CsvHelper
+
 - Bogus
+
 - Moq
+
 - Docker
 
 ## Architecture
-- **Clean Architecture** with separation of concerns.
-- **Domain Driven Design (DDD)**: Including domain events and validations.
-- **CQRS Pattern**: Immediate consistency.
-- **Unit Testing**: Example tests using Moq and other testing tools.
+
+- **Clean Architecture** with a strong separation of concerns.
+
+- **Domain-Driven Design (DDD)**: Leveraging domain events and business logic encapsulation.
+
+- **CQRS Pattern**: Implements immediate consistency for queries and commands.
+
+- **Microservices and Event-Driven Architecture**: RabbitMQ facilitates communication between different services.
+
+- **Secure Authentication**: Integrated with Entra ID for enterprise-level authentication and authorization.
+
+- **DevOps and CI/CD**: Configured for Azure DevOps with automated deployments.
+
+- **Containerized Deployment**: Runs using Docker and Docker Compose for seamless scalability.
 
 ## Project Structure
-| Project | Description |
-| ------ | ------ |
-| ChatRoomWithBot.UI.MVC | Web Application |
-| ChatRoomWithBot.Application | Task coordination and delegation to domain objects and repositories |
-| ChatRoomWithBot.Domain | Business logic and domain processes |
-| ChatRoomWithBot.Service.Identity | User authentication with ASP.NET Identity Core |
-| ChatRoomWithBot.Services.BerechitLogger | Logging services |
-| ChatRoomWithBot.Services.RabbitMq | RabbitMQ message publishing and consuming |
-| ChatRoomWithBot.Data | Repositories and database connection (MS SQL Server) |
-| ChatRoomWithBot.Service.WorkerService | Background worker service for RabbitMQ |
-| ChatRoomWithBot.Data.Test | Unit tests for Data Layer |
-| ChatRoomWithBot.Domain.Test | Unit tests for Domain Layer |
 
-## Configuration
-No need to manually create initial users and chat rooms—the system is pre-configured to seed the database with sample users and chat rooms using the `Seed()` method.
-
-| User | Password |
-| ------ | ------ |
-| user1@teste.com | Test12345678 |
-| user2@teste.com | Test12345678 |
-
-| Chat Room  | 
-| ------ |
-| Room 1 |
-| Room 2 |
-| Room 3 |
+| Project                                 | Description                                                             |
+| --------------------------------------- | ----------------------------------------------------------------------- |
+| ChatRoomWithBot.UI.MVC                  | Web Application                                                         |
+| ChatRoomWithBot.Application             | Task coordination and delegation to domain objects and repositories     |
+| ChatRoomWithBot.Domain                  | Business logic and domain processes                                     |
+| ChatRoomWithBot.Service.Identity        | User authentication with ASP.NET Identity Core and Entra ID integration |
+| ChatRoomWithBot.Services.BerechitLogger | Logging services (Serilog, Sentry)                                      |
+| ChatRoomWithBot.Services.RabbitMq       | RabbitMQ message publishing and consuming                               |
+| ChatRoomWithBot.Data                    | Repositories and database connection (MS SQL Server)                    |
+| ChatRoomWithBot.Service.WorkerService   | Background worker service for RabbitMQ message processing               |
+| ChatRoomWithBot.Data.Test               | Unit tests for Data Layer                                               |
+| ChatRoomWithBot.Domain.Test             | Unit tests for Domain Layer                                             |
 
 ## Running the Project
 
 You can run the project using Docker or directly in Visual Studio or Visual Code:
 
 - **Docker**:
-  ```sh
+  
+  ```
   docker-compose up -d
   ```
 
 - **Visual Studio/Visual Code**:
   Configure the solution for multiple startup projects and select:
+  
   - ChatRoomWithBot.UI.MVC
+  
   - ChatRoomWithBot.Service.WorkerService
-
- ## Connect with Me
-
-Let's connect on LinkedIn:
-
-[Anderson Meneses on LinkedIn](https://www.linkedin.com/in/anderson-meneses)
-
-## License
-
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
-
-## Contributions
-
-Contributions are welcome! Please submit a pull request or open an issue to suggest improvements or report bugs.
-
-## Contact
-
-For any questions or support, feel free to contact the repository owner via [GitHub](https://github.com/b3r3ch1t).

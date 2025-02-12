@@ -16,9 +16,7 @@
 
         public RabbitMq RabbitMq { get; set; }
 
-        public SQLServer SQLServer { get; set; }
-
-        public Redis Redis { get; set; }
+        public SQLServer SQLServer { get; set; } 
     }
 
 
@@ -74,11 +72,5 @@
             }
         }
     }
-
-    public class Redis
-    {
-        public string HostName { get; set; } = string.Empty;
-        public string Port { get; set; } = string.Empty;
-        public string Password { get; set; } = string.Empty;
-    }
+     
 }

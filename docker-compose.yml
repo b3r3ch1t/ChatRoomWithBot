@@ -1,62 +1,77 @@
 
 services:
-  # chatroomwithbot.ui.mvc:
-  #   image: ${DOCKER_REGISTRY-}chatroomwithbotuimvc
-  #   container_name: 'ChatRoomWithBot.MVC'
-  #   build:
-  #     context: .
-  #     dockerfile: src/UI/ChatRoomWithBot.UI.MVC/Dockerfile
-  #   ports:
-  #    - "8080:80"
-  #   depends_on:
-  #    - db
-  #    - rabbitmq
-  #   restart: always
-  #   networks:
-  #       - chatroomwithbot
-  
-  # chatroomwithbot.ui.consumer:
-  #   image: ${DOCKER_REGISTRY-}consumer
-  #   container_name: 'ChatRoomWithBot.Consumer'
-  #   build:
-  #     context: .
-  #     dockerfile: src/Services/ChatRoomWithBot.Service.WorkerService/Dockerfile 
-  #   depends_on: 
-  #    - rabbitmq
-  #   restart: always
-  #   networks:
-  #       - chatroomwithbot
-
-
-
-
-  db:
-    image: "mcr.microsoft.com/mssql/server:2022-latest"
-    container_name: 'ChatRoomWithBot.Database'
-    ports:
-     - "1433:1433"
-
+  chatroomwithbot.ui.mvc:
+    image: ${DOCKER_REGISTRY-}chatroomwithbotuimvc
+    container_name: 'ChatRoomWithBot.MVC'
+    build:
+      context: .
+      dockerfile: src/UI/ChatRoomWithBot.UI.MVC/Dockerfile
     environment:
-     SA_PASSWORD: "S3cur3P@ssW0rd!"
-     ACCEPT_EULA: "Y"
+      # Azure AD
+      - SHAREDSETTINGS__AZUREAD__INSTANCE=${AZUREAD_INSTANCE}
+      - SHAREDSETTINGS__AZUREAD__DOMAIN=${AZUREAD_DOMAIN}
+      - SHAREDSETTINGS__AZUREAD__TENANTID=${AZUREAD_TENANTID}
+      - SHAREDSETTINGS__AZUREAD__CLIENTID=${AZUREAD_CLIENTID}
+      - SHAREDSETTINGS__AZUREAD__CALLBACKPATH=${AZUREAD_CALLBACKPATH}
+      - SHAREDSETTINGS__AZUREAD__CLIENTSECRET=${AZUREAD_CLIENTSECRET}
+      - SHAREDSETTINGS__AZUREAD__POSTLOGOUTREDIRECTURI=${AZUREAD_POSTLOGOUTREDIRECTURI}
+
+      # Sentry
+      - SHAREDSETTINGS__SENTRY=${SENTRY}
+
+      # RabbitMQ
+      - SHAREDSETTINGS__RABBITMQ__HOST=${RABBITMQ_HOST}
+      - SHAREDSETTINGS__RABBITMQ__PORT=${RABBITMQ_PORT}
+      - SHAREDSETTINGS__RABBITMQ__USERNAME=${RABBITMQ_USERNAME}
+      - SHAREDSETTINGS__RABBITMQ__PASSWORD=${RABBITMQ_PASSWORD}
+      - SHAREDSETTINGS__RABBITMQ__QUEUE=${RABBITMQ_QUEUE}
+
+      # SQL Server
+      - SHAREDSETTINGS__SQLSERVER__HOSTNAME=${SQLSERVER_HOSTNAME}
+      - SHAREDSETTINGS__SQLSERVER__PORT=${SQLSERVER_PORT}
+      - SHAREDSETTINGS__SQLSERVER__DATABASE=${SQLSERVER_DATABASE}
+      - SHAREDSETTINGS__SQLSERVER__USER=${SQLSERVER_USER}
+      - SHAREDSETTINGS__SQLSERVER__PASSWORD=${SQLSERVER_PASSWORD}
+      - SHAREDSETTINGS__SQLSERVER__TRUSTSERVERCERTIFICATE=${SQLSERVER_TRUSTSERVERCERTIFICATE}
+    expose:
+     - "8080:8080"
+    depends_on:
+     - db
+     - rabbitmq
     restart: always
     networks:
         - chatroomwithbot
+  
+ 
+ 
+ 
+  db:
+    image: "mcr.microsoft.com/mssql/server:2022-latest"
+    container_name: '${ChatRoomWithBotDatabase}'
+    ports:
+      - "${SQLSERVER_PORT}:${SQLSERVER_PORT}"
+    environment:
+      SA_PASSWORD: "${SQLSERVER_PASSWORD}"
+      ACCEPT_EULA: "Y"
+    restart: always
+    networks:
+      - chatroomwithbot
 
-
-  # rabbitmq:
-  #   image: rabbitmq:3-management-alpine    
-  #   container_name: 'ChatRoomWithBot.Rabbitmq' 
-  #   ports:
-  #       - 5672:5672
-  #       - 15672:15672
-  #   volumes:
-  #       - ~/.docker-conf/rabbitmq/data/:/var/lib/rabbitmq/
-  #       - ~/.docker-conf/rabbitmq/log/:/var/log/rabbitmq
-  #   networks:
-  #       - chatroomwithbot
-
-
+  rabbitmq:
+    image: rabbitmq:3-management-alpine    
+    container_name: '${RABBITMQ_HOST}' 
+    ports:
+      - "${RABBITMQ_PORT}:5672"
+      - "${RABBITMQ_UI_PORT}:15672"
+    volumes:
+      - ~/.docker-conf/rabbitmq/data/:/var/lib/rabbitmq/
+      - ~/.docker-conf/rabbitmq/log/:/var/log/rabbitmq
+    environment:
+      RABBITMQ_DEFAULT_USER: "${RABBITMQ_USERNAME}"
+      RABBITMQ_DEFAULT_PASS: "${RABBITMQ_PASSWORD}"
+    networks:
+      - chatroomwithbot
+ 
 
 networks:
   chatroomwithbot:

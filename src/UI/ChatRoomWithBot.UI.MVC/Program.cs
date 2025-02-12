@@ -18,7 +18,6 @@ using ChatRoomWithBot.Domain.Interfaces;
 using ChatRoomWithBot.Infra.HttpRequest.Infra.HttpRequest.IoC;
 using ChatRoomWithBot.UI.MVC;
 using ChatRoomWithBot.UI.MVC.BackgroundServices;
-using Microsoft.Extensions.DependencyInjection;
 using RabbitMQ.Client;
 
 
