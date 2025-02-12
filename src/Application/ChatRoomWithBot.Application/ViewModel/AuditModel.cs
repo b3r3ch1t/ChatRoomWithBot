@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.Graph.Models;
-
-namespace ChatRoomWithBot.Application.ViewModel
+﻿namespace ChatRoomWithBot.Application.ViewModel
 {
     public  class AuditModel
     {

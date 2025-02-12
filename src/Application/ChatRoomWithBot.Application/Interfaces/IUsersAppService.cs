@@ -20,4 +20,5 @@ public interface IUsersAppService:IDisposable
     Task<IEnumerable<ChatRoom>> GetChats();
     Task<ChatRoom?> GetChat(Guid id);
     Task<IEnumerable<AuditModel>> GetAudits();
+    Task<IEnumerable<GroupViewModel>> GetAllGroupsAsync();
 }

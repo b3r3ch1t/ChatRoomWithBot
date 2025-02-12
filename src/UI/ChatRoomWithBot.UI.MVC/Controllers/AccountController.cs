@@ -138,14 +138,18 @@ namespace ChatRoomWithBot.UI.MVC.Controllers
             return View(audit);
         }
 
-        public IActionResult Usuarios()
+        public async Task<IActionResult> Usuarios()
         {
-            throw new NotImplementedException();
+            var users = await _usersAppService.GetAllUsersAsync();
+
+            return View(users);
         }
 
-        public IActionResult Grupos()
+        public async Task<IActionResult> Grupos()
         {
-            throw new NotImplementedException();
+            var groups  = await _usersAppService.GetAllGroupsAsync ();
+
+            return View(groups);
         }
     }
 }

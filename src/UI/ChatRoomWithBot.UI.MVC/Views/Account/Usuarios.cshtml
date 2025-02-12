@@ -1,0 +1,52 @@
+﻿@inject IUsersAppService _usersAppService
+
+
+@using ChatRoomWithBot.Application.Interfaces
+@model System.Collections.Generic.IEnumerable<ChatRoomWithBot.Application.ViewModel.UserViewModel>
+
+@{
+    ViewBag.Title = "title";
+    Layout = "_Layout";
+}
+
+
+@if (_usersAppService.IsAuthenticated())
+{
+    var user = await _usersAppService.GetCurrentUserAsync();
+    <div class="text-center">
+        <h1 class="display-4">Usuários no Tenant </h1>
+        <div class="col-md-12">
+            <table class="table table-bordered table-striped">
+                <thead class="table-dark">
+                    <tr>
+                        <th>TenantId</th>
+                        <th>Name</th>
+                        <th>Email</th> 
+                    </tr>
+                </thead>
+                <tbody>
+
+                    @foreach (var userView in Model)
+                    {
+
+                        <tr>
+                            <td>@userView.TenantId </td>
+                            <td>@userView.Name </td>
+                            <td>@userView.Email </td> 
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+}
+else
+{
+    <div class="text-center">
+        <h1 class="display-4 text-danger">Usuário não está logado</h1>
+        <p>Por favor, faça login para visualizar os dados.</p>
+    </div>
+}
+
+
+

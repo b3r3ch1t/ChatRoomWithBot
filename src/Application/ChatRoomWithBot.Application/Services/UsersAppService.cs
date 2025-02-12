@@ -5,8 +5,6 @@ using ChatRoomWithBot.Domain.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Graph;
 using Microsoft.Graph.Models;
-using System.Collections.Generic;
-using Microsoft.Graph.Models.ExternalConnectors;
 
 namespace ChatRoomWithBot.Application.Services
 {
@@ -54,13 +52,51 @@ namespace ChatRoomWithBot.Application.Services
 
         public async Task<IEnumerable<UserViewModel>> GetAllUsersAsync()
         {
-            // To Implement
+            try
+            {
+                var allUsers = new List<User>();
 
-            //var map = _mapper.Map<IEnumerable<UserViewModel>>(result);
+                var users = (await _graphServiceClient.Users
+                    .GetAsync((requestConfiguration) =>
+                    {
+                        requestConfiguration.QueryParameters.Top = 15;
+                    }));
 
-            //return map;
 
-            return new List<UserViewModel>();
+                allUsers.AddRange(users.Value);
+
+                Console.WriteLine($"`{DateTime.Now}==> {allUsers.Count}");
+
+                while (users.OdataNextLink != null)
+                {
+                    users = await _graphServiceClient.Users
+                        .WithUrl(users.OdataNextLink)
+                        .GetAsync((requestConfiguration) =>
+                        {
+                            requestConfiguration.QueryParameters.Top = 15;
+
+                        });
+                    allUsers.AddRange(users.Value);
+
+                    Console.WriteLine($"`{DateTime.Now}==> {allUsers.Count}");
+                }
+
+                var result = allUsers.Select(x => new UserViewModel()
+                {
+                    Name = x.DisplayName ?? string.Empty,
+                    TenantId = x.Id,
+                    Email = x.UserPrincipalName ?? string.Empty
+                });
+
+
+
+                return result;
+
+            }
+            catch (Exception e)
+            {
+                return Enumerable.Empty<UserViewModel>();
+            }
         }
 
         public async Task<UserViewModel> GetCurrentUserAsync()
@@ -107,7 +143,7 @@ namespace ChatRoomWithBot.Application.Services
 
                 result.Add(chatRoomDefault);
 
-                if (!IsAuthenticated()) return new List<ChatRoom>(); 
+                if (!IsAuthenticated()) return new List<ChatRoom>();
 
                 var groups = (await _graphServiceClient
                     .Groups
@@ -118,7 +154,7 @@ namespace ChatRoomWithBot.Application.Services
                     .Where(x => !string.IsNullOrWhiteSpace(x.Id) && !string.IsNullOrWhiteSpace(x.DisplayName))
                     .Select(x => new ChatRoom(Guid.Parse(x.Id), x.DisplayName)));
 
-                return result.OrderBy(x=> x.Name);
+                return result.OrderBy(x => x.Name);
 
             }
             catch (Exception e)
@@ -144,7 +180,7 @@ namespace ChatRoomWithBot.Application.Services
             }
         }
 
-        public async  Task<IEnumerable<AuditModel>> GetAudits()
+        public async Task<IEnumerable<AuditModel>> GetAudits()
         {
             try
             {
@@ -152,21 +188,21 @@ namespace ChatRoomWithBot.Application.Services
 
 
                 var signInLogs = (await _graphServiceClient.AuditLogs
-                    .SignIns   
+                    .SignIns
                     .GetAsync((requestConfiguration) =>
                     {
                         requestConfiguration.QueryParameters.Top = 15;
                     }));
 
 
-                allLogs.AddRange(signInLogs.Value );
+                allLogs.AddRange(signInLogs.Value);
 
-                Console.WriteLine($"`{DateTime.Now }==> {allLogs.Count }");
+                Console.WriteLine($"`{DateTime.Now}==> {allLogs.Count}");
 
-                while (signInLogs.OdataNextLink !=null   )
+                while (signInLogs.OdataNextLink != null)
                 {
                     signInLogs = await _graphServiceClient.AuditLogs
-                        .SignIns 
+                        .SignIns
                         .WithUrl(signInLogs.OdataNextLink)
                         .GetAsync((requestConfiguration) =>
                         {
@@ -175,17 +211,17 @@ namespace ChatRoomWithBot.Application.Services
                         });
                     allLogs.AddRange(signInLogs.Value);
 
-                    Console.WriteLine($"`{DateTime.Now}==> {allLogs.Count}"); 
+                    Console.WriteLine($"`{DateTime.Now}==> {allLogs.Count}");
                 }
 
                 var result = allLogs.Select(x => new AuditModel()
                 {
                     Id = x.Id,
                     IpAddress = x.IpAddress,
-                    Status = x.Status.ToString() ,
+                    Status = x.Status.ToString(),
                     UserId = x.UserId,
-                    CreatedDateTime = x.CreatedDateTime, 
-                     
+                    CreatedDateTime = x.CreatedDateTime,
+
                 });
 
 
@@ -195,24 +231,60 @@ namespace ChatRoomWithBot.Application.Services
             }
             catch (Exception e)
             {
-                return Enumerable.Empty<AuditModel>(); 
+                return Enumerable.Empty<AuditModel>();
             }
         }
 
-        public async Task<IList<User>> GetTenantUsersAsync()
+        public  async Task<IEnumerable<GroupViewModel>> GetAllGroupsAsync()
         {
-            var users = await _graphServiceClient.Users  
-                .GetAsync();
 
-            return users.Value ;
+            try
+            {
+                var listGroups = new List<Group>();
+
+                var groups = (await _graphServiceClient.Groups 
+                    .GetAsync((requestConfiguration) =>
+                    {
+                        requestConfiguration.QueryParameters.Top = 15;
+                    }));
+
+
+                listGroups.AddRange(groups.Value );
+
+                Console.WriteLine($"`{DateTime.Now}==> {listGroups.Count}");
+
+                while (groups.OdataNextLink != null)
+                {
+                    groups = await _graphServiceClient.Groups 
+                        .WithUrl(groups.OdataNextLink)
+                        .GetAsync((requestConfiguration) =>
+                        {
+                            requestConfiguration.QueryParameters.Top = 15;
+
+                        });
+                    listGroups.AddRange(groups.Value);
+
+                    Console.WriteLine($"`{DateTime.Now}==> {listGroups.Count}");
+                }
+
+                var result = listGroups.Select(x => new GroupViewModel()
+                {
+                    Id = x.Id,
+                    Description = x.DisplayName?? string.Empty,
+
+                });
+
+
+
+                return result;
+
+            }
+            catch (Exception e)
+            {
+                return Enumerable.Empty<GroupViewModel>();
+            }
         }
 
-        public async Task<IList<Group>> GetTenantGroupsAsync()
-        {
-            var groups = await _graphServiceClient.Groups 
-                .GetAsync();
-
-            return groups.Value;
-        }
+         
     }
 }
