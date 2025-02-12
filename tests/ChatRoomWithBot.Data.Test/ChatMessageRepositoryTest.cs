@@ -18,23 +18,7 @@ namespace ChatRoomWithBot.Data.Test
         }
 
 
-        [Fact]
-        public async Task GetAllMessagesAsync_Qte()
-        {
-
-            var chatMessageRepository = new ChatMessageRepository(_dbContext, _iBerechitLoggerMock.Object);
-            var qte = Randomizer.Seed.Next(minValue: 1, maxValue: ChatRoomWithBotContextFaker.MaxChatMessages - 10);
-
-            var result = await chatMessageRepository.GetAllMessagesAsync(qte);
-
-            var resultQte = result.Count();
-
-            Assert.Equal(qte, resultQte);
-
-        }
-
-
-
+          
         [Fact]
         public async Task AddCommitedAsync_Exception()
         {

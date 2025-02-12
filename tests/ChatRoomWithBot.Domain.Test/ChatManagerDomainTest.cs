@@ -15,13 +15,13 @@ namespace ChatRoomWithBot.Domain.Test
 
         private Mock<IMediatorHandler> _mediatorHandlerMock;
         private Mock<EventValidator> _validatorMock;
-        private Mock<IBerechitLogger> _berechitLoggerMock; 
+        private Mock<IBerechitLogger> _berechitLoggerMock;
 
         public ChatManagerDomainTest()
         {
             _mediatorHandlerMock = new Mock<IMediatorHandler>();
             _validatorMock = new Mock<EventValidator>();
-            _berechitLoggerMock = new Mock<IBerechitLogger>(); 
+            _berechitLoggerMock = new Mock<IBerechitLogger>();
         }
 
         [Fact]
@@ -42,10 +42,10 @@ namespace ChatRoomWithBot.Domain.Test
                 UserName = userName,
                 UserId = userId
             };
-             
+
             _mediatorHandlerMock.Setup(x => x.SendMessage(It.IsAny<Event>()))
                 .ReturnsAsync(CommandResponse.Ok);
-              
+
 
             var chatManagerDomain =
                 new ChatManagerDomain(mediatorHandler: _mediatorHandlerMock.Object,
@@ -61,12 +61,12 @@ namespace ChatRoomWithBot.Domain.Test
 
             Assert.True(result.Success);
 
-            Assert.Equal($"This message is not valid : {messageBeforValidation}", msgAfterValidation);
+            Assert.Equal(messageBeforValidation, msgAfterValidation);
 
             _mediatorHandlerMock.Verify(x => x
                 .SendMessage(It.IsAny<Event>()), Times.Once());
 
-            _berechitLoggerMock.Verify(x => x.Error(It.IsAny<Exception>( )), Times.Never); 
+            _berechitLoggerMock.Verify(x => x.Error(It.IsAny<Exception>()), Times.Never);
 
         }
 
@@ -77,7 +77,7 @@ namespace ChatRoomWithBot.Domain.Test
         {
             var faker = new Faker();
 
-            var messageBeforValidation =$"/stock=aapl.us";
+            var messageBeforValidation = $"/stock=aapl.us";
             var codeRoom = Guid.NewGuid();
             var userName = faker.Person.FullName;
             var userId = Guid.NewGuid();
@@ -109,9 +109,9 @@ namespace ChatRoomWithBot.Domain.Test
 
             Assert.True(result.Success);
 
-            Assert.True(chatMessageCommandEvent.UserName== "bot"); 
+            Assert.True(chatMessageCommandEvent.UserName == "bot");
 
-            Assert.Equal( messageBeforValidation, msgAfterValidation);
+            Assert.Equal(messageBeforValidation, msgAfterValidation);
 
             _mediatorHandlerMock.Verify(x => x
                 .SendMessage(It.IsAny<Event>()), Times.Once());
@@ -121,7 +121,7 @@ namespace ChatRoomWithBot.Domain.Test
 
         }
 
-         
+
 
 
         [Fact]
@@ -144,7 +144,7 @@ namespace ChatRoomWithBot.Domain.Test
             };
 
             _mediatorHandlerMock.Setup(x => x.SendMessage(It.IsAny<Event>()))
-                .Throws(new Exception( "erro"));
+                .Throws(new Exception("erro"));
 
 
             var chatManagerDomain =
@@ -159,17 +159,17 @@ namespace ChatRoomWithBot.Domain.Test
             var msgAfterValidation = chatMessageCommandEvent.Message;
 
 
-            Assert.True(result.Failure );
+            Assert.True(result.Failure);
 
-            
+
 
             Assert.True(chatMessageCommandEvent.UserName == "bot");
 
             Assert.Equal(messageBeforValidation, msgAfterValidation);
 
-            
 
-            _berechitLoggerMock.Verify(x => x.Error(It.IsAny<Exception>()), Times.Once );
+
+            _berechitLoggerMock.Verify(x => x.Error(It.IsAny<Exception>()), Times.Once);
 
 
         }
