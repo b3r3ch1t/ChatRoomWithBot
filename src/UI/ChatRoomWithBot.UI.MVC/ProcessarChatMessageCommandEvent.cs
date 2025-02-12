@@ -28,8 +28,7 @@ public class ProcessarChatMessageCommandEvent : IProcessarChatMessageCommandEven
 
             var url = $"https://stooq.com/q/l/?s={stockCode}&f=sd2t2ohlcv&h&e=csv";
 
-            url = "https://stooq.com/q/l/?s=aapl.us&f=sd2t2ohlcv&h&e=csv";
-
+            
             var r = await _httpRequests.GetAsync<string>(baseUrl: url, "");
 
             var m = ConverterParaMensagem(r.Data, stockCode, chatMessage.CodeRoom);
