@@ -15,7 +15,7 @@ namespace ChatRoomWithBot.Data.IoC
 
 
  
-			services.AddScoped<IChatRoomRepository, ChatRoomRepository>();
+			
 			services.AddScoped<IChatMessageRepository, ChatMessageRepository>();
 
 			var connection = SharedSettings.Current.SQLServer.ConnectionString;

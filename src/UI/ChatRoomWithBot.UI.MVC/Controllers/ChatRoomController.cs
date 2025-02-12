@@ -1,8 +1,11 @@
-﻿using ChatRoomWithBot.Application.Interfaces;
+﻿using System.Text.Json;
+using ChatRoomWithBot.Application.Interfaces;
 using ChatRoomWithBot.Application.ViewModel;
 using ChatRoomWithBot.Domain.Interfaces;
+using ChatRoomWithBot.UI.MVC.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 
 namespace ChatRoomWithBot.UI.MVC.Controllers
 {
@@ -16,13 +19,19 @@ namespace ChatRoomWithBot.UI.MVC.Controllers
 
         private readonly IChatManagerApplication _managerChatMessage;
         private readonly IUsersAppService _usersAppService;
-        private readonly IBerechitLogger _berechitLogger; 
+        private readonly IBerechitLogger _berechitLogger;
+        private readonly IHubContext<ChatRoomHub> _hubContext;
 
-        public ChatRoomController(IChatManagerApplication managerChatMessage, IUsersAppService usersAppService, IBerechitLogger berechitLogger)
+        private readonly IChatManagerApplication _chatManagerApplication;
+
+
+        public ChatRoomController(IChatManagerApplication managerChatMessage, IUsersAppService usersAppService, IBerechitLogger berechitLogger, IChatManagerApplication chatManagerApplication, IHubContext<ChatRoomHub> hubContext)
         {
             _managerChatMessage = managerChatMessage;
             _usersAppService = usersAppService;
             _berechitLogger = berechitLogger;
+            _chatManagerApplication = chatManagerApplication;
+            _hubContext = hubContext;
         }
 
 
@@ -45,7 +54,7 @@ namespace ChatRoomWithBot.UI.MVC.Controllers
                 return BadRequest("user or room invalid ! ");
             }
 
-            model.UserId =Guid.Parse(  user.TenantId ) ;
+            model.UserId = Guid.Parse(user.TenantId);
             model.UserName = user.Name;
 
             var result = await _managerChatMessage.SendMessageAsync(model);
@@ -64,6 +73,10 @@ namespace ChatRoomWithBot.UI.MVC.Controllers
         public async Task<IActionResult> JoinChatRoom(Guid id)
         {
 
+
+
+
+
             var room = await _usersAppService.GetChat(id);
             if (room == null)
             {
@@ -72,17 +85,29 @@ namespace ChatRoomWithBot.UI.MVC.Controllers
                 return RedirectToAction("index", "ChatRoom");
             }
 
+
+            var group = id.ToString();
+            var messages = (await _chatManagerApplication.GetMessagesAsync(id, 50)).ToList();
+
+            var message = JsonSerializer.Serialize(messages);
+
             var user = await _usersAppService.GetCurrentUserAsync();
-            if (user == null || Guid.Parse( user.TenantId ) == Guid.Empty)
+
+
+            await _hubContext.Clients.Group(group)
+                .SendAsync("ReceiveMessage", user, message);
+
+
+            if (user == null || Guid.Parse(user.TenantId) == Guid.Empty)
             {
                 return RedirectToAction("Login", "Account");
             }
 
 
             ViewData["ChatName"] = room.Name;
-            ViewData["roomId"] = room.Id ;
+            ViewData["roomId"] = room.Id;
 
-            return View( );
+            return View();
         }
 
 

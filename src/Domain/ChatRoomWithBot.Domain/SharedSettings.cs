@@ -69,7 +69,8 @@
 
                 var printableStr = $"{Hostname}:{Port}";
                 Console.WriteLine($"Using SQL server connection: {printableStr}");
-                return $"Server={Hostname};Port={Port};Database={Database};User={User};Password={Password};TrustServerCertificate={trustServerCertificate}";
+                return $"Server={Hostname},{Port};Database={Database};User Id={User};Password={Password};TrustServerCertificate={trustServerCertificate}";
+
             }
         }
     }

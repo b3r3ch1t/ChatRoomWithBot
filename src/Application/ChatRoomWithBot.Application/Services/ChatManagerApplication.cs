@@ -11,14 +11,14 @@ namespace ChatRoomWithBot.Application.Services
     internal class ChatManagerApplication : IChatManagerApplication
     {
 
-        private readonly IChatRoomRepository _chatRoomRepository;
+         
         private readonly IChatManagerDomain _chatManagerDomain;
         private readonly IBerechitLogger _berechitLogger;
         private readonly IChatMessageRepository _chatMessageRepository;
 
-        public ChatManagerApplication(IChatRoomRepository chatRoomRepository, IChatManagerDomain chatManagerDomain, IBerechitLogger berechitLogger, IChatMessageRepository chatMessageRepository)
+        public ChatManagerApplication(IChatManagerDomain chatManagerDomain, IBerechitLogger berechitLogger, IChatMessageRepository chatMessageRepository)
         {
-            _chatRoomRepository = chatRoomRepository;
+           
             _chatManagerDomain = chatManagerDomain;
             _berechitLogger = berechitLogger;
             _chatMessageRepository = chatMessageRepository;
@@ -29,13 +29,31 @@ namespace ChatRoomWithBot.Application.Services
 
             try
             {
-                var chatMessageEvent = new ChatMessageTextEvent
+
+                Event chatMessageEvent;
+
+                if (model.IsCommand)
                 {
-                    CodeRoom = model.RoomId,
-                    Message = model.Message,
-                    UserId = model.UserId.Value,
-                    UserName = model.UserName
-                };
+                    chatMessageEvent = new ChatMessageCommandEvent()
+                    {
+                        CodeRoom = model.RoomId,
+                        Message = model.Message,
+                        UserId = model.UserId.Value,
+                        UserName = model.UserName
+                    };
+
+                }
+                else
+                {
+                    chatMessageEvent = new ChatMessageTextEvent
+                    {
+                        CodeRoom = model.RoomId,
+                        Message = model.Message,
+                        UserId = model.UserId.Value,
+                        UserName = model.UserName
+                    };
+                }
+               
 
                 var result = await _chatManagerDomain.SendMessageAsync(chatMessageEvent);
 
@@ -68,13 +86,14 @@ namespace ChatRoomWithBot.Application.Services
 
         public async Task<IEnumerable<ChatMessageViewModel>> GetMessagesAsync(Guid roomId, int qte)
         {
-            var result = _chatRoomRepository.GetLastMessagesAsync(qte, roomId);
+            var result = _chatMessageRepository.GetLastMessagesAsync(qte, roomId);
+
+            
 
             var map = result.Select(x => new ChatMessageViewModel()
             {
-
                 UserName = x.UserName,
-                Date = x.DateCreated,
+                Date = x.DateCreated  ,
                 Message = x.Message,
                 RoomId = x.RoomId
             });
@@ -84,10 +103,10 @@ namespace ChatRoomWithBot.Application.Services
 
 
 
-        
 
 
-       
+
+
 
         public void Dispose()
         {

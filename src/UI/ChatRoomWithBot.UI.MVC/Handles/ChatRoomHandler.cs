@@ -37,6 +37,7 @@ public class ChatRoomHandler :
             var group = notification.CodeRoom.ToString();
             var user = notification.UserName;
             var chatMessage = new ChatMessage(userId: notification.UserId, message: notification.Message, userName: notification.UserName, roomId: notification.CodeRoom);
+          
             var result = CommandResponse.Fail("Fail to send");
 
             var messages = (await _chatManagerApplication.GetMessagesAsync(notification.CodeRoom, qteMessages)).ToList();
@@ -50,7 +51,7 @@ public class ChatRoomHandler :
                 Date = DateTime.Now,
                 Message = notification.Message,
                 RoomId = notification.CodeRoom,
-                UserName = "bot",
+                UserName = notification.UserName ,
             });
 
             var message = JsonSerializer.Serialize(messages);
