@@ -1,5 +1,4 @@
-﻿using System.Text.Json;
-using ChatRoomWithBot.Application.Interfaces;
+﻿using ChatRoomWithBot.Application.Interfaces;
 using ChatRoomWithBot.Application.ViewModel;
 using ChatRoomWithBot.Domain.Interfaces;
 using ChatRoomWithBot.UI.MVC.Services;
@@ -72,11 +71,7 @@ namespace ChatRoomWithBot.UI.MVC.Controllers
         [HttpGet("JoinChatRoom/{id}")]
         public async Task<IActionResult> JoinChatRoom(Guid id)
         {
-
-
-
-
-
+             
             var room = await _usersAppService.GetChat(id);
             if (room == null)
             {
@@ -86,17 +81,8 @@ namespace ChatRoomWithBot.UI.MVC.Controllers
             }
 
 
-            var group = id.ToString();
-            var messages = (await _chatManagerApplication.GetMessagesAsync(id, 50)).ToList();
-
-            var message = JsonSerializer.Serialize(messages);
-
-            var user = await _usersAppService.GetCurrentUserAsync();
-
-
-            await _hubContext.Clients.Group(group)
-                .SendAsync("ReceiveMessage", user, message);
-
+            
+            var user = await _usersAppService.GetCurrentUserAsync(); 
 
             if (user == null || Guid.Parse(user.TenantId) == Guid.Empty)
             {
@@ -128,5 +114,8 @@ namespace ChatRoomWithBot.UI.MVC.Controllers
                 return RedirectToAction("index", "Home");
             }
         }
+
+
+       
     }
 }
