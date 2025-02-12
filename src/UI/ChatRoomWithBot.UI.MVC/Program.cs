@@ -14,8 +14,7 @@ using Microsoft.Graph;
 using Azure.Identity;
 using System.Reflection;
 using ChatRoomWithBot.Domain;
-using ChatRoomWithBot.Domain.Interfaces;
-using ChatRoomWithBot.Infra.Cache.IoC;
+using ChatRoomWithBot.Domain.Interfaces; 
 using ChatRoomWithBot.Infra.HttpRequest.Infra.HttpRequest.IoC;
 using ChatRoomWithBot.UI.MVC;
 using ChatRoomWithBot.UI.MVC.BackgroundServices;
@@ -90,8 +89,7 @@ builder.Services
 	.RegisterLogDependencies()
 	.RegisterApplicationDependencies( )
 	.RegisterDataDependencies( )
-	.RegisterServicesRabbitMqDependencies() 
-	.RegisterCacheDependencies()
+	.RegisterServicesRabbitMqDependencies()  
 	.RegisterHttpRequestDependencies();
 
 
