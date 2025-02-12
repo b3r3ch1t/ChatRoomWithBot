@@ -2,9 +2,10 @@ using System.Text;
 using System.Text.Json;
 using ChatRoomWithBot.Domain;
 using ChatRoomWithBot.Domain.Events;
-using ChatRoomWithBot.Domain.Interfaces;
+using ChatRoomWithBot.Domain.Interfaces; 
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
+using IModel = RabbitMQ.Client.IModel;
 
 namespace ChatRoomWithBot.UI.MVC.BackgroundServices
 {

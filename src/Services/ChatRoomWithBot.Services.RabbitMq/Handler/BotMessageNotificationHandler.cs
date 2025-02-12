@@ -11,11 +11,11 @@ namespace ChatRoomWithBot.Services.RabbitMq.Handler
 {
     internal class BotMessageNotificationHandler : IRequestHandler<ChatMessageCommandEvent, CommandResponse>
     {
-        private readonly IBerechitLogger _berechitLogger; 
+        private readonly IBerechitLogger _berechitLogger;
 
-        public BotMessageNotificationHandler(IBerechitLogger berechitLogger )
+        public BotMessageNotificationHandler(IBerechitLogger berechitLogger)
         {
-            _berechitLogger = berechitLogger; 
+            _berechitLogger = berechitLogger;
         }
 
         public async Task<CommandResponse> Handle(ChatMessageCommandEvent notification,
@@ -25,24 +25,24 @@ namespace ChatRoomWithBot.Services.RabbitMq.Handler
             {
                 var factory = new ConnectionFactory()
                 {
-                    HostName = SharedSettings.Current.RabbitMq.Host, 
-                    Port = SharedSettings.Current.RabbitMq.Port ,
+                    HostName = SharedSettings.Current.RabbitMq.Host,
+                    Port = SharedSettings.Current.RabbitMq.Port,
                     UserName = SharedSettings.Current.RabbitMq.Username,
                     Password = SharedSettings.Current.RabbitMq.Password
                 };
 
-                  using (var connection =    factory.CreateConnection( ))
+                using (var connection = factory.CreateConnection())
 
 
-                  using (var channel =   connection.CreateModel (  )) 
+                using (var channel = connection.CreateModel())
                 {
                     // Declaração da fila
-                      channel.QueueDeclare(
-                        queue: SharedSettings.Current.RabbitMq.Queue,
-                        durable: true,
-                        exclusive: false,
-                        autoDelete: false,
-                        arguments: null );
+                    channel.QueueDeclare(
+                      queue: SharedSettings.Current.RabbitMq.Queue,
+                      durable: true,
+                      exclusive: false,
+                      autoDelete: false,
+                      arguments: null);
 
                     // Serialização da mensagem
                     var message = JsonConvert.SerializeObject(notification);
@@ -51,10 +51,10 @@ namespace ChatRoomWithBot.Services.RabbitMq.Handler
 
 
                     // Publicação da mensagem
-                      channel.BasicPublish (
-                         exchange: "",
-                         routingKey: "ChatMessageCommandEvent",
-                         body: body);
+                    channel.BasicPublish(
+                       exchange: "",
+                       routingKey: "ChatMessageCommandEvent",
+                       body: body);
                 }
 
 
