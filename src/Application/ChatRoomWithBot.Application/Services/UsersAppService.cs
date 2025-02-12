@@ -198,5 +198,21 @@ namespace ChatRoomWithBot.Application.Services
                 return Enumerable.Empty<AuditModel>(); 
             }
         }
+
+        public async Task<IList<User>> GetTenantUsersAsync()
+        {
+            var users = await _graphServiceClient.Users  
+                .GetAsync();
+
+            return users.Value ;
+        }
+
+        public async Task<IList<Group>> GetTenantGroupsAsync()
+        {
+            var groups = await _graphServiceClient.Groups 
+                .GetAsync();
+
+            return groups.Value;
+        }
     }
 }
