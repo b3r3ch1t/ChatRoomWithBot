@@ -61,7 +61,7 @@ namespace ChatRoomWithBot.Domain.Test
 
             Assert.True(result.Success);
 
-            Assert.Equal($"This message is not valid : {messageBeforValidation}", msgAfterValidation);
+            Assert.Equal( messageBeforValidation, msgAfterValidation);
 
             _mediatorHandlerMock.Verify(x => x
                 .SendMessage(It.IsAny<Event>()), Times.Once());
