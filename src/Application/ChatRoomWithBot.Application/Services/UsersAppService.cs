@@ -4,6 +4,9 @@ using ChatRoomWithBot.Domain.Entities;
 using ChatRoomWithBot.Domain.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Graph;
+using Microsoft.Graph.Models;
+using System.Collections.Generic;
+using Microsoft.Graph.Models.ExternalConnectors;
 
 namespace ChatRoomWithBot.Application.Services
 {
@@ -138,6 +141,61 @@ namespace ChatRoomWithBot.Application.Services
             {
                 _berechitLogger.Error(ex);
                 return null;
+            }
+        }
+
+        public async  Task<IEnumerable<AuditModel>> GetAudits()
+        {
+            try
+            {
+                var allLogs = new List<SignIn>();
+
+
+                var signInLogs = (await _graphServiceClient.AuditLogs
+                    .SignIns   
+                    .GetAsync((requestConfiguration) =>
+                    {
+                        requestConfiguration.QueryParameters.Top = 15;
+                    }));
+
+
+                allLogs.AddRange(signInLogs.Value );
+
+                Console.WriteLine($"`{DateTime.Now }==> {allLogs.Count }");
+
+                while (signInLogs.OdataNextLink !=null   )
+                {
+                    signInLogs = await _graphServiceClient.AuditLogs
+                        .SignIns 
+                        .WithUrl(signInLogs.OdataNextLink)
+                        .GetAsync((requestConfiguration) =>
+                        {
+                            requestConfiguration.QueryParameters.Top = 15;
+
+                        });
+                    allLogs.AddRange(signInLogs.Value);
+
+                    Console.WriteLine($"`{DateTime.Now}==> {allLogs.Count}"); 
+                }
+
+                var result = allLogs.Select(x => new AuditModel()
+                {
+                    Id = x.Id,
+                    IpAddress = x.IpAddress,
+                    Status = x.Status.ToString() ,
+                    UserId = x.UserId,
+                    CreatedDateTime = x.CreatedDateTime, 
+                     
+                });
+
+
+
+                return result;
+
+            }
+            catch (Exception e)
+            {
+                return Enumerable.Empty<AuditModel>(); 
             }
         }
     }

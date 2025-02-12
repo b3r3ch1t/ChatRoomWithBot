@@ -1,4 +1,5 @@
-﻿using ChatRoomWithBot.Services.EntraId.ViewModels;
+﻿using ChatRoomWithBot.Application.Interfaces;
+using ChatRoomWithBot.Services.EntraId.ViewModels;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
@@ -11,9 +12,11 @@ namespace ChatRoomWithBot.UI.MVC.Controllers
     [Authorize]
     public class AccountController : Controller
     {
-        public AccountController()
-        {
+        private readonly IUsersAppService _usersAppService;
 
+        public AccountController(IUsersAppService usersAppService)
+        {
+            _usersAppService = usersAppService;
         }
 
         [AllowAnonymous]
@@ -128,5 +131,21 @@ namespace ChatRoomWithBot.UI.MVC.Controllers
 
         }
 
+        public async Task<IActionResult> Audit()
+        {
+            var audit =await  _usersAppService.GetAudits();
+
+            return View(audit);
+        }
+
+        public IActionResult Usuarios()
+        {
+            throw new NotImplementedException();
+        }
+
+        public IActionResult Grupos()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

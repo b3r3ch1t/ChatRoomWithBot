@@ -1,0 +1,51 @@
+﻿
+@inject IUsersAppService _usersAppService
+
+@using ChatRoomWithBot.Application.Interfaces
+@model System.Collections.Generic.IEnumerable<ChatRoomWithBot.Application.ViewModel.AuditModel>
+
+@{
+    ViewBag.Title = "title";
+    Layout = "_Layout";
+}
+
+
+@if (_usersAppService.IsAuthenticated())
+{
+    var user = await _usersAppService.GetCurrentUserAsync();
+        <div class="text-center">
+            <h1 class="display-4">Tentativas de Login </h1>
+            <div class="col-md-12">
+                <table class="table table-bordered table-striped">
+                    <thead class="table-dark">
+                    <tr>
+                        <th>Id</th>
+                        <th>IpAddress</th>
+                        <th>Status</th>
+                        <th>CreatedDateTime</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    
+                    @foreach (var tentativa in Model)
+                    {
+
+                        <tr>
+                            <td>@tentativa.Id </td>
+                            <td>@tentativa.IpAddress </td>
+                            <td>@tentativa.Status </td>
+                            <td>@tentativa.CreatedDateTime </td>
+                        </tr>
+                    }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+}
+else
+{
+        <div class="text-center">
+            <h1 class="display-4 text-danger">Usuário não está logado</h1>
+            <p>Por favor, faça login para visualizar os dados.</p>
+        </div>
+}
